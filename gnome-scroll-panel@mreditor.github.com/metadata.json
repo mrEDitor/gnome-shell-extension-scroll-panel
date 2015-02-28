@@ -1,0 +1,7 @@
+{
+	"shell-version": ["3.14.3"],
+	"uuid": "gnome-scroll-panel@mreditor.github.com",
+	"name": "Scroll Panel",
+	"description": "Scroll opened applications and workspaces by mouse wheel on top panel",
+	"url": "http://github.com/mrEDitor/gnome-scroll-panel"
+}
