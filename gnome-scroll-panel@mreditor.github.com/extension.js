@@ -1,6 +1,6 @@
 /**
  * Gnome Scroll Panel (Gnome Shell extension)
- * Copycenter (C) 2015 Edward Minasyan <mrEDitor@mail.ru>
+ * Copyright (C) 2015 Edward Minasyan <mrEDitor@mail.ru>
  * https://github.com/mrEDitor/gnome-scroll-panel
  * 
  * This program is free software: you can redistribute it and/or modify
