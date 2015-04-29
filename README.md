@@ -1,5 +1,5 @@
 # Gnome Scroll Panel
-### Gnome Shell extension (maintaining since 3.14.3, last tested: 3.16.1)
+### Gnome Shell extension (maintaining since 3.14, last tested: 3.16.1)
 ##### *<https://github.com/mrEDitor/gnome-scroll-panel/>*
 *Allow to switch workspaces and applications in Gnome Shell just scrolling a mouse above corresponding title on top panel.*
 
