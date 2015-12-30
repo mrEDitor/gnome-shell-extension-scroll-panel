@@ -3,7 +3,7 @@
 ##### *<https://github.com/mrEDitor/gnome-scroll-panel/>*
 *Enables switching workspaces and applications in Gnome Shell just by scrolling a mousewheel above a corresponding title on the top panel.*
 
-Scroll above application name for switching between windows on active workspace, and above clock for switching between virtual workspaces.
+Scroll above an application's title to switch between windows on the active workspace, and above the clock to switch between virtual workspaces.
 ##### GNU GPL v3
 ```This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.```
 ##### Installation
