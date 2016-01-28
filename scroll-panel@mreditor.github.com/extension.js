@@ -89,7 +89,7 @@ function applicationSwitchEvent(target, event) {
 					}
 				}
 		);
-		(next == windows[0] ? (cycle_windows ? first : windows[0]) : next).activate(global.get_current_time());
+		(!next && cycle_windows ? first : next).activate(global.get_current_time());
 	}
 }
 
