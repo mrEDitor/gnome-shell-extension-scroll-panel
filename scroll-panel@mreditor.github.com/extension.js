@@ -116,8 +116,8 @@ function workspaceSwitchEvent(target, event) {
 
 function load_devices() {
 	devices = {
-		'default': new Devices.DiscreteDevice('default', Devices.Direction.DIRECT),
-		'SynPS/2 Synaptics TouchPad': new Devices.AnalogDevice('SynPS/2 Synaptics TouchPad', Devices.Direction.DIRECT, 80, 40),
+		'default': new Devices.Device('default', Devices.Direction.DIRECT, 0, 0),
+		'SynPS/2 Synaptics TouchPad': new Devices.Device('SynPS/2 Synaptics TouchPad', Devices.Direction.DIRECT, 80, 40),
 	};
 }
 

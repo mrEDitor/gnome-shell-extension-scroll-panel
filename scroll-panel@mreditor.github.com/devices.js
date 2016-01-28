@@ -26,33 +26,8 @@ const Direction = {
 	REVERSE: -1,
 };
 
-const DiscreteDevice = new Lang.Class({
-	Name: "DiscreteDeviceScrollAdapter",
-	deviceName: null,
-	upDirection: 1,
-	
-	_init: function(name, direction) {
-		this.deviceName = name;
-		this.upDirection = direction;
-	},
-	
-	enter: function(target, event) {
-	},
-	
-	scroll: function(target, event) {
-		switch (event.get_scroll_direction()) {
-			case Clutter.ScrollDirection.UP:
-				return -this.upDirection;
-			case Clutter.ScrollDirection.DOWN:
-				return this.upDirection;
-			default:
-				return 0;
-		}
-	},
-});
-
-const AnalogDevice = new Lang.Class({
-	Name: "AnalogDeviceScrollAdapter",
+const Device = new Lang.Class({
+	Name: "DeviceScrollingAdapter",
 	deviceName: null,
 	upDirection: 1,
 	direction: 0,
@@ -60,6 +35,13 @@ const AnalogDevice = new Lang.Class({
 	deltaMin: 0,
 	deltaBoost: 0,
 	
+	/**
+	 * Input device settings.
+	 * @param name : string - Name of input device.
+	 * @param direction : Direction - Direct or inversed scroll direction.
+	 * @param deltaMin : int - Minimal scroll-distance.
+	 * @param deltaBoost : int - Scroll-distance boost on panel hover.
+	 */
 	_init: function(name, direction, deltaMin, deltaBoost) {
 		this.deviceName = name;
 		this.upDirection = direction;
@@ -71,7 +53,7 @@ const AnalogDevice = new Lang.Class({
 		this.direction = 0;
 		this.delta = delta_boost;
 	},
-	
+
 	scroll: function(target, event) {
 		switch (event.get_scroll_direction()) {
 			case Clutter.ScrollDirection.UP:
@@ -79,20 +61,24 @@ const AnalogDevice = new Lang.Class({
 					this.delta = 0;
 				}
 				this.direction = this.upDirection;
-				return 0;
+				break;
 			case Clutter.ScrollDirection.DOWN:
 				if (this.direction == this.upDirection) {
 					this.delta = 0;
 				}
 				this.direction = -this.upDirection;
-				return 0;
+				break;
 			default:
 				this.delta += Math.abs(event.get_scroll_delta()[1]);
-				if (this.delta >= this.deltaMin) {
-					this.delta -= this.deltaMin;
-					return -this.direction;
-				}
-				return 0;
+				break;
+		}
+		if (this.delta >= this.deltaMin) {
+			const r = -this.direction;
+			this.direction = 0;
+			this.delta = 0;
+			return r;
+		} else {
+			return 0;
 		}
 	},
 });
