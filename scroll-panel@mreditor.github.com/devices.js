@@ -21,11 +21,6 @@ const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
 
-const Direction = {
-	DIRECT: 1,
-	REVERSE: -1,
-};
-
 const Device = new Lang.Class({
 	Name: "DeviceScrollingAdapter",
 	deviceName: null,
@@ -38,13 +33,13 @@ const Device = new Lang.Class({
 	/**
 	 * Input device settings.
 	 * @param name : string - Name of input device.
-	 * @param direction : Direction - Direct or inversed scroll direction.
+	 * @param inversed : Inversed - Is scrolling direction inversed.
 	 * @param deltaMin : int - Minimal scroll-distance.
 	 * @param deltaBoost : int - Scroll-distance boost on panel hover.
 	 */
-	_init: function(name, direction, deltaMin, deltaBoost) {
+	_init: function(name, inversed, deltaMin, deltaBoost) {
 		this.deviceName = name;
-		this.upDirection = direction;
+		this.upDirection = inversed ? -1 : 1;
 		this.deltaBoost = deltaBoost;
 		this.deltaMin = deltaMin;
 	},

@@ -19,7 +19,7 @@ const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
-const Devices = imports.misc.extensionUtils.getCurrentExtension().imports.devices;
+const Device = imports.misc.extensionUtils.getCurrentExtension().imports.devices.Device;
 
 const applicationSwitcher = Main.panel.statusArea.appMenu;
 const workspaceSwitcher = Main.panel.statusArea.dateMenu;
@@ -116,8 +116,8 @@ function workspaceSwitchEvent(target, event) {
 
 function load_devices() {
 	devices = {
-		'default': new Devices.Device('default', Devices.Direction.DIRECT, 0, 0),
-		'SynPS/2 Synaptics TouchPad': new Devices.Device('SynPS/2 Synaptics TouchPad', Devices.Direction.DIRECT, 80, 40),
+		'default': new Device('default', false, 0, 0),
+		'SynPS/2 Synaptics TouchPad': new Device('SynPS/2 Synaptics TouchPad', false, 80, 40),
 	};
 }
 
