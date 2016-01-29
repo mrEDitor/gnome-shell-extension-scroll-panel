@@ -1,0 +1,22 @@
+<schemalist gettext-domain="gnome-shell-extensions">
+  <schema id="org.gnome.shell.extensions.scroll-panel"
+      path="/org/gnome/shell/extensions/scroll-panel/">
+
+    <key type="b" name="cycle-windows">
+        <default>true</default>
+        <summary>Cyclic scrolling of windows</summary>
+    </key>
+
+    <key type="b" name="cycle-workspaces">
+        <default>false</default>
+        <summary>Cyclic scrolling of workspaces</summary>
+    </key>
+    
+    <key type="a(sbii)" name="devices">
+      <default>[('default',false,0,0)]</default>
+      <summary>Devices settings</summary>
+      <description>Contain name of device, inversion flag, minimal delta to switch and delta boost on hover.</description>
+    </key>
+    
+  </schema>
+</schemalist>
