@@ -16,14 +16,12 @@
  */
 
 const Lang = imports.lang;
-const Main = imports.ui.main;
-const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
-const GLib = imports.gi.GLib;
 
 const Device = new Lang.Class({
 	Name: "DeviceScrollingAdapter",
 	deviceName: null,
+	inversed: false,
 	upDirection: 1,
 	direction: 0,
 	delta: 0,
@@ -39,6 +37,7 @@ const Device = new Lang.Class({
 	 */
 	_init: function(name, inversed, deltaMin, deltaBoost) {
 		this.deviceName = name;
+		this.inversed = inversed;
 		this.upDirection = inversed ? -1 : 1;
 		this.deltaBoost = deltaBoost;
 		this.deltaMin = deltaMin;

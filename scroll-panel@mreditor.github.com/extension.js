@@ -15,17 +15,19 @@
  * limitations under the License.
  */
 
+const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
 const GLib = imports.gi.GLib;
-const Device = imports.misc.extensionUtils.getCurrentExtension().imports.devices.Device;
+const Device = Me.imports.devices.Device;
 
 const applicationSwitcher = Main.panel.statusArea.appMenu;
 const workspaceSwitcher = Main.panel.statusArea.dateMenu;
-
+/** Stores settings, Gio.Settings object */
+const settings = Me.imports.lib.settings;
 /** Stores connected event handlers */
-let handlers = {
+const handlers = {
 	connections: [ /* {target:obj, handle:int} */ ],
 	
 	connect: function (target, event, handler) {
@@ -42,8 +44,8 @@ let handlers = {
 		this.connections = [];
 	},
 };
-/** Stores configured devices */
-let devices = { /* name: Device */ };
+/** Stores configured devices like { name1: Device, name2: device } */
+const devices = Me.imports.lib.devices;
 let cycle_windows = false;
 let cycle_workspaces = false;
 
@@ -51,20 +53,14 @@ let cycle_workspaces = false;
 
 function deviceEnterEvent(target, event) {
 	let device = event.get_source_device().get_device_name();
-	if (!(device in devices)) {
-		device = 'default';
-	}
-	devices[device].enter(target, event);
+	devices[device in devices ? device : 'default'].enter(target, event);
 }
 
 
 
 function applicationSwitchEvent(target, event) {
 	let device = event.get_source_device().get_device_name();
-	if (!(device in devices)) {
-		device = 'default';
-	}
-	const scroll_result = devices[device].scroll(target, event);
+	const scroll_result = devices[device in devices ? device : 'default'].scroll(target, event);
 	if (scroll_result) {
 		const windows = global.display.get_tab_list(Meta.TabList.NORMAL, global.screen.get_active_workspace());
 		const current_id = windows[0].get_stable_sequence();
@@ -97,10 +93,7 @@ function applicationSwitchEvent(target, event) {
 
 function workspaceSwitchEvent(target, event) {
 	let device = event.get_source_device().get_device_name();
-	if (!(device in devices)) {
-		device = 'default';
-	}
-	const scroll_result = devices[device].scroll(target, event);
+	const scroll_result = devices[device in devices ? device : 'default'].scroll(target, event);
 	if (scroll_result) {
 		let index = global.screen.get_active_workspace_index() + scroll_result;
 		if (cycle_workspaces) {
@@ -114,26 +107,23 @@ function workspaceSwitchEvent(target, event) {
 
 
 
-function load_devices() {
-	devices = {
-		'default': new Device('default', false, 0, 0),
-		'SynPS/2 Synaptics TouchPad': new Device('SynPS/2 Synaptics TouchPad', false, 80, 40),
-	};
+function init() {
+	Me.imports.lib.init();
 }
 
 
 
 function enable() {
-	load_devices();
 	handlers.connect(applicationSwitcher.actor, 'scroll-event', applicationSwitchEvent);
 	handlers.connect(workspaceSwitcher.actor, 'scroll-event', workspaceSwitchEvent);
 	handlers.connect(applicationSwitcher.actor, 'enter-event', deviceEnterEvent);
 	handlers.connect(workspaceSwitcher.actor, 'enter-event', deviceEnterEvent);
+	settings.connect('changed::cycle-windows', ()=>{ cycle_windows = settings.get_boolean('cycle-windows'); });
+	settings.connect('changed::cycle-workspaces', ()=>{ cycle_workspaces = settings.get_boolean('cycle-workspaces'); });
 }
 
 
 
 function disable() {
-	workspaces = [];
 	handlers.disconnectAll();
 }

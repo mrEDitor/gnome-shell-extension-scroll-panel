@@ -2,6 +2,8 @@
 	"shell-version": ["3.14", "3.16",  "3.18"],
 	"uuid": "scroll-panel@mreditor.github.com",
 	"name": "Scroll Panel",
+	"settings-schema": "org.gnome.shell.extensions.scroll-panel",
+	"gettext-domain": "scroll-panel",
 	"description": "Switch workspaces and applications just by scrolling a mousewheel above the top panel.",
 	"url": "http://github.com/mrEDitor/gnome-scroll-panel"
 }
