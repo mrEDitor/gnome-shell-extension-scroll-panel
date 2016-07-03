@@ -1,0 +1,12 @@
+<schemalist gettext-domain="gnome-shell-extensions-scroll-panel">
+  <schema id="org.gnome.shell.extensions.scroll-panel"
+      path="/org/gnome/shell/extensions/scroll-panel/">
+
+    <key type="s" name="devices">
+      <default>"{}"</default>
+      <summary>Device-dependent settings</summary>
+      <description>Stores associative array of (device, target) => (enable, invert, cyclic, pressure, boost).</description>
+    </key>
+    
+  </schema>
+</schemalist>
