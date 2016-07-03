@@ -34,9 +34,9 @@ Build
 
 		make install
 
-4. Enable extension, e.g. with
+4. Enable extension with
 
-	`gnome-tweak-tool`
+		gnome-shell-extension-prefs
 
 Bug reports and features requests
 -----
