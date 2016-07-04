@@ -5,8 +5,7 @@ Scroll Panel
 Gnome Shell Extension
 -----
 Scroll above an application's title to switch between windows on the active
-workspace, above the clock to switch between virtual workspaces, and above
-the window title to move it to another workspace.
+workspace, above the clock to switch between virtual workspaces.
 
 Get it from [extensions.gnome.org](https://extensions.gnome.org/extension/932/).
 

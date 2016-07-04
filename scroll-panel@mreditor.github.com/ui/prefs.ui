@@ -76,11 +76,6 @@ Author: Edward Minasyan <mrEDitor@mail.ru>
         <col id="1" translatable="yes">Switching windows</col>
         <col id="2" translatable="yes">Switching active window by scrolling a mousewheel above the application menu</col>
       </row>
-      <row>
-        <col id="0">moving-windows</col>
-        <col id="1" translatable="yes">Moving windows</col>
-        <col id="2" translatable="yes">Moving a window between workspaces by scrolling a mousewheel above its title bar</col>
-      </row>
     </data>
   </object>
   <object class="GtkGrid" id="prefs">
