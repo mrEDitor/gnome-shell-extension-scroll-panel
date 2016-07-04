@@ -2,16 +2,19 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+const Settings = Me.imports.settings;
 
 const DEVICE = { NAME: 0, DELETABLE: 1 };
 const TARGET = { ID: 0, NAME: 1 };
-const devices = JSON.parse(Me.imports.settings.settings.get_string('devices'));
-const _ = Me.imports.gettext.gettext;
+const devices = Settings.devices;
 
 let filllock = false;
 
+
+
 function init() {
 }
+
 
 
 function buildPrefsWidget() {
@@ -20,7 +23,7 @@ function buildPrefsWidget() {
 
 	const devices_list = ui_builder.get_object('devices-list');
 	for (let name in devices) {
-		if (name != Me.imports.settings.UNLISTED_DEVICE)
+		if (name != Settings.UNLISTED_DEVICE)
 		{
 			const iter = devices_list.insert(0);
 			devices_list.set_value(iter, DEVICE.NAME, name);
@@ -113,7 +116,7 @@ function _add_or_find_device(source, ui) {
 				list.set_value(iter, DEVICE.NAME, device.name);
 				list.set_value(iter, DEVICE.DELETABLE, true);
 				devices[device.name] = JSON.parse(JSON.stringify(
-					devices[Me.imports.settings.UNLISTED_DEVICE]
+					devices[Settings.UNLISTED_DEVICE]
 				));
 			} else if (list.get_value(iter, 1) != device.name) {
 				return false;
@@ -136,7 +139,7 @@ function _foreach_selected(callback, ui) {
 		const [device_ok, device_iter] = devices_model.get_iter(device_path);
 		const device_id = devices_model.get_value(device_iter, DEVICE.DELETABLE)
 			? devices_model.get_value(device_iter, DEVICE.NAME)
-			: Me.imports.settings.UNLISTED_DEVICE;
+			: Settings.UNLISTED_DEVICE;
 		if (devices[device_id] == undefined) {
 			devices[device_id] = {
 				'switching-workspaces': {},
@@ -182,8 +185,7 @@ function _on_settings_changed(source, ui) {
 
 function _save_settings() {
 	const data = JSON.stringify(devices);
-	log('Saving ' + data);
-	Me.imports.settings.settings.set_value(
+	Settings.settings.set_value(
 		'devices',
 		new GLib.Variant('s', data)
 	);

@@ -1,5 +1,7 @@
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const GioSettingsSchemaSource = imports.gi.Gio.SettingsSchemaSource;
+
+const UNLISTED_DEVICE = '__unlisted_device__';
 const settings = new imports.gi.Gio.Settings({
 	settings_schema:
 		GioSettingsSchemaSource.new_from_directory(
@@ -8,4 +10,4 @@ const settings = new imports.gi.Gio.Settings({
 			false
 		).lookup(Me.metadata['settings-schema'], true)
 });
-const UNLISTED_DEVICE = '__unlisted_device__';
+const devices = JSON.parse(Me.imports.settings.settings.get_string('devices'));
