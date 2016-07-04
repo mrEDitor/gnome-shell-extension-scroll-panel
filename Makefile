@@ -10,6 +10,8 @@ Usage:
 	clean - remove built files
 	install - install built files
 		uses PREFIX=$(PREFIX)
+	uninstall - uninstall old files
+		uses PREFIX=$(PREFIX)
 endef
 export HELP
 
@@ -17,10 +19,13 @@ all:
 	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) all
 
 clean:
-	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) clear
+	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) clean
 
-install:
+install: all uninstall
 	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) install
+
+uninstall:
+	rm -r $(PREFIX)/$(UUID) || true
 
 help:
 	@echo "$$HELP"
