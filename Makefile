@@ -1,3 +1,4 @@
+DOMAIN ?= scroll-panel
 PREFIX ?= ~/.local/share/gnome-shell/extensions
 UUID ?= scroll-panel@mreditor.github.com
 MAKE ?= make
@@ -16,16 +17,16 @@ endef
 export HELP
 
 all:
-	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) all
+	DOMAIN=$(DOMAIN) PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) all
 
 clean:
-	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) clean
+	DOMAIN=$(DOMAIN) PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) clean
 
 install: all uninstall
-	PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) install
+	DOMAIN=$(DOMAIN) PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) install
 
 uninstall:
-	rm -r $(PREFIX)/$(UUID) || true
+	-rm -r $(PREFIX)/$(UUID)
 
 help:
 	@echo "$$HELP"

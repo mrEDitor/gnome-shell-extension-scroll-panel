@@ -2,16 +2,20 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
 const Lang = imports.lang;
+const GetText = Me.imports.gettext;
 const Settings = Me.imports.settings;
 
 const DEVICE = { NAME: 0, DELETABLE: 1 };
 const TARGET = { ID: 0, NAME: 1 };
 let filllock = false;
 let devices;
+let _;
 
 
 
 function init() {
+	_ = GetText.bind();
+	log(_('Switching workspaces'));
 }
 
 

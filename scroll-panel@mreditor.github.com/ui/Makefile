@@ -1,3 +1,4 @@
+DOMAIN ?=
 PREFIX ?=
 MAKE ?= make
 CLEAN ?= rm -f

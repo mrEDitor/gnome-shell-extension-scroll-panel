@@ -2,8 +2,8 @@
 	"shell-version": ["3.20"],
 	"uuid": "scroll-panel@mreditor.github.com",
 	"name": "Scroll Panel",
+	"gettext-domain": "scroll-panel",
 	"settings-schema": "org.gnome.shell.extensions.scroll-panel",
-	"gettext-domain": "gnome-shell-extensions-scroll-panel",
 	"description": "Scroll above an application's title to switch between windows on the activeworkspace, above the clock to switch between virtual workspaces, and abovethe window title to move it to another workspace.",
 	"url": "http://github.com/mrEDitor/gnome-shell-extension-scroll-panel"
 }
