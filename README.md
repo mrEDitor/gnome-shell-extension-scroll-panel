@@ -5,7 +5,10 @@ Scroll Panel
 Gnome Shell Extension
 -----
 Scroll above an application's title to switch between windows on the active
-workspace, above the clock to switch between virtual workspaces.
+workspace, and above the clock to switch between virtual workspaces.
+
+Note: to use the touchpad, you probably have to configure its sensitivity in
+the extension settings.
 
 Get it from [extensions.gnome.org](https://extensions.gnome.org/extension/932/).
 
@@ -33,7 +36,7 @@ Build
 
 		make install
 
-4. Enable extension with
+4. Enable and configure extension with
 
 		gnome-shell-extension-prefs
 
