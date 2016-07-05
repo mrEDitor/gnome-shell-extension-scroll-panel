@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Edward Minasyan <mrEDitor@mail.ru>, 2016.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: v3.0.0-gnome3.20\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-07-05 22:47+0300\n"
+"PO-Revision-Date: 2016-07-05 20:58+0300\n"
+"Last-Translator: Edward Minasyan <mrEDitor@mail.ru>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Gtranslator 2.91.7\n"
+
+#: ../prefs.js:18 ../ui/prefs.ui:71
+msgid "Switching workspaces"
+msgstr "Переключение рабочих столов"
+
+#: ../ui/prefs.ui:44
+msgid "Not listed devices"
+msgstr "Другие устройства"
+
+#: ../ui/prefs.ui:72
+msgid ""
+"Switching active workspace by scrolling a mousewheel above the clock panel"
+msgstr ""
+"Переключайте рабочие столы, прокручивая колесо мыши над панелью с часами"
+
+#: ../ui/prefs.ui:76
+msgid "Switching windows"
+msgstr "Переключение окон"
+
+#: ../ui/prefs.ui:77
+msgid ""
+"Switching active window by scrolling a mousewheel above the application menu"
+msgstr "Переключайте окна, прокручивая колесо мыши над меню приложения"
+
+#: ../ui/prefs.ui:95
+msgid "Enable"
+msgstr "Включено"
+
+#: ../ui/prefs.ui:110
+msgid "Invert direction"
+msgstr "В обратном направлении"
+
+#: ../ui/prefs.ui:125
+msgid "Cyclic scrolling"
+msgstr "Циклическая прокрутка"
+
+#: ../ui/prefs.ui:156
+msgid ""
+"Distance to go for a mousewheel, required to trigger an action.\n"
+"Hint: you can scroll this spinner to change it's value."
+msgstr ""
+"Дистанция прокрутки колесом мыши, необходимая для активации действия.\n"
+"Подсказка: вы можете крутить этот переключатель для настройки."
+
+#: ../ui/prefs.ui:190
+msgid "Required pressure"
+msgstr "Необходимое давление"
+
+#: ../ui/prefs.ui:247
+msgid "Please, select action(s) and device(s) to configure."
+msgstr "Пожалуйста, выберите действия и устройства для настройки."
+
+#: ../ui/prefs.ui:273
+msgid "This device (click me!)"
+msgstr "Это устройство (кликните!)"
+
+#: ../ui/prefs.ui:304
+msgid "Name"
+msgstr "Имя"
+
+#: ../ui/prefs.ui:318
+msgid "Remove"
+msgstr "Убрать"
+
+#: ../ui/prefs.ui:354
+msgid "Actions"
+msgstr "Действия"
