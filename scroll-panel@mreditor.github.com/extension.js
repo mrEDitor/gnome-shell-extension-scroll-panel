@@ -44,7 +44,9 @@ function _switch_workspace(source, event) {
 		}
 		top = top.get_parent();
 	}
-	const settings = devices[event.get_source_device().name]['switching-workspaces'];
+	const settings = devices[event.get_source_device().name] == undefined
+		? devices[Settings.UNLISTED_DEVICE]['switching-workspaces']
+		: devices[event.get_source_device().name]['switching-workspaces'];
 	if (settings['setting-enable']) {
 		const direction = _get_direction(event) * (settings['setting-invert'] ? -1 : 1);
 		_delta_workspaces += direction;
@@ -64,7 +66,9 @@ function _switch_workspace(source, event) {
 
 
 function _switch_window(source, event) {
-	const settings = devices[event.get_source_device().name]['switching-windows'];
+	const settings = devices[event.get_source_device().name] == undefined
+		? devices[Settings.UNLISTED_DEVICE]['switching-windows']
+		: devices[event.get_source_device().name]['switching-windows'];
 	if (settings['setting-enable']) {
 		const direction = _get_direction(event) * (settings['setting-invert'] ? -1 : 1);
 		_delta_windows += direction;
