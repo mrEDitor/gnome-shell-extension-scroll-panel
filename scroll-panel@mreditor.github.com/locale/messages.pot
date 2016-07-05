@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 22:47+0300\n"
+"POT-Creation-Date: 2016-07-05 23:29+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../prefs.js:18 ../ui/prefs.ui:71
-msgid "Switching workspaces"
-msgstr ""
-
 #: ../ui/prefs.ui:44
 msgid "Not listed devices"
+msgstr ""
+
+#: ../ui/prefs.ui:71
+msgid "Switching workspaces"
 msgstr ""
 
 #: ../ui/prefs.ui:72

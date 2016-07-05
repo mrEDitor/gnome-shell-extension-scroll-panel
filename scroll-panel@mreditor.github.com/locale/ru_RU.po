@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: v3.0.0-gnome3.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 22:47+0300\n"
+"POT-Creation-Date: 2016-07-05 23:29+0300\n"
 "PO-Revision-Date: 2016-07-05 20:58+0300\n"
 "Last-Translator: Edward Minasyan <mrEDitor@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -18,13 +18,13 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: ../prefs.js:18 ../ui/prefs.ui:71
-msgid "Switching workspaces"
-msgstr "Переключение рабочих столов"
-
 #: ../ui/prefs.ui:44
 msgid "Not listed devices"
 msgstr "Другие устройства"
+
+#: ../ui/prefs.ui:71
+msgid "Switching workspaces"
+msgstr "Переключение рабочих столов"
 
 #: ../ui/prefs.ui:72
 msgid ""

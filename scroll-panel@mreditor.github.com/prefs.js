@@ -15,7 +15,6 @@ let _;
 
 function init() {
 	_ = GetText.bind();
-	log(_('Switching workspaces'));
 }
 
 

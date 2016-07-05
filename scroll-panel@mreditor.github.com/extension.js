@@ -8,7 +8,6 @@ const Settings = Me.imports.settings;
 let left_connection, center_connection, settings_connection;
 let _delta_windows = 0, _delta_workspaces = 0;
 let devices;
-let _;
 
 
 

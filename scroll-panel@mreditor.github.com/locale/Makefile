@@ -6,9 +6,9 @@ XGETTEXT ?= xgettext
 MAKE ?= make
 CLEAN ?= rm -f
 
-PO_FILES = $(wildcard *.po)
-MO_FILES = $(PO_FILES:.po=.mo)
-SUBDIRS = $(PO_FILES:.po=)
+PO_FILES := $(wildcard *.po)
+MO_FILES := $(PO_FILES:.po=.mo)
+SUBDIRS := $(PO_FILES:.po=)
 
 all: $(MO_FILES)
 
