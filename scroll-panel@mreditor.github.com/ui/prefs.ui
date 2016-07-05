@@ -53,8 +53,8 @@ Author: Edward Minasyan <mrEDitor@mail.ru>
   </object>
   <object class="GtkAdjustment" id="setting-pressure-adjustment">
     <property name="upper">100000</property>
-    <property name="step_increment">5</property>
-    <property name="page_increment">50</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">5</property>
   </object>
   <object class="GtkListStore" id="targets-list">
     <columns>
@@ -153,7 +153,8 @@ Author: Edward Minasyan <mrEDitor@mail.ru>
                   <object class="GtkLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Distance to go for a mousewheel, required to trigger an action.</property>
+                    <property name="label" translatable="yes">Distance to go for a mousewheel, required to trigger an action.
+Hint: you can scroll this spinner to change it's value.</property>
                     <property name="wrap">True</property>
                   </object>
                   <packing>
@@ -178,18 +179,7 @@ Author: Edward Minasyan <mrEDitor@mail.ru>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="setting-pressure-boost">
-                    <property name="label" translatable="yes">Boost first action</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
+                  <placeholder/>
                 </child>
               </object>
             </child>

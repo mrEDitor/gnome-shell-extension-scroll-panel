@@ -3,7 +3,20 @@
       path="/org/gnome/shell/extensions/scroll-panel/">
 
     <key type="s" name="devices">
-      <default>"{}"</default>
+      <default>"{
+					'switching-workspaces': {
+						'setting-enable': true,
+						'setting-invert': false,
+						'setting-cyclic': false,
+						'setting-pressure': 1,
+					},
+					'switching-windows': {
+						'setting-enable': true,
+						'setting-invert': false,
+						'setting-cyclic': false,
+						'setting-pressure': 1,
+					},
+				}"</default>
       <summary>Device-dependent settings</summary>
       <description>Stores associative array of (device, target) => (enable, invert, cyclic, pressure, boost).</description>
     </key>
