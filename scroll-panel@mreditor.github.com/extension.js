@@ -75,7 +75,7 @@ function _switch_window(source, event) {
 		_delta_windows += direction;
 		if (Math.abs(_delta_windows) >= settings['setting-pressure']) {
 			_delta_windows -= direction * settings['setting-pressure'];
-			const windows = global.display.get_tab_list(Meta.TabList.NORMAL, global.screen.get_active_workspace());
+			const windows = global.display.get_tab_list(Meta.TabList.NORMAL_ALL, global.screen.get_active_workspace());
 			const target = windows[0].get_stable_sequence() + direction;
 			let next_window = null;
 			let far_window = windows[0];
@@ -83,10 +83,10 @@ function _switch_window(source, event) {
 				case -1:
 					windows.forEach((window) => {
 						const id = window.get_stable_sequence();
-						if (id <= target && (next_window == null || next_window.get_stable_sequence() < id)) {
+						if (!window.appears_focused && id <= target && (next_window == null || next_window.get_stable_sequence() < id)) {
 							next_window = window;
 						}
-						if (id > far_window.get_stable_sequence()) {
+						if (!window.appears_focused && id > far_window.get_stable_sequence()) {
 							far_window = window;
 						}
 					});
@@ -94,10 +94,10 @@ function _switch_window(source, event) {
 				case +1:
 					windows.forEach((window) => {
 						const id = window.get_stable_sequence();
-						if (id >= target && (next_window == null || next_window.get_stable_sequence() > id)) {
+						if (!window.appears_focused && id >= target && (next_window == null || next_window.get_stable_sequence() > id)) {
 							next_window = window;
 						}
-						if (id < far_window.get_stable_sequence()) {
+						if (!window.appears_focused && id < far_window.get_stable_sequence()) {
 							far_window = window;
 						}
 					});
