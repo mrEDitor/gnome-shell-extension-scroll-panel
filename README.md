@@ -40,6 +40,21 @@ Build
 
 		gnome-shell-extension-prefs
 
+
+
+How to localize
+-----
+Localization files are located inside
+[```locale```](./scroll-panel@mreditor.github.com/locale) directory.
+There you can see `messages.pot`, an template file to generate .po-translations.
+You should open it, e.g. with GTranslator or POEdit, translate text and save
+resulting .po-file in the same directory with corresponding to its locale name,
+like `en_US.po`. Then go back to project root and build whole project with
+`make` and perhaps install it with `make install`. Then, if you are going to
+commit your changes don't forget to `make clean` generated binaries.
+
+And feel free to submit translations to upstream on GitHub, I'll appreciate it!
+
 Bug reports and features requests
 -----
 - <https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/>
