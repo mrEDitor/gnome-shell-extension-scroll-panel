@@ -24,6 +24,14 @@ function buildPrefsWidget() {
 	const ui_builder = new Gtk.Builder();
 	ui_builder.add_from_file(Me.path + '/ui/prefs.ui');
 
+	const wide_left = ui_builder.get_object('setting-wide-left');
+	wide_left.active = Settings.is('wide-left');
+	wide_left.connect('toggled', () => { Settings.settings.set_boolean('wide-left', wide_left.active); });
+
+	const wide_center = ui_builder.get_object('setting-wide-center');
+	wide_center.active = Settings.is('wide-center');
+	wide_center.connect('toggled', () => { Settings.settings.set_boolean('wide-center', wide_center.active); });
+
 	const devices_list = ui_builder.get_object('devices-list');
 	for (let name in devices) {
 		if (name != Settings.UNLISTED_DEVICE)
@@ -153,16 +161,6 @@ function _on_settings_changed(source, ui) {
 			config['setting-cyclic'] = ui.get_object('setting-cyclic').active;
 			config['setting-pressure'] = ui.get_object('setting-pressure').value;
 		}, ui);
-		_save_settings();
+		Settings.settings.set_string('devices', JSON.stringify(devices));
 	}
-}
-
-
-
-function _save_settings() {
-	const data = JSON.stringify(devices);
-	Settings.settings.set_value(
-		'devices',
-		new GLib.Variant('s', data)
-	);
 }

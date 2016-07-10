@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 23:29+0300\n"
+"POT-Creation-Date: 2016-07-11 00:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,62 +21,70 @@ msgstr ""
 msgid "Not listed devices"
 msgstr ""
 
-#: ../ui/prefs.ui:71
+#: ../ui/prefs.ui:73
 msgid "Switching workspaces"
 msgstr ""
 
-#: ../ui/prefs.ui:72
+#: ../ui/prefs.ui:74
 msgid ""
 "Switching active workspace by scrolling a mousewheel above the clock panel"
 msgstr ""
 
-#: ../ui/prefs.ui:76
+#: ../ui/prefs.ui:78
 msgid "Switching windows"
 msgstr ""
 
-#: ../ui/prefs.ui:77
+#: ../ui/prefs.ui:79
 msgid ""
 "Switching active window by scrolling a mousewheel above the application menu"
 msgstr ""
 
-#: ../ui/prefs.ui:95
-msgid "Enable"
+#: ../ui/prefs.ui:92
+msgid "Switch windows when scrolling over Overview button"
 msgstr ""
 
-#: ../ui/prefs.ui:110
-msgid "Invert direction"
+#: ../ui/prefs.ui:106
+msgid "This device (click me!)"
 msgstr ""
 
 #: ../ui/prefs.ui:125
+msgid "Enable"
+msgstr ""
+
+#: ../ui/prefs.ui:140
+msgid "Invert direction"
+msgstr ""
+
+#: ../ui/prefs.ui:155
 msgid "Cyclic scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:156
+#: ../ui/prefs.ui:186
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
 msgstr ""
 
-#: ../ui/prefs.ui:190
+#: ../ui/prefs.ui:217
 msgid "Required pressure"
 msgstr ""
 
-#: ../ui/prefs.ui:247
-msgid "Please, select action(s) and device(s) to configure."
-msgstr ""
-
-#: ../ui/prefs.ui:273
-msgid "This device (click me!)"
-msgstr ""
-
-#: ../ui/prefs.ui:304
+#: ../ui/prefs.ui:260
 msgid "Name"
 msgstr ""
 
-#: ../ui/prefs.ui:318
+#: ../ui/prefs.ui:274
 msgid "Remove"
 msgstr ""
 
-#: ../ui/prefs.ui:354
+#: ../ui/prefs.ui:323
 msgid "Actions"
+msgstr ""
+
+#: ../ui/prefs.ui:374
+msgid "Please, select action(s) and device(s) to configure."
+msgstr ""
+
+#: ../ui/prefs.ui:423
+msgid "Switch workspaces when scrolling over free space on topbar"
 msgstr ""

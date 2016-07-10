@@ -12,3 +12,7 @@ const settings = new imports.gi.Gio.Settings({
 function get_devices() {
 	return JSON.parse(settings.get_string('devices'));
 }
+
+function is(key) {
+	return settings.get_boolean(key);
+}

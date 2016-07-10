@@ -5,7 +5,7 @@ const Meta = imports.gi.Meta;
 const GetText = Me.imports.gettext;
 const Settings = Me.imports.settings;
 
-let left_connection, center_connection, settings_connection;
+let connected = [];
 let _delta_windows = 0, _delta_workspaces = 0;
 let devices;
 
@@ -18,25 +18,46 @@ function init() {
 
 function enable() {
 	Main.panel._leftBox.reactive = true;
-	center_connection = Main.panel.actor.connect('scroll-event', _switch_workspace);
-	left_connection = Main.panel._leftBox.connect('scroll-event', _switch_window);
-	settings_connection = Settings.settings.connect('changed::devices', () => {
-		devices = Settings.get_devices();
-	});
+	connected = [
+		{
+			target: Settings.is('wide-left') ? Main.panel._leftBox : Main.panel.statusArea.appMenu.actor,
+			event: 'scroll-event',
+			callback: _switch_window
+		},
+		{
+			target: Settings.is('wide-center') ? Main.panel.actor : Main.panel.statusArea.dateMenu.actor,
+			event: 'scroll-event',
+			callback: Settings.is('wide-center') ? _switch_workspace_deep_check : _switch_workspace
+		},
+		{
+			target: Settings.settings,
+			event: 'changed::wide-left',
+			callback: () => { disable(); enable(); }
+		},
+		{
+			target: Settings.settings,
+			event: 'changed::wide-center',
+			callback: () => { disable(); enable(); }
+		},
+		{
+			target: Settings.settings,
+			event: 'changed::devices',
+			callback: () => { devices = Settings.get_devices(); }
+		}
+	];
+	connected.forEach((c) => { c.handle = c.target.connect(c.event, c.callback); });
 	devices = Settings.get_devices();
 }
 
 
 
 function disable() {
-	Main.panel.actor.disconnect(center_connection);
-	Main.panel._leftBox.disconnect(left_connection);
-	Settings.settings.disconnect(settings_connection);
+	connected.forEach((c) => { c.target.disconnect(c.handle); });
 }
 
 
 
-function _switch_workspace(source, event) {
+function _switch_workspace_deep_check(source, event) {
 	const [x,y] = event.get_coords();
 	let top = event.get_stage().get_actor_at_pos(Clutter.PickMode.ALL, x, y);
 	while (top != Main.panel.actor) {
@@ -45,6 +66,10 @@ function _switch_workspace(source, event) {
 		}
 		top = top.get_parent();
 	}
+	_switch_workspace(source, event);
+}
+
+function _switch_workspace(source, event) {
 	const settings = devices[event.get_source_device().name] == undefined
 		? devices[Settings.UNLISTED_DEVICE]['switching-workspaces']
 		: devices[event.get_source_device().name]['switching-workspaces'];

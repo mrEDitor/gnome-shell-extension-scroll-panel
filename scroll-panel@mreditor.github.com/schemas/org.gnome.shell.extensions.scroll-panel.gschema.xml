@@ -2,6 +2,16 @@
   <schema id="org.gnome.shell.extensions.scroll-panel"
       path="/org/gnome/shell/extensions/scroll-panel/">
 
+    <key type="b" name="wide-left">
+		<default>false</default>
+		<summary>Also use Overview button as windows switcher</summary>
+	</key>
+
+    <key type="b" name="wide-center">
+		<default>false</default>
+		<summary>Use whole panel as workspaces switcher</summary>
+	</key>
+
     <key type="s" name="devices">
       <default>'{
 					"__unlisted_device__": {

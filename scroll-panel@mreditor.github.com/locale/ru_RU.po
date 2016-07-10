@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: v3.0.0-gnome3.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-05 23:29+0300\n"
+"POT-Creation-Date: 2016-07-11 00:33+0300\n"
 "PO-Revision-Date: 2016-07-05 20:58+0300\n"
 "Last-Translator: Edward Minasyan <mrEDitor@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -22,38 +22,46 @@ msgstr ""
 msgid "Not listed devices"
 msgstr "Другие устройства"
 
-#: ../ui/prefs.ui:71
+#: ../ui/prefs.ui:73
 msgid "Switching workspaces"
 msgstr "Переключение рабочих столов"
 
-#: ../ui/prefs.ui:72
+#: ../ui/prefs.ui:74
 msgid ""
 "Switching active workspace by scrolling a mousewheel above the clock panel"
 msgstr ""
 "Переключайте рабочие столы, прокручивая колесо мыши над панелью с часами"
 
-#: ../ui/prefs.ui:76
+#: ../ui/prefs.ui:78
 msgid "Switching windows"
 msgstr "Переключение окон"
 
-#: ../ui/prefs.ui:77
+#: ../ui/prefs.ui:79
 msgid ""
 "Switching active window by scrolling a mousewheel above the application menu"
 msgstr "Переключайте окна, прокручивая колесо мыши над меню приложения"
 
-#: ../ui/prefs.ui:95
+#: ../ui/prefs.ui:92
+msgid "Switch windows when scrolling over Overview button"
+msgstr "Переключать окна при прокрутке над кнопкой Обзор"
+
+#: ../ui/prefs.ui:106
+msgid "This device (click me!)"
+msgstr "Это устройство (кликните!)"
+
+#: ../ui/prefs.ui:125
 msgid "Enable"
 msgstr "Включено"
 
-#: ../ui/prefs.ui:110
+#: ../ui/prefs.ui:140
 msgid "Invert direction"
 msgstr "В обратном направлении"
 
-#: ../ui/prefs.ui:125
+#: ../ui/prefs.ui:155
 msgid "Cyclic scrolling"
 msgstr "Циклическая прокрутка"
 
-#: ../ui/prefs.ui:156
+#: ../ui/prefs.ui:186
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
@@ -61,26 +69,26 @@ msgstr ""
 "Дистанция прокрутки колесом мыши, необходимая для активации действия.\n"
 "Подсказка: вы можете крутить этот переключатель для настройки."
 
-#: ../ui/prefs.ui:190
+#: ../ui/prefs.ui:217
 msgid "Required pressure"
 msgstr "Необходимое давление"
 
-#: ../ui/prefs.ui:247
-msgid "Please, select action(s) and device(s) to configure."
-msgstr "Пожалуйста, выберите действия и устройства для настройки."
-
-#: ../ui/prefs.ui:273
-msgid "This device (click me!)"
-msgstr "Это устройство (кликните!)"
-
-#: ../ui/prefs.ui:304
+#: ../ui/prefs.ui:260
 msgid "Name"
 msgstr "Имя"
 
-#: ../ui/prefs.ui:318
+#: ../ui/prefs.ui:274
 msgid "Remove"
 msgstr "Убрать"
 
-#: ../ui/prefs.ui:354
+#: ../ui/prefs.ui:323
 msgid "Actions"
 msgstr "Действия"
+
+#: ../ui/prefs.ui:374
+msgid "Please, select action(s) and device(s) to configure."
+msgstr "Пожалуйста, выберите действия и устройства для настройки."
+
+#: ../ui/prefs.ui:423
+msgid "Switch workspaces when scrolling over free space on topbar"
+msgstr "Переключать столы при прокрутке над свободной частью панели"

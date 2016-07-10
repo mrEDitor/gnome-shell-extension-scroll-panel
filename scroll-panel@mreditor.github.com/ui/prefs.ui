@@ -52,7 +52,9 @@ Author: Edward Minasyan <mrEDitor@mail.ru>
     <property name="stock">gtk-find</property>
   </object>
   <object class="GtkAdjustment" id="setting-pressure-adjustment">
+    <property name="lower">1</property>
     <property name="upper">100000</property>
+    <property name="value">1</property>
     <property name="step_increment">1</property>
     <property name="page_increment">5</property>
   </object>
@@ -85,6 +87,34 @@ Author: Edward Minasyan <mrEDitor@mail.ru>
     <property name="row_spacing">5</property>
     <property name="column_spacing">5</property>
     <property name="column_homogeneous">True</property>
+    <child>
+      <object class="GtkCheckButton" id="setting-wide-left">
+        <property name="label" translatable="yes">Switch windows when scrolling over Overview button</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="draw_indicator">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="device-this">
+        <property name="label" translatable="yes">This device (click me!)</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="image">img-find</property>
+        <property name="always_show_image">True</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">6</property>
+      </packing>
+    </child>
     <child>
       <object class="GtkBox" id="settings">
         <property name="visible">True</property>
@@ -178,9 +208,6 @@ Hint: you can scroll this spinner to change it's value.</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
             </child>
             <child type="label">
@@ -200,8 +227,120 @@ Hint: you can scroll this spinner to change it's value.</property>
       </object>
       <packing>
         <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
+        <property name="top_attach">4</property>
         <property name="height">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="devices">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="vexpand">True</property>
+            <property name="model">devices-list</property>
+            <property name="headers_clickable">False</property>
+            <property name="enable_search">False</property>
+            <property name="fixed_height_mode">True</property>
+            <property name="show_expanders">False</property>
+            <property name="enable_grid_lines">both</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="devices-selection">
+                <property name="mode">multiple</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="spacing">5</property>
+                <property name="sizing">fixed</property>
+                <property name="title" translatable="yes">Name</property>
+                <property name="expand">True</property>
+                <child>
+                  <object class="GtkCellRendererText" id="device-name"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="spacing">5</property>
+                <property name="sizing">fixed</property>
+                <property name="title" translatable="yes">Remove</property>
+                <child>
+                  <object class="GtkCellRendererToggle" id="device-remove"/>
+                  <attributes>
+                    <attribute name="visible">1</attribute>
+                    <attribute name="activatable">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel">
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkFrame">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkTreeView" id="targets">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="model">targets-list</property>
+            <property name="headers_clickable">False</property>
+            <property name="enable_search">False</property>
+            <property name="fixed_height_mode">True</property>
+            <property name="show_expanders">False</property>
+            <property name="enable_grid_lines">both</property>
+            <property name="tooltip_column">2</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="targets-selection">
+                <property name="mode">multiple</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="targets-title">
+                <property name="spacing">5</property>
+                <property name="sizing">fixed</property>
+                <property name="title" translatable="yes">Actions</property>
+                <property name="expand">True</property>
+                <child>
+                  <object class="GtkCellRendererText"/>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel">
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">4</property>
       </packing>
     </child>
     <child>
@@ -228,18 +367,6 @@ Hint: you can scroll this spinner to change it's value.</property>
             <property name="can_focus">False</property>
             <property name="spacing">5</property>
             <child>
-              <object class="GtkArrow">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="arrow_type">down</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -250,6 +377,18 @@ Hint: you can scroll this spinner to change it's value.</property>
               </object>
               <packing>
                 <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkArrow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="arrow_type">down</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
@@ -264,107 +403,33 @@ Hint: you can scroll this spinner to change it's value.</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
+        <property name="top_attach">3</property>
         <property name="width">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="device-this">
-        <property name="label" translatable="yes">This device (click me!)</property>
+      <object class="GtkSeparator">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="image">img-find</property>
-        <property name="always_show_image">True</property>
-      </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkTreeView" id="devices">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="vexpand">True</property>
-        <property name="model">devices-list</property>
-        <property name="headers_clickable">False</property>
-        <property name="enable_search">False</property>
-        <property name="fixed_height_mode">True</property>
-        <property name="enable_grid_lines">both</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="devices-selection">
-            <property name="mode">multiple</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkTreeViewColumn">
-            <property name="spacing">5</property>
-            <property name="sizing">fixed</property>
-            <property name="title" translatable="yes">Name</property>
-            <property name="expand">True</property>
-            <child>
-              <object class="GtkCellRendererText" id="device-name"/>
-              <attributes>
-                <attribute name="text">0</attribute>
-              </attributes>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkTreeViewColumn">
-            <property name="spacing">5</property>
-            <property name="sizing">fixed</property>
-            <property name="title" translatable="yes">Remove</property>
-            <child>
-              <object class="GtkCellRendererToggle" id="device-remove"/>
-              <attributes>
-                <attribute name="visible">1</attribute>
-                <attribute name="activatable">1</attribute>
-              </attributes>
-            </child>
-          </object>
-        </child>
+        <property name="can_focus">False</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">2</property>
+        <property name="width">2</property>
       </packing>
     </child>
     <child>
-      <object class="GtkTreeView" id="targets">
+      <object class="GtkCheckButton" id="setting-wide-center">
+        <property name="label" translatable="yes">Switch workspaces when scrolling over free space on topbar</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
-        <property name="model">targets-list</property>
-        <property name="headers_clickable">False</property>
-        <property name="enable_search">False</property>
-        <property name="fixed_height_mode">True</property>
-        <property name="show_expanders">False</property>
-        <property name="enable_grid_lines">both</property>
-        <property name="tooltip_column">2</property>
-        <child internal-child="selection">
-          <object class="GtkTreeSelection" id="targets-selection">
-            <property name="mode">multiple</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkTreeViewColumn" id="targets-title">
-            <property name="spacing">5</property>
-            <property name="sizing">fixed</property>
-            <property name="title" translatable="yes">Actions</property>
-            <property name="expand">True</property>
-            <child>
-              <object class="GtkCellRendererText"/>
-              <attributes>
-                <attribute name="text">1</attribute>
-              </attributes>
-            </child>
-          </object>
-        </child>
+        <property name="receives_default">False</property>
+        <property name="draw_indicator">True</property>
       </object>
       <packing>
         <property name="left_attach">0</property>
         <property name="top_attach">1</property>
+        <property name="width">2</property>
       </packing>
     </child>
   </object>
