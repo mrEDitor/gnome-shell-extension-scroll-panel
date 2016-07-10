@@ -10,7 +10,7 @@ workspace, and above the clock to switch between virtual workspaces.
 Note: to use the touchpad, you probably have to configure its sensitivity in
 the extension settings.
 
-Get it from [extensions.gnome.org](https://extensions.gnome.org/extension/932/).
+Get it from [extensions.gnome.org](https://extensions.gnome.org/extension/1096/).
 
 
 
