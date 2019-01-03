@@ -1,3 +1,8 @@
+/**********************************************************************
+ * This file is licensed under MIT license.                           *
+ * Learn more from LICENSE file from package or upstream:             *
+ * https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/    *
+ **********************************************************************/
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const GioSettingsSchemaSource = imports.gi.Gio.SettingsSchemaSource;
 
@@ -9,10 +14,16 @@ const settings = new imports.gi.Gio.Settings({
 			.lookup(Me.metadata['settings-schema'], true)
 });
 
+/**
+ * Get devices from settings.
+ */
 function get_devices() {
 	return JSON.parse(settings.get_string('devices'));
 }
 
+/**
+ * Boolean value check shortcut.
+ */
 function is(key) {
 	return settings.get_boolean(key);
 }

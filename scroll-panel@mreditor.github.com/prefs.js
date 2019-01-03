@@ -1,3 +1,8 @@
+/**********************************************************************
+ * This file is licensed under MIT license.                           *
+ * Learn more from LICENSE file from package or upstream:             *
+ * https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/    *
+ **********************************************************************/
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const GLib = imports.gi.GLib;
 const Gtk = imports.gi.Gtk;
@@ -11,14 +16,16 @@ let filllock = false;
 let devices;
 let _;
 
-
-
+/**
+ * Initialize prefs with gettext helper.
+ */
 function init() {
 	_ = GetText.bind();
 }
 
-
-
+/**
+ * Build, bind and return widget.
+ */
 function buildPrefsWidget() {
 	devices = Settings.get_devices();
 	const ui_builder = new Gtk.Builder();
@@ -60,14 +67,16 @@ function buildPrefsWidget() {
 	return ui_builder.get_object('prefs');
 }
 
-
-
+/**
+ * Selection change callback.
+ */
 function _on_selection_changed(source, devices_sel, targets_sel, ui) {
 	_on_affecting_configs_changed(devices_sel.count_selected_rows() * targets_sel.count_selected_rows(), ui);
 }
 
-
-
+/**
+ * Device remove callback.
+ */
 function _remove_device(source, path, ui) {
 	let [ok, iter] = ui.get_object('devices').get_model().get_iter(Gtk.TreePath.new_from_string(path));
 	const devices_list = ui.get_object('devices-list');
@@ -75,8 +84,9 @@ function _remove_device(source, path, ui) {
 	devices_list.remove(iter);
 }
 
-
-
+/**
+ * On config change callback.
+ */
 function _on_affecting_configs_changed(count, ui) {
 	ui.get_object('settings').sensitive = (count != 0);
 	ui.get_object('info-empty-selection').visible = (count == 0);
@@ -93,8 +103,9 @@ function _on_affecting_configs_changed(count, ui) {
 	}
 }
 
-
-
+/**
+ * Adding device callback.
+ */
 function _add_or_find_device(source, ui) {
 	const device = Gtk.get_current_event().get_source_device();
 	const list = ui.get_object('devices-list');
@@ -116,8 +127,9 @@ function _add_or_find_device(source, ui) {
 	);
 }
 
-
-
+/**
+ * Foreach callback executor.
+ */
 function _foreach_selected(callback, ui) {
 	let [devices_pathes, devices_model] =
 		ui.get_object('devices-selection').get_selected_rows();
@@ -151,8 +163,9 @@ function _foreach_selected(callback, ui) {
 	});
 }
 
-
-
+/**
+ * Settings change callback.
+ */
 function _on_settings_changed(source, ui) {
 	if (!filllock) {
 		_foreach_selected((config) => {
