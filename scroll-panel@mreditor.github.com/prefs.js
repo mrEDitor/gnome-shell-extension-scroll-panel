@@ -62,6 +62,7 @@ function buildPrefsWidget() {
 	ui_builder.get_object('setting-enable').connect('toggled', settings_changed_listener);
 	ui_builder.get_object('setting-invert').connect('toggled', settings_changed_listener);
 	ui_builder.get_object('setting-cyclic').connect('toggled', settings_changed_listener);
+	ui_builder.get_object('setting-switcher').connect('toggled', settings_changed_listener);
 	ui_builder.get_object('setting-pressure').connect('value-changed', settings_changed_listener);
 	
 	return ui_builder.get_object('prefs');
@@ -97,6 +98,7 @@ function _on_affecting_configs_changed(count, ui) {
 			ui.get_object('setting-enable').active = config['setting-enable'];
 			ui.get_object('setting-invert').active = config['setting-invert'];
 			ui.get_object('setting-cyclic').active = config['setting-cyclic'];
+			ui.get_object('setting-switcher').active = config['setting-switcher'];
 			ui.get_object('setting-pressure').value = config['setting-pressure'];
 			filllock = false;
 		}, ui);
@@ -155,6 +157,7 @@ function _foreach_selected(callback, ui) {
 					'setting-enable': true,
 					'setting-invert': false,
 					'setting-cyclic': false,
+					'setting-switcher': false,
 					'setting-pressure': 1,
 				};
 			}
@@ -172,6 +175,7 @@ function _on_settings_changed(source, ui) {
 			config['setting-enable'] = ui.get_object('setting-enable').active;
 			config['setting-invert'] = ui.get_object('setting-invert').active;
 			config['setting-cyclic'] = ui.get_object('setting-cyclic').active;
+			config['setting-switcher'] = ui.get_object('setting-switcher').active;
 			config['setting-pressure'] = ui.get_object('setting-pressure').value;
 		}, ui);
 		Settings.settings.set_string('devices', JSON.stringify(devices));

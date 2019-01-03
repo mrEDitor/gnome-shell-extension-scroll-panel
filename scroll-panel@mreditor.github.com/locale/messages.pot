@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-11 00:33+0300\n"
+"POT-Creation-Date: 2019-01-03 13:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,32 +59,36 @@ msgstr ""
 msgid "Cyclic scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:186
+#: ../ui/prefs.ui:170
+msgid "Show switcher"
+msgstr ""
+
+#: ../ui/prefs.ui:201
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
 msgstr ""
 
-#: ../ui/prefs.ui:217
+#: ../ui/prefs.ui:232
 msgid "Required pressure"
 msgstr ""
 
-#: ../ui/prefs.ui:260
+#: ../ui/prefs.ui:275
 msgid "Name"
 msgstr ""
 
-#: ../ui/prefs.ui:274
+#: ../ui/prefs.ui:289
 msgid "Remove"
 msgstr ""
 
-#: ../ui/prefs.ui:323
+#: ../ui/prefs.ui:338
 msgid "Actions"
 msgstr ""
 
-#: ../ui/prefs.ui:374
+#: ../ui/prefs.ui:389
 msgid "Please, select action(s) and device(s) to configure."
 msgstr ""
 
-#: ../ui/prefs.ui:423
+#: ../ui/prefs.ui:438
 msgid "Switch workspaces when scrolling over free space on topbar"
 msgstr ""

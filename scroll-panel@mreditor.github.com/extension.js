@@ -5,6 +5,7 @@
  **********************************************************************/
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Clutter = imports.gi.Clutter;
+const AltTab = imports.ui.altTab;
 const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const GetText = Me.imports.gettext;
@@ -91,13 +92,24 @@ function _switch_workspace(source, event) {
 		_delta_workspaces += direction;
 		if (Math.abs(_delta_workspaces) >= settings['setting-pressure']) {
 			_delta_workspaces -= direction * settings['setting-pressure'];
-			let index = workspaceManager.get_active_workspace_index() + direction;
+			let current_index = workspaceManager.get_active_workspace_index();
+			let index = current_index + direction;
 			if (settings['setting-cyclic']) {
 				index = (index + workspaceManager.n_workspaces) % workspaceManager.n_workspaces;
 			} else if (index < 0 || workspaceManager.n_workspaces <= index) {
 				index = workspaceManager.get_active_workspace_index();
 			}
-			workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
+			if (settings['setting-switcher']) {
+				let switcher_delta = current_index < index ? +1 : -1;
+				let switcher_name = current_index < index ? 'switch-to-workspace-down' : 'switch-to-workspace-up';
+				for (let i = current_index; i != index; i += switcher_delta) {
+					Main.wm._showWorkspaceSwitcher(global.display, null, {
+						get_name: () => switcher_name
+					});
+				}
+			} else {
+				workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
+			}
 		}
 	}
 }
@@ -109,10 +121,18 @@ function _switch_window(source, event) {
 	const settings = devices[event.get_source_device().name] == undefined
 		? devices[Settings.UNLISTED_DEVICE]['switching-windows']
 		: devices[event.get_source_device().name]['switching-windows'];
+
 	if (settings['setting-enable']) {
 		const direction = _get_direction(event) * (settings['setting-invert'] ? -1 : 1);
 		_delta_windows += direction;
-		if (Math.abs(_delta_windows) >= settings['setting-pressure']) {
+
+		if (settings['setting-switcher']) {
+			let tabPopup = new AltTab.WindowSwitcherPopup();
+			if (!tabPopup.show(settings['setting-invert'], 0, 0)) {
+				tabPopup.destroy();
+			}
+		}
+		else if (Math.abs(_delta_windows) >= settings['setting-pressure']) {
 			_delta_windows -= direction * settings['setting-pressure'];
 			const windows = global.display.get_tab_list(Meta.TabList.NORMAL_ALL, workspaceManager.get_active_workspace());
 			const target = windows[0].get_stable_sequence() + direction;

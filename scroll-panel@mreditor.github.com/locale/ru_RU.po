@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: v3.0.0-gnome3.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-07-11 00:33+0300\n"
+"POT-Creation-Date: 2019-01-03 13:11+0300\n"
 "PO-Revision-Date: 2016-07-05 20:58+0300\n"
 "Last-Translator: Edward Minasyan <mrEDitor@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,11 @@ msgstr "В обратном направлении"
 msgid "Cyclic scrolling"
 msgstr "Циклическая прокрутка"
 
-#: ../ui/prefs.ui:186
+#: ../ui/prefs.ui:170
+msgid "Show switcher"
+msgstr "Визуализировать переключение"
+
+#: ../ui/prefs.ui:201
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
@@ -69,26 +73,26 @@ msgstr ""
 "Дистанция прокрутки колесом мыши, необходимая для активации действия.\n"
 "Подсказка: вы можете крутить этот переключатель для настройки."
 
-#: ../ui/prefs.ui:217
+#: ../ui/prefs.ui:232
 msgid "Required pressure"
 msgstr "Необходимое давление"
 
-#: ../ui/prefs.ui:260
+#: ../ui/prefs.ui:275
 msgid "Name"
 msgstr "Имя"
 
-#: ../ui/prefs.ui:274
+#: ../ui/prefs.ui:289
 msgid "Remove"
 msgstr "Убрать"
 
-#: ../ui/prefs.ui:323
+#: ../ui/prefs.ui:338
 msgid "Actions"
 msgstr "Действия"
 
-#: ../ui/prefs.ui:374
+#: ../ui/prefs.ui:389
 msgid "Please, select action(s) and device(s) to configure."
 msgstr "Пожалуйста, выберите действия и устройства для настройки."
 
-#: ../ui/prefs.ui:423
+#: ../ui/prefs.ui:438
 msgid "Switch workspaces when scrolling over free space on topbar"
 msgstr "Переключать столы при прокрутке над свободной частью панели"
