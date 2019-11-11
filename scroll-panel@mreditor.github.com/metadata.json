@@ -4,6 +4,6 @@
 	"name": "Scroll Panel",
 	"gettext-domain": "scroll-panel",
 	"settings-schema": "org.gnome.shell.extensions.scroll-panel",
-	"description": "Scroll above an application's title to switch between windows on the active workspace, above the clock to switch between virtual workspaces, and abovethe window title to move it to another workspace.",
+	"description": "Scroll above an application's title to switch between windows on the active workspace and above the clock to switch between virtual workspaces.",
 	"url": "http://github.com/mrEDitor/gnome-shell-extension-scroll-panel"
 }
