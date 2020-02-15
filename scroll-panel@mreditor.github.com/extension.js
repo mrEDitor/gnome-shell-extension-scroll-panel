@@ -10,6 +10,7 @@ const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const GetText = Me.imports.gettext;
 const Settings = Me.imports.settings;
+const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 
 let connected = [];
 let _delta_windows = 0, _delta_workspaces = 0;
@@ -99,16 +100,19 @@ function _switch_workspace(source, event) {
 			} else if (index < 0 || workspaceManager.n_workspaces <= index) {
 				index = workspaceManager.get_active_workspace_index();
 			}
+
+			workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
 			if (settings['setting-switcher']) {
-				let switcher_delta = current_index < index ? +1 : -1;
-				let switcher_name = current_index < index ? 'switch-to-workspace-down' : 'switch-to-workspace-up';
-				for (let i = current_index; i != index; i += switcher_delta) {
-					Main.wm._showWorkspaceSwitcher(global.display, null, {
-						get_name: () => switcher_name
-					});
-				}
-			} else {
-				workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
+				const wsPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup();
+
+				// Showing switcher blocks changing to a new workspace (#13)
+				// TODO: it's too dirty hack, need better
+				wsPopup.y = Main.panel.height;
+
+				const switcher_direction = direction < 0
+					? Meta.MotionDirection.UP
+					: Meta.MotionDirection.DOWN;
+				wsPopup.display(switcher_direction, index);
 			}
 		}
 	}
