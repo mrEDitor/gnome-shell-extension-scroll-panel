@@ -12,6 +12,7 @@ const GetText = Me.imports.gettext;
 const Settings = Me.imports.settings;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 
+
 let connected = [];
 let _delta_windows = 0, _delta_workspaces = 0;
 let devices;
@@ -72,7 +73,7 @@ function disable() {
 function _switch_workspace_deep_check(source, event) {
 	const [x,y] = event.get_coords();
 	let top = event.get_stage().get_actor_at_pos(Clutter.PickMode.ALL, x, y);
-	while (top != Main.panel.actor) {
+	while (top != Main.panel.actor && top != null) {
 		if (top == Main.panel._leftBox || top == Main.panel._rightBox) {
 			return;
 		}
@@ -88,7 +89,7 @@ function _switch_workspace(source, event) {
 	const settings = devices[event.get_source_device().name] == undefined
 		? devices[Settings.UNLISTED_DEVICE]['switching-workspaces']
 		: devices[event.get_source_device().name]['switching-workspaces'];
-	if (settings['setting-enable']) {
+	if (settings['setting-enable'] && workspaceManager.n_workspaces > 1) {
 		const direction = _get_direction(event) * (settings['setting-invert'] ? -1 : 1);
 		_delta_workspaces += direction;
 		if (Math.abs(_delta_workspaces) >= settings['setting-pressure']) {
@@ -104,15 +105,13 @@ function _switch_workspace(source, event) {
 			workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
 			if (settings['setting-switcher']) {
 				const wsPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup();
-
-				// Showing switcher blocks changing to a new workspace (#13)
-				// TODO: it's too dirty hack, need better
-				wsPopup.y = Main.panel.height;
-
+				wsPopup.actor.reactive = false;
 				const switcher_direction = direction < 0
 					? Meta.MotionDirection.UP
 					: Meta.MotionDirection.DOWN;
-				wsPopup.display(switcher_direction, index);
+				if (!Main.overview.visible) {
+					wsPopup.display(switcher_direction, index);
+				}
 			}
 		}
 	}
