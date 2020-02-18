@@ -1,0 +1,37 @@
+on:
+  push:
+    tags:
+    - 'v*'
+
+name: Create Release Draft
+
+jobs:
+  build:
+    name: Create Release Asset
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Build project
+        run: |
+          make zip
+      - name: Draft Release
+        id: draft_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+      - name: Upload Package
+        id: upload-package
+        uses: actions/upload-release-asset@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.draft_release.outputs.upload_url }}
+          asset_path: ./scroll-panel@mreditor.github.com.zip
+          asset_name: scroll-panel@mreditor.github.com.zip
+          asset_content_type: application/zip
