@@ -31,12 +31,12 @@ function enable() {
 	Main.panel._leftBox.reactive = true;
 	connected = [
 		{
-			target: Settings.is('wide-left') ? Main.panel._leftBox : Main.panel.statusArea.appMenu.actor,
+			target: Settings.is('wide-left') ? Main.panel._leftBox : Main.panel.statusArea.appMenu,
 			event: 'scroll-event',
 			callback: _switch_window
 		},
 		{
-			target: Settings.is('wide-center') ? Main.panel.actor : Main.panel.statusArea.dateMenu.actor,
+			target: Settings.is('wide-center') ? Main.panel : Main.panel.statusArea.dateMenu,
 			event: 'scroll-event',
 			callback: Settings.is('wide-center') ? _switch_workspace_deep_check : _switch_workspace
 		},
@@ -73,7 +73,7 @@ function disable() {
 function _switch_workspace_deep_check(source, event) {
 	const [x,y] = event.get_coords();
 	let top = event.get_stage().get_actor_at_pos(Clutter.PickMode.ALL, x, y);
-	while (top != Main.panel.actor && top != null) {
+	while (top != Main.panel && top != null) {
 		if (top == Main.panel._leftBox || top == Main.panel._rightBox) {
 			return;
 		}
@@ -105,7 +105,7 @@ function _switch_workspace(source, event) {
 			workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
 			if (settings['setting-switcher']) {
 				const wsPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup();
-				wsPopup.actor.reactive = false;
+				wsPopup.reactive = false;
 				const switcher_direction = direction < 0
 					? Meta.MotionDirection.UP
 					: Meta.MotionDirection.DOWN;
