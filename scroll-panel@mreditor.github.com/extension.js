@@ -17,7 +17,7 @@ let connected = [];
 let _delta_windows = 0, _delta_workspaces = 0;
 let devices;
 let workspaceManager = global.screen || global.workspace_manager;
-let wsPopup = null;
+var wsPopup = null;
 
 /**
  * Init action.
@@ -105,10 +105,13 @@ function _switch_workspace(source, event) {
 
 			workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
 			if (settings['setting-switcher']) {
-				if (wsPopup != null) {
-					wsPopup.destroy();
+				const prevWsPopup = wsPopup;
+				if (prevWsPopup != null) {
+					prevWsPopup.hide();
 				}
+
 				wsPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup();
+				wsPopup.connect('destroy', () => { this.wsPopup = null });
 				wsPopup.reactive = false;
 				const switcher_direction = direction < 0
 					? Meta.MotionDirection.UP
