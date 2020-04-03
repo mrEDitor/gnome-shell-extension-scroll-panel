@@ -199,5 +199,5 @@ function _get_direction(event) {
  * Get actor for back-compatibility with older gnome shell versions
  */
 function get_actor(obj) {
-	return obj.actor;
+	return obj instanceof Clutter.Actor ? obj : obj.actor;
 }
