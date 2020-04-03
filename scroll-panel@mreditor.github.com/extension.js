@@ -32,12 +32,12 @@ function enable() {
 	Main.panel._leftBox.reactive = true;
 	connected = [
 		{
-			target: Settings.is('wide-left') ? Main.panel._leftBox : Main.panel.statusArea.appMenu,
+			target: get_actor(Settings.is('wide-left') ? Main.panel._leftBox : Main.panel.statusArea.appMenu),
 			event: 'scroll-event',
 			callback: _switch_window
 		},
 		{
-			target: Settings.is('wide-center') ? Main.panel : Main.panel.statusArea.dateMenu,
+			target: get_actor(Settings.is('wide-center') ? Main.panel : Main.panel.statusArea.dateMenu),
 			event: 'scroll-event',
 			callback: Settings.is('wide-center') ? _switch_workspace_deep_check : _switch_workspace
 		},
@@ -74,8 +74,8 @@ function disable() {
 function _switch_workspace_deep_check(source, event) {
 	const [x,y] = event.get_coords();
 	let top = event.get_stage().get_actor_at_pos(Clutter.PickMode.ALL, x, y);
-	while (top != Main.panel && top != null) {
-		if (top == Main.panel._leftBox || top == Main.panel._rightBox) {
+	while (top != get_actor(Main.panel) && top != null) {
+		if (top == get_actor(Main.panel._leftBox) || top == get_actor(Main.panel._rightBox)) {
 			return;
 		}
 		top = top.get_parent();
@@ -112,7 +112,7 @@ function _switch_workspace(source, event) {
 
 				wsPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup();
 				wsPopup.connect('destroy', () => { this.wsPopup = null });
-				wsPopup.reactive = false;
+				get_actor(wsPopup).reactive = false;
 				const switcher_direction = direction < 0
 					? Meta.MotionDirection.UP
 					: Meta.MotionDirection.DOWN;
@@ -193,4 +193,11 @@ function _get_direction(event) {
 		default:
 			return 0;
 	}
+}
+
+/**
+ * Get actor for back-compatibility with older gnome shell versions
+ */
+function get_actor(obj) {
+	return obj.actor;
 }
