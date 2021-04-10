@@ -7,61 +7,55 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-03 13:11+0300\n"
+"POT-Creation-Date: 2021-04-11 02:54+0300\n"
 "PO-Revision-Date: 2019-12-08 22:25+0100\n"
+"Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
+"Language-Team: \n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Onno Giesmann <nutzer3105@gmail.com>\n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.2.4\n"
 
-#: ../ui/prefs.ui:44
+#: ../ui/prefs.ui:11
 msgid "Not listed devices"
 msgstr "Keine Geräte aufgeführt"
 
-#: ../ui/prefs.ui:73
+#: ../ui/prefs.ui:32
 msgid "Switching workspaces"
 msgstr "Arbeitsflächen wechseln"
 
-#: ../ui/prefs.ui:74
-msgid "Switching active workspace by scrolling a mousewheel above the clock panel"
-msgstr "Beim Drehen des Mausrades über dem Uhr/Datum-Bereich wird die aktive Arbeitsfläche gewechselt"
+#: ../ui/prefs.ui:33
+msgid ""
+"Switching active workspace by scrolling a mousewheel above the clock panel"
+msgstr ""
+"Beim Drehen des Mausrades über dem Uhr/Datum-Bereich wird die aktive "
+"Arbeitsfläche gewechselt"
 
-#: ../ui/prefs.ui:78
+#: ../ui/prefs.ui:37
 msgid "Switching windows"
 msgstr "Fenster wechseln"
 
-#: ../ui/prefs.ui:79
-msgid "Switching active window by scrolling a mousewheel above the application menu"
-msgstr "Beim Drehen des Mausrades über dem Anwendungsmenü wird das aktive Fenster gewechselt"
+#: ../ui/prefs.ui:38
+msgid ""
+"Switching active window by scrolling a mousewheel above the application menu"
+msgstr ""
+"Beim Drehen des Mausrades über dem Anwendungsmenü wird das aktive Fenster "
+"gewechselt"
 
-#: ../ui/prefs.ui:92
+#: ../ui/prefs.ui:53
 msgid "Switch windows when scrolling over Overview button"
 msgstr "Fenster wechseln beim Scrollen auf der Aktivitäten-Schaltfläche"
 
-#: ../ui/prefs.ui:106
-msgid "This device (click me!)"
+#: ../ui/prefs.ui:63
+msgid "This device (click here)"
 msgstr "Dieses Gerät (hier klicken)"
 
-#: ../ui/prefs.ui:125
+#: ../ui/prefs.ui:77
 msgid "Enable"
 msgstr "Aktivieren"
 
-#: ../ui/prefs.ui:140
-msgid "Invert direction"
-msgstr "Richtung umkehren"
-
-#: ../ui/prefs.ui:155
-msgid "Cyclic scrolling"
-msgstr "Endlos durchscrollen"
-
-#: ../ui/prefs.ui:170
-msgid "Show switcher"
-msgstr "Umschalter anzeigen"
-
-#: ../ui/prefs.ui:201
+#: ../ui/prefs.ui:103
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
@@ -69,26 +63,40 @@ msgstr ""
 "Mausrad-Schritte, bevor eine Aktion ausgelöst wird.\n"
 "Hinweis: Sie können diesen Wert durch Drehen mit dem Mausrad ändern."
 
-#: ../ui/prefs.ui:232
+#: ../ui/prefs.ui:120
 msgid "Required pressure"
 msgstr "Erforderliche Bewegung"
 
-#: ../ui/prefs.ui:275
+#: ../ui/prefs.ui:127
+msgid "Cyclic scrolling"
+msgstr "Endlos durchscrollen"
+
+#: ../ui/prefs.ui:136
+msgid "Invert direction"
+msgstr "Richtung umkehren"
+
+#: ../ui/prefs.ui:145
+msgid "Show switcher"
+msgstr "Umschalter anzeigen"
+
+#: ../ui/prefs.ui:180
 msgid "Name"
 msgstr "Name"
 
-#: ../ui/prefs.ui:289
+#: ../ui/prefs.ui:194
 msgid "Remove"
 msgstr "Entfernen"
 
-#: ../ui/prefs.ui:338
+#: ../ui/prefs.ui:239
 msgid "Actions"
 msgstr "Aktionen"
 
-#: ../ui/prefs.ui:389
+#: ../ui/prefs.ui:274
 msgid "Please, select action(s) and device(s) to configure."
 msgstr "Bitte Aktion(en) und Gerät(e) zum Konfigurieren auswählen."
 
-#: ../ui/prefs.ui:438
+#: ../ui/prefs.ui:309
 msgid "Switch workspaces when scrolling over free space on topbar"
-msgstr "Arbeitsflächen wechseln beim Drehen des Mausrades in einem freien Bereich der oberen Leiste"
+msgstr ""
+"Arbeitsflächen wechseln beim Drehen des Mausrades in einem freien Bereich "
+"der oberen Leiste"

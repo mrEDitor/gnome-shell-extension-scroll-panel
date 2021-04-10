@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: v3.0.0-gnome3.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-03 13:11+0300\n"
+"POT-Creation-Date: 2021-04-11 02:54+0300\n"
 "PO-Revision-Date: 2016-07-05 20:58+0300\n"
 "Last-Translator: Edward Minasyan <mrEDitor@mail.ru>\n"
 "MIME-Version: 1.0\n"
@@ -18,54 +18,42 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 2.91.7\n"
 
-#: ../ui/prefs.ui:44
+#: ../ui/prefs.ui:11
 msgid "Not listed devices"
 msgstr "Другие устройства"
 
-#: ../ui/prefs.ui:73
+#: ../ui/prefs.ui:32
 msgid "Switching workspaces"
 msgstr "Переключение рабочих столов"
 
-#: ../ui/prefs.ui:74
+#: ../ui/prefs.ui:33
 msgid ""
 "Switching active workspace by scrolling a mousewheel above the clock panel"
 msgstr ""
 "Переключайте рабочие столы, прокручивая колесо мыши над панелью с часами"
 
-#: ../ui/prefs.ui:78
+#: ../ui/prefs.ui:37
 msgid "Switching windows"
 msgstr "Переключение окон"
 
-#: ../ui/prefs.ui:79
+#: ../ui/prefs.ui:38
 msgid ""
 "Switching active window by scrolling a mousewheel above the application menu"
 msgstr "Переключайте окна, прокручивая колесо мыши над меню приложения"
 
-#: ../ui/prefs.ui:92
+#: ../ui/prefs.ui:53
 msgid "Switch windows when scrolling over Overview button"
 msgstr "Переключать окна при прокрутке над кнопкой Обзор"
 
-#: ../ui/prefs.ui:106
-msgid "This device (click me!)"
-msgstr "Это устройство (кликните!)"
+#: ../ui/prefs.ui:63
+msgid "This device (click here)"
+msgstr "Это устройство (кликните здесь)"
 
-#: ../ui/prefs.ui:125
+#: ../ui/prefs.ui:77
 msgid "Enable"
 msgstr "Включено"
 
-#: ../ui/prefs.ui:140
-msgid "Invert direction"
-msgstr "В обратном направлении"
-
-#: ../ui/prefs.ui:155
-msgid "Cyclic scrolling"
-msgstr "Циклическая прокрутка"
-
-#: ../ui/prefs.ui:170
-msgid "Show switcher"
-msgstr "Визуализировать переключение"
-
-#: ../ui/prefs.ui:201
+#: ../ui/prefs.ui:103
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
@@ -73,26 +61,38 @@ msgstr ""
 "Дистанция прокрутки колесом мыши, необходимая для активации действия.\n"
 "Подсказка: вы можете крутить этот переключатель для настройки."
 
-#: ../ui/prefs.ui:232
+#: ../ui/prefs.ui:120
 msgid "Required pressure"
 msgstr "Необходимое давление"
 
-#: ../ui/prefs.ui:275
+#: ../ui/prefs.ui:127
+msgid "Cyclic scrolling"
+msgstr "Циклическая прокрутка"
+
+#: ../ui/prefs.ui:136
+msgid "Invert direction"
+msgstr "В обратном направлении"
+
+#: ../ui/prefs.ui:145
+msgid "Show switcher"
+msgstr "Визуализировать переключение"
+
+#: ../ui/prefs.ui:180
 msgid "Name"
 msgstr "Имя"
 
-#: ../ui/prefs.ui:289
+#: ../ui/prefs.ui:194
 msgid "Remove"
 msgstr "Убрать"
 
-#: ../ui/prefs.ui:338
+#: ../ui/prefs.ui:239
 msgid "Actions"
 msgstr "Действия"
 
-#: ../ui/prefs.ui:389
+#: ../ui/prefs.ui:274
 msgid "Please, select action(s) and device(s) to configure."
 msgstr "Пожалуйста, выберите действия и устройства для настройки."
 
-#: ../ui/prefs.ui:438
+#: ../ui/prefs.ui:309
 msgid "Switch workspaces when scrolling over free space on topbar"
 msgstr "Переключать столы при прокрутке над свободной частью панели"
