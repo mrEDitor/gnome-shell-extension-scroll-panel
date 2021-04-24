@@ -1,3 +1,5 @@
 *~
-/*/locale/*/
-/*/schemas/gschemas.compiled
+/.idea
+/build
+/eslintrc-gjs.yml
+/eslintrc-shell.yml

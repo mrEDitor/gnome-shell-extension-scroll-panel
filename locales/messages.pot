@@ -1,14 +1,9 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-11 02:54+0300\n"
+"Project-Id-Version: 4.0\n"
+"Report-Msgid-Bugs-To: github.com/mrEDitor/gnome-shell-extension-scroll-panel/issues\n"
+"POT-Creation-Date: 2021-04-11 05:08+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -44,40 +39,44 @@ msgid "Switch windows when scrolling over Overview button"
 msgstr ""
 
 #: ../ui/prefs.ui:63
+msgid "Switch workspaces when scrolling over free space on topbar"
+msgstr ""
+
+#: ../ui/prefs.ui:73
 msgid "This device (click here)"
 msgstr ""
 
-#: ../ui/prefs.ui:77
+#: ../ui/prefs.ui:87
 msgid "Enable"
 msgstr ""
 
-#: ../ui/prefs.ui:103
+#: ../ui/prefs.ui:113
 msgid ""
 "Distance to go for a mousewheel, required to trigger an action.\n"
 "Hint: you can scroll this spinner to change it's value."
 msgstr ""
 
-#: ../ui/prefs.ui:120
+#: ../ui/prefs.ui:130
 msgid "Required pressure"
 msgstr ""
 
-#: ../ui/prefs.ui:127
+#: ../ui/prefs.ui:137
 msgid "Cyclic scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:136
+#: ../ui/prefs.ui:146
 msgid "Invert direction"
 msgstr ""
 
-#: ../ui/prefs.ui:145
+#: ../ui/prefs.ui:155
 msgid "Show switcher"
 msgstr ""
 
-#: ../ui/prefs.ui:180
+#: ../ui/prefs.ui:185
 msgid "Name"
 msgstr ""
 
-#: ../ui/prefs.ui:194
+#: ../ui/prefs.ui:199
 msgid "Remove"
 msgstr ""
 
@@ -87,8 +86,4 @@ msgstr ""
 
 #: ../ui/prefs.ui:274
 msgid "Please, select action(s) and device(s) to configure."
-msgstr ""
-
-#: ../ui/prefs.ui:309
-msgid "Switch workspaces when scrolling over free space on topbar"
 msgstr ""

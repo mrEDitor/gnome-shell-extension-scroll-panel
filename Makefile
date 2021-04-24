@@ -1,42 +1,109 @@
-TEMPDIR := $(shell mktemp -u)
-DOMAIN ?= scroll-panel
-PREFIX ?= ~/.local/share/gnome-shell/extensions
-UUID ?= scroll-panel@mreditor.github.com
-MAKE ?= make
-CLEAN ?= rm -f
+DOMAIN ?= io.github.mreditor.gnome-shell-extensions.scroll-panel
+BUILD_DIR ?= build
+INSTALL_DIR ?= $(HOME)/.local/share/gnome-shell/extensions
+
+BUILD_DIR := $(abspath $(BUILD_DIR))
+INSTALL_DIR := $(abspath $(INSTALL_DIR))
 
 define HELP
-Usage:
-	help - show this message
-	all - build the extension
-	clean - remove built files
-	install - install built files
-		uses PREFIX=$(PREFIX)
-	uninstall - uninstall old files
-		uses PREFIX=$(PREFIX)
-	zip - pack extension to archieve
+Usage (with `: dependencies` according to make syntax):
+	help :
+		- Show this message.
+	all : lint build zip
+		- Build every artifact of the extension inside `BUILD_DIR`; does NOT run
+		`debug`, `install` or `uninstall` targets.
+	build :
+		- Build the extension inside `BUILD_DIR` without debug files; any debug
+		files built earlier will be deleted.
+	debug : build
+		- Build the extension inside `BUILD_DIR` with debug files.
+	lint : eslintrc-gjs.yml eslintrc-shell.yml
+		- Run linter on project files. Required config files will be downloaded
+		from https://gitlab.gnome.org/GNOME/gnome-shell-extensions/ if missed.
+	install : build uninstall
+		- Install the built extension from `BUILD_DIR` to `INSTALL_DIR`. Since
+		dependency on `build`, run `debug install` if debug version is required.
+	uninstall : build
+		- Delete files from `INSTALL_DIR`, if they are similar to built ones. If
+		you want to remove files despite are they similar to built ones or not,
+		pass the `FORCE=1` flag.
+	zip : build
+		- Pack the extension to a ZIP archive (in `BUILD_DIR`) which is expected
+		for publishing at https://extensions.gnome.org.
+
+Variables:
+	DOMAIN = $(DOMAIN)
+		- Extension unique namespace.
+	BUILD_DIR = $(BUILD_DIR)
+		- Target directory for all targets.
+	INSTALL_DIR = $(INSTALL_DIR)
+		- Gnome Shell extensions directory to use during `install` and
+		`uninstall`. To install extension globally, you can use
+		`/usr/share/gnome-shell/extensions` on most systems.
+	FORCE = $(FORCE)
+		- If set, `uninstall` target will delete non-similar files keeping diff
+		in standard output. Intended to be used for uninstalling or upgrading
+		extension when not having source code of installed version.
 endef
 export HELP
 
-all:
-	DOMAIN=$(DOMAIN) PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) all
+.PHONY : help all build debug lint install uninstall zip
 
-clean:
-	DOMAIN=$(DOMAIN) PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) clean
-	-rm $(UUID).zip
-
-install: all uninstall
-	DOMAIN=$(DOMAIN) PREFIX=$(PREFIX)/$(UUID) $(MAKE) -C $(UUID) install
-
-uninstall:
-	-rm -r $(PREFIX)/$(UUID)
-
-zip: all
-	mkdir $(TEMPDIR)
-	DOMAIN=$(DOMAIN) PREFIX=$(TEMPDIR) $(MAKE) -C $(UUID) install
-	cd $(TEMPDIR) ; zip -r $(UUID).zip *
-	cp $(TEMPDIR)/$(UUID).zip ./
-	rm -r $(TEMPDIR)
-
-help:
+help :
 	@echo "$$HELP"
+
+all : lint build zip
+
+build :
+	test -n '$(DOMAIN)'
+	mkdir -p '$(BUILD_DIR)'
+	$(MAKE) -C sources build BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C locales build BUILD_DIR='$(BUILD_DIR)/locale' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C schemas build BUILD_DIR='$(BUILD_DIR)/schemas' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C ui build BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+
+debug : build
+	$(MAKE) -C sources debug BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+
+lint : eslintrc-gjs.yml eslintrc-shell.yml
+	eslint --ignore-pattern '$(BUILD_DIR)' .
+	$(MAKE) -C ui lint BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+
+install : build uninstall
+	test -n '$(BUILD_DIR)'
+	mkdir -p '$(INSTALL_DIR)'
+	$(MAKE) -C sources install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C locales install BUILD_DIR='$(BUILD_DIR)/locale' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)/locale' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C schemas install BUILD_DIR='$(BUILD_DIR)/schemas' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)/schemas' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C ui install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)' DOMAIN='$(DOMAIN)'
+
+uninstall :
+	test -n '$(DOMAIN)'
+	test -n '$(BUILD_DIR)'
+	test -n '$(INSTALL_DIR)'
+ifneq ($(wildcard $(INSTALL_DIR)/$(DOMAIN)/),)
+	$(eval TEMP_DIR := $(shell mktemp -d))
+	$(MAKE) debug install BUILD_DIR='$(TEMP_DIR)' INSTALL_DIR='$(TEMP_DIR)/INSTALL_DIR' DOMAIN='$(DOMAIN)'
+	$(foreach FILE, $(wildcard $(TEMP_DIR)/INSTALL_DIR/*), \
+		test -f '$(INSTALL_DIR)/$(DOMAIN)/$(FILE)' && \
+		cmp '$(INSTALL_DIR)/$(DOMAIN)/$(FILE)' '$(TEMP_DIR)/INSTALL_DIR/$(FILE)' ;\
+	)
+	-rm -r '$(INSTALL_DIR)/$(DOMAIN)' || tree '$(INSTALL_DIR)/$(DOMAIN)'
+	rm -r '$(TEMP_DIR)'
+endif
+
+zip : $(BUILD_DIR)/$(DOMAIN).zip
+
+eslintrc-gjs.yml :
+	wget https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-gjs.yml
+
+eslintrc-shell.yml :
+	wget https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-shell.yml
+
+$(BUILD_DIR)/$(DOMAIN).zip : build
+	test -n '$(DOMAIN)'
+	test -n '$(BUILD_DIR)'
+	$(eval TEMP_DIR := $(shell mktemp -d))
+	$(MAKE) install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(TEMP_DIR)' DOMAIN='$(DOMAIN)'
+	zip -r '$(BUILD_DIR)/$(DOMAIN).zip' '$(TEMP_DIR)'/*
+	rm -r '$(TEMP_DIR)'

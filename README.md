@@ -1,60 +1,60 @@
-Scroll Panel
-=====
+# Scroll Panel extension for Gnome Shell
 
+Extension allows switching between windows or workspaces by scrolling
+Gnome Shell topbar (both in overview and workspace mode).
 
-Gnome Shell Extension
------
-Scroll above an application's title to switch between windows on the active
-workspace, and above the clock to switch between virtual workspaces.
+Defaults are:
 
-Note: to use the touchpad, you probably have to configure its sensitivity in
-the extension settings.
+- scroll the topbar over the clock or empty space to switch workspaces;
+- scroll the overview button or application name in topbar to switch windows;
+- hold Super key and scroll anywhere to switch workspaces (Gnome Shell feature);
+- hold Super+Shift keys and scroll a window to take it to another workspaces while switching.
 
-Get it from [extensions.gnome.org](https://extensions.gnome.org/extension/1096/).
+You can install the extension from [extensions.gnome.org](https://extensions.gnome.org/extension/1096/).
 
+Target Gnome version is Gnome Shell 40.
 
+## Installation from scratch
 
-License and contributors
------
-This software is distributing under MIT (X11) license, provided "as is" and
-without warranty of any kind. You can take a look at [LICENSE](LICENSE) file.
-
-
-
-Build
------
 1. Clone source code from GitHub:
 
 		git clone https://github.com/mrEDitor/gnome-shell-extension-scroll-panel
 		cd gnome-shell-extension-scroll-panel
 	
-2. Build it with Makefile:
-
-		make
-	
-3. Install extension into your Gnome Shell:
+2. Install extension into your Gnome Shell:
 
 		make install
 
-4. Enable and configure extension with
+3. Enable (and configure, if needed) extension with
 
-		gnome-shell-extension-prefs
+		gnome-extensions-app
 
 
+## License, feedback and contributions
 
-How to localize
------
-Localization files are located inside
-[```locale```](./scroll-panel@mreditor.github.com/locale) directory.
-There you can see `messages.pot`, an template file to generate .po-translations.
-You should open it, e.g. with GTranslator or POEdit, translate text and save
-resulting .po-file in the same directory with corresponding to its locale name,
-like `en_US.po`. Then go back to project root and build whole project with
-`make` and perhaps install it with `make install`. Then, if you are going to
-commit your changes don't forget to `make clean` generated binaries.
+This software is distributing under MIT (X11) license, provided "as is" and
+without a warranty of any kind. You can take a look at [LICENSE](LICENSE) file.
 
-And feel free to submit translations to upstream on GitHub, I'll appreciate it!
+Feel free to contribute (especially localizations) or send feedback at
+https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/
 
-Bug reports and features requests
------
-- <https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/>
+
+## Localization
+
+1. Open [`locales/messages.pot`](locales/messages.pot) file with text editor or
+favorite .po-editor (e.g. you GTranslator or POEdit).
+
+2. Translate the text, name resulting .po-file after the target locale (e.g.
+`en_US.po`), and save it back to [`locales`](locales) directory. 
+
+3. Go back to project root and build whole project with `make`.
+
+
+# Previous versions
+
+Previous versions are available as:
+
+- [extensions.gnome.org page](https://extensions.gnome.org/extension/932/) for Gnome Shell 3.14-3.18;
+- [extensions.gnome.org page](https://extensions.gnome.org/extension/1096/) for Gnome Shell 3.20-3.38; 
+- [source code at GitHub.com](https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/);
+- [releases at GitHub.com](https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/releases).

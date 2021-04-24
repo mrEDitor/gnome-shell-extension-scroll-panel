@@ -1,0 +1,7 @@
+extends:
+  - ./eslintrc-gjs.yml
+  - ./eslintrc-shell.yml
+rules:
+  curly:
+    - error
+    - all
