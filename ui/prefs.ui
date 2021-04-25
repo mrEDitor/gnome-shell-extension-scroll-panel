@@ -84,7 +84,7 @@
                             </object>
                         </child>
                         <child>
-                            <object class="GtkButton" id="setting-actor">
+                            <object class="GtkToggleButton" id="setting-actor">
                                 <property name="icon-name">find-location-symbolic</property>
                             </object>
                         </child>

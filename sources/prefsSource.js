@@ -155,7 +155,6 @@ var module = new class PrefsSourceModule {
          * Path along the scene view to the actor to highlight.
          * The setting is used for extension-settings communication only and intended
          * to be empty when to setting widget is open.
-         * TODO: May be there is a better way to communicate?
          * @type {StringArraySetting}
          */
         this.highlightPath = new StringArraySetting('highlight-path');
@@ -165,7 +164,6 @@ var module = new class PrefsSourceModule {
          * either 'workspaces-switcher-path' or 'windows-switcher-path'.
          * The setting is used for extension-settings communication only and intended
          * to be empty when no settings widget is open.
-         * TODO: May be there is a better way to communicate?
          * @type {StringSetting}
          */
         this.pickPathKey = new StringSetting('pick-path-key');

@@ -60,23 +60,19 @@ var module = new class PrefsModule {
         const uiBuilder = Gtk.Builder.new_from_file(uiFile);
         const widget = uiBuilder.get_object('content');
 
-        widget.connect(
-            'realize',
-            () => widget.get_root().set_titlebar(uiBuilder.get_object('titlebar'))
-        );
+        widget.connect('realize', () => {
+            widget.get_root().set_titlebar(uiBuilder.get_object('titlebar'));
+        });
 
-        uiBuilder.get_object('workspaces-switcher').connect(
-            'toggled',
-            () => this._updateLayout(uiBuilder)
-        );
-        uiBuilder.get_object('windows-switcher').connect(
-            'toggled',
-            () => this._updateLayout(uiBuilder)
-        );
-        uiBuilder.get_object('windows-dragger').connect(
-            'toggled',
-            () => this._updateLayout(uiBuilder)
-        );
+        uiBuilder.get_object('workspaces-switcher').connect('toggled', () => {
+            this._updateLayout(uiBuilder);
+        });
+        uiBuilder.get_object('windows-switcher').connect('toggled', () => {
+            this._updateLayout(uiBuilder);
+        });
+        uiBuilder.get_object('windows-dragger').connect('toggled', () => {
+            this._updateLayout(uiBuilder);
+        });
 
         this._updateLayout(uiBuilder);
         return [widget, uiBuilder];
@@ -107,39 +103,32 @@ var module = new class PrefsModule {
         const PrefsSource = this._me().imports.prefsSource.module;
 
         const motionController = new Gtk.EventControllerMotion();
-        motionController.connect(
-            'enter',
-            () => {
-                const action = this._getAction(uiBuilder);
-                PrefsSource.highlightPath.setValue(
-                    action
-                        ? PrefsSource.getStringArray(`${action}-path`)
-                        : []
-                );
-            }
-        );
-        motionController.connect(
-            'leave',
-            () => PrefsSource.highlightPath.setValue([])
-        );
+        motionController.connect('enter', () => {
+            const action = this._getAction(uiBuilder);
+            PrefsSource.highlightPath.setValue(
+                action
+                    ? PrefsSource.getStringArray(`${action}-path`)
+                    : []
+            );
+        });
+        motionController.connect('leave', () => {
+            PrefsSource.highlightPath.setValue([]);
+        });
         uiBuilder.get_object('setting-actor').add_controller(motionController);
 
-        uiBuilder.get_object('setting-actor').connect(
-            'clicked',
-            () => {
-                const action = this._getAction(uiBuilder);
-                PrefsSource.pickPathKey.setValue(action ? `${action}-path` : '');
-            }
-        );
+        uiBuilder.get_object('setting-actor').connect('toggled', button => {
+            const action = button.active && this._getAction(uiBuilder);
+            PrefsSource.pickPathKey.setValue(action ? `${action}-path` : '');
+        });
+        PrefsSource.pickPathKey.onChange((key, value) => {
+            uiBuilder.get_object('setting-actor').active = !!value;
+        });
 
         const widget = uiBuilder.get_object('content');
-        widget.connect(
-            'unrealize',
-            () => {
-                PrefsSource.highlightPath.setValue([]);
-                PrefsSource.pickPathKey.setValue('');
-            }
-        );
+        widget.connect('unrealize', () => {
+            PrefsSource.highlightPath.setValue([]);
+            PrefsSource.pickPathKey.setValue('');
+        });
     }
 
     /**
