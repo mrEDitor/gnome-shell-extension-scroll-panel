@@ -1,4 +1,4 @@
-DOMAIN ?= io.github.mreditor.gnome-shell-extensions.scroll-panel
+export DOMAIN ?= io.github.mreditor.gnome-shell-extensions.scroll-panel
 BUILD_DIR ?= build
 INSTALL_DIR ?= $(HOME)/.local/share/gnome-shell/extensions
 
@@ -57,25 +57,25 @@ all : lint build zip
 build :
 	test -n '$(DOMAIN)'
 	mkdir -p '$(BUILD_DIR)'
-	$(MAKE) -C sources build BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
-	$(MAKE) -C locales build BUILD_DIR='$(BUILD_DIR)/locale' DOMAIN='$(DOMAIN)'
-	$(MAKE) -C schemas build BUILD_DIR='$(BUILD_DIR)/schemas' DOMAIN='$(DOMAIN)'
-	$(MAKE) -C ui build BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C sources build BUILD_DIR='$(BUILD_DIR)'
+	$(MAKE) -C locales build BUILD_DIR='$(BUILD_DIR)/locale'
+	$(MAKE) -C schemas build BUILD_DIR='$(BUILD_DIR)/schemas'
+	$(MAKE) -C ui build BUILD_DIR='$(BUILD_DIR)'
 
 debug : build
-	$(MAKE) -C sources debug BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C sources debug BUILD_DIR='$(BUILD_DIR)'
 
 lint : eslintrc-gjs.yml eslintrc-shell.yml
 	eslint --ignore-pattern '$(BUILD_DIR)' .
-	$(MAKE) -C ui lint BUILD_DIR='$(BUILD_DIR)' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C ui lint BUILD_DIR='$(BUILD_DIR)'
 
 install : build uninstall
 	test -n '$(BUILD_DIR)'
 	mkdir -p '$(INSTALL_DIR)'
-	$(MAKE) -C sources install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)' DOMAIN='$(DOMAIN)'
-	$(MAKE) -C locales install BUILD_DIR='$(BUILD_DIR)/locale' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)/locale' DOMAIN='$(DOMAIN)'
-	$(MAKE) -C schemas install BUILD_DIR='$(BUILD_DIR)/schemas' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)/schemas' DOMAIN='$(DOMAIN)'
-	$(MAKE) -C ui install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)' DOMAIN='$(DOMAIN)'
+	$(MAKE) -C sources install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)'
+	$(MAKE) -C locales install BUILD_DIR='$(BUILD_DIR)/locale' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)/locale'
+	$(MAKE) -C schemas install BUILD_DIR='$(BUILD_DIR)/schemas' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)/schemas'
+	$(MAKE) -C ui install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(INSTALL_DIR)/$(DOMAIN)'
 
 uninstall :
 	test -n '$(DOMAIN)'
@@ -83,12 +83,25 @@ uninstall :
 	test -n '$(INSTALL_DIR)'
 ifneq ($(wildcard $(INSTALL_DIR)/$(DOMAIN)/),)
 	$(eval TEMP_DIR := $(shell mktemp -d))
-	$(MAKE) debug install BUILD_DIR='$(TEMP_DIR)' INSTALL_DIR='$(TEMP_DIR)/INSTALL_DIR' DOMAIN='$(DOMAIN)'
-	$(foreach FILE, $(wildcard $(TEMP_DIR)/INSTALL_DIR/*), \
-		test -f '$(INSTALL_DIR)/$(DOMAIN)/$(FILE)' && \
-		cmp '$(INSTALL_DIR)/$(DOMAIN)/$(FILE)' '$(TEMP_DIR)/INSTALL_DIR/$(FILE)' ;\
-	)
-	-rm -r '$(INSTALL_DIR)/$(DOMAIN)' || tree '$(INSTALL_DIR)/$(DOMAIN)'
+	$(MAKE) debug install BUILD_DIR='$(TEMP_DIR)' INSTALL_DIR='$(TEMP_DIR)/INSTALL_DIR'
+ifeq ($(FORCE),)
+	echo 'Marking changed files as out-of-package:'
+	cd '$(INSTALL_DIR)/$(DOMAIN)' && find . -type f -exec sh -c '\
+		cmp "$(INSTALL_DIR)/$(DOMAIN)/$$1" "$(TEMP_DIR)/INSTALL_DIR/$(DOMAIN)/$$1" && \
+		rm "$(INSTALL_DIR)/$(DOMAIN)/$$1" || true ; \
+		' sh {} \;
+else
+	echo 'Generating changed files diff before deletion:'
+	cd '$(INSTALL_DIR)/$(DOMAIN)' && find . -type f -exec sh -c '\
+		diff -uN "$(INSTALL_DIR)/$(DOMAIN)/$$1" "$(TEMP_DIR)/INSTALL_DIR/$(DOMAIN)/$$1" ; \
+		rm "$(INSTALL_DIR)/$(DOMAIN)/$$1" || true ; \
+		' sh {} \;
+endif
+	find '$(INSTALL_DIR)/$(DOMAIN)' -type d -empty -delete
+	test -d '$(INSTALL_DIR)/$(DOMAIN)' \
+		&& echo 'Protected and out-of-package files left untouched:' 1>&2 \
+		&& tree '$(INSTALL_DIR)/$(DOMAIN)' 1>&2 \
+		|| true
 	rm -r '$(TEMP_DIR)'
 endif
 
@@ -104,6 +117,6 @@ $(BUILD_DIR)/$(DOMAIN).zip : build
 	test -n '$(DOMAIN)'
 	test -n '$(BUILD_DIR)'
 	$(eval TEMP_DIR := $(shell mktemp -d))
-	$(MAKE) install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(TEMP_DIR)' DOMAIN='$(DOMAIN)'
+	$(MAKE) install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(TEMP_DIR)'
 	zip -r '$(BUILD_DIR)/$(DOMAIN).zip' '$(TEMP_DIR)'/*
 	rm -r '$(TEMP_DIR)'
