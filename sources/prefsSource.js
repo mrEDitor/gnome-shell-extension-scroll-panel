@@ -5,6 +5,30 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 /**
+ * @interface DeviceSettings
+ */
+/**
+ * @type {string}
+ * @name DeviceSettings#deviceMask
+ */
+/**
+ * @type {'direct'|'inverted'|'disabled'}
+ * @name DeviceSettings#horizontal
+ */
+/**
+ * @type {'direct'|'inverted'|'disabled'}
+ * @name DeviceSettings#vertical
+ */
+/**
+ * @type {number}
+ * @name DeviceSettings#resistance
+ */
+/**
+ * @type {boolean}
+ * @name DeviceSettings#visualize
+ */
+
+/**
  * GSettings-based settings source.
  * @type {Gio.Settings}
  */
@@ -32,16 +56,11 @@ function _logInfo(message) {
 }
 
 /**
- * @class
  * String array setting accessor.
  * @param {string} key - Setting key.
  */
 const StringArraySetting = GObject.registerClass(
     class StringArraySetting extends GObject.Object {
-        /**
-         * @inheritDoc {StringArraySetting}
-         * @constructs
-         */
         _init(key) {
             // TODO: is it okay to abandon setting change connections?
             SettingsSource.connect(
@@ -91,16 +110,11 @@ const StringArraySetting = GObject.registerClass(
 );
 
 /**
- * @class
  * String setting accessor.
  * @param {string} key - Setting key.
  */
 const StringSetting = GObject.registerClass(
     class StringSetting extends GObject.Object {
-        /**
-         * @inheritDoc {StringSetting}
-         * @constructs
-         */
         _init(key) {
             // TODO: is it okay to abandon setting change connections?
             SettingsSource.connect(
@@ -149,6 +163,62 @@ const StringSetting = GObject.registerClass(
     }
 );
 
+/**
+ * JSON setting accessor.
+ * @param {string} key - Setting key.
+ * @template T
+ */
+const JsonSetting = GObject.registerClass(
+    class JsonSetting extends GObject.Object {
+        _init(key) {
+            // TODO: is it okay to abandon setting change connections?
+            SettingsSource.connect(
+                `changed::${key}`,
+                () => {
+                    const value = SettingsSource.get_string(key);
+                    this.value = JSON.parse(value);
+                    _logInfo(`Setting ${key} set to: ${value}`);
+                }
+            );
+
+            /**
+             * GSetting key
+             * @type {string} _key
+             */
+            this._key = key;
+
+            /**
+             * Current setting value.
+             * @type {T} value
+             */
+            this.value = JSON.parse(SettingsSource.get_string(key));
+        }
+
+        /**
+         * Subscribe a callback for setting value changes.
+         * @param {function(string, T)} callback - Callback for value change.
+         * @returns {function()} - Callback for subscription cancellation.
+         */
+        onChange(callback) {
+            const cId = SettingsSource.connect(
+                `changed::${this._key}`,
+                () => callback(this._key, this.value)
+            );
+            this.value = JSON.parse(SettingsSource.get_string(this._key));
+            callback(this._key, this.value);
+            return () => SettingsSource.disconnect(cId);
+        }
+
+        /**
+         * Set new value for the setting.
+         * @param {T} value - New value for the setting.
+         */
+        setValue(value) {
+            SettingsSource.set_string(this._key, JSON.stringify(value));
+        }
+    }
+);
+
 var module = new class PrefsSourceModule {
     constructor() {
         /**
@@ -179,6 +249,18 @@ var module = new class PrefsSourceModule {
          * @type {StringArraySetting}
          */
         this.windowsSwitcherPath = new StringArraySetting('windows-switcher-path');
+
+        /**
+         * Workspaces switcher settings per device.
+         * @type {JsonSetting<DeviceSettings[]>}
+         */
+        this.workspacesSwitcherDevices = new JsonSetting('workspaces-switcher-devices');
+
+        /**
+         * Windows switcher settings per device.
+         * @type {JsonSetting<DeviceSettings[]>}
+         */
+        this.windowsSwitcherDevices = new JsonSetting('windows-switcher-devices');
     }
 
     /**

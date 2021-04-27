@@ -14,12 +14,12 @@ function _logWarning(message) {
  * Red border highlight effect for {@link Clutter} actors.
  * Based on Gnome Shell Looking Glass, you can find it at
  * {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/lookingGlass.js}
- * @type {_ActorPicker.prototype.constructor}
+ * @type {ActorPicker.prototype.constructor}
  * @param {function(Clutter.Actor)} onPicked - Callback for pick completion.
  * Receives resulting actor as argument.
  */
 const ActorPicker = GObject.registerClass(
-    class _ActorPicker extends Clutter.Effect {
+    class ActorPicker extends Clutter.Effect {
         _init(onPicked) {
             super._init();
             try {

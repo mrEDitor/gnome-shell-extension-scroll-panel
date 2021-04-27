@@ -13,8 +13,10 @@ class ActorScrollHandler {
     /**
      * @param {function(Clutter.ScrollDirection)} onSwitch - Callback for switch
      * action. The only argument is switching (scrolling) direction.
+     * @param {JsonSetting<DeviceSettings[]>} settingsSource - Per-device
+     * settings source for the switcher.
      */
-    constructor(onSwitch) {
+    constructor(onSwitch, settingsSource) {
         this._onSwitch = onSwitch;
 
         /** @type {number} */
@@ -25,6 +27,16 @@ class ActorScrollHandler {
 
         /** @type {function()|null} */
         this._signalDisconnector = null;
+
+        settingsSource.onChange((key, value) => {
+            /** @type {DeviceSettings[]} */
+            this._settings = (value ?? []).map(
+                v => Object.assign(v, { deviceMask: new RegExp(v.deviceMask) })
+            );
+
+            /** @type {Object.<number, DeviceSettings>} */
+            this._settingsCache = {};
+        });
     }
 
     /**
@@ -47,29 +59,63 @@ class ActorScrollHandler {
         }
     }
 
-    _switch(event) {
-        // log('---------->' + event.get_source_device().name)
-        const [x, y] = event.get_scroll_delta();
-        if (event.get_scroll_direction() === Clutter.ScrollDirection.SMOOTH) {
-            this._x += x;
-            this._y += y;
+    /**
+     * @param {Clutter.InputDevice} device - Device to get settings for.
+     * @returns {DeviceSettings} - Device settings.
+     */
+    _getSettings(device) {
+        const cacheKey = `${device.vendor_id}_${device.product_id}`;
+        if (this._settingsCache.hasOwnProperty(cacheKey)) {
+            return this._settingsCache[cacheKey];
         }
-        while (Math.abs(this._x) >= 1) {
+        const settings = this._settings.find(s => s.deviceMask.test(device.name)) || {
+            resistance: 1,
+        };
+        this._settingsCache[cacheKey] = settings;
+        return settings;
+    }
+
+    _switch(event) {
+        if (event.get_scroll_direction() !== Clutter.ScrollDirection.SMOOTH) {
+            // seems like all events are doubled as both smooth and directed
+            return;
+        }
+        const settings = this._getSettings(event.get_source_device());
+        const [x, y] = event.get_scroll_delta();
+        this._x += settings.horizontal !== 'disabled' ? x : 0;
+        this._y += settings.vertical !== 'disabled' ? y : 0;
+        while (Math.abs(this._x) >= settings.resistance) {
             if (this._x < 0) {
                 this._x += 1;
-                this._onSwitch(Clutter.ScrollDirection.LEFT, false);
+                this._onSwitch(
+                    settings.horizontal === 'direct'
+                        ? Clutter.ScrollDirection.LEFT
+                        : Clutter.ScrollDirection.RIGHT
+                );
             } else {
                 this._x -= 1;
-                this._onSwitch(Clutter.ScrollDirection.RIGHT, false);
+                this._onSwitch(
+                    settings.horizontal === 'direct'
+                        ? Clutter.ScrollDirection.RIGHT
+                        : Clutter.ScrollDirection.LEFT
+                );
             }
         }
-        while (Math.abs(this._y) >= 1) {
+        while (Math.abs(this._y) >= settings.resistance) {
             if (this._y < 0) {
                 this._y += 1;
-                this._onSwitch(Clutter.ScrollDirection.UP, false);
+                this._onSwitch(
+                    settings.vertical === 'direct'
+                        ? Clutter.ScrollDirection.UP
+                        : Clutter.ScrollDirection.DOWN
+                );
             } else {
                 this._y -= 1;
-                this._onSwitch(Clutter.ScrollDirection.DOWN, false);
+                this._onSwitch(
+                    settings.vertical === 'direct'
+                        ? Clutter.ScrollDirection.DOWN
+                        : Clutter.ScrollDirection.UP
+                );
             }
         }
     }
@@ -83,11 +129,13 @@ var module = new class ExtensionModule {
     constructor() {
         /** @type {function()[]} */
         this._signalDisconnectors = [];
-        this._windowsSwitcherHandler = new ActorScrollHandler(
-            this._switchWindow.bind(this)
-        );
         this._workspacesSwitcherHandler = new ActorScrollHandler(
-            this._switchWorkspace.bind(this)
+            this._switchWorkspace.bind(this),
+            PrefsSource.workspacesSwitcherDevices
+        );
+        this._windowsSwitcherHandler = new ActorScrollHandler(
+            this._switchWindow.bind(this),
+            PrefsSource.windowsSwitcherDevices
         );
     }
 
@@ -119,12 +167,15 @@ var module = new class ExtensionModule {
         );
     }
 
+    /**
+     * @param {Clutter.ScrollDirection} direction - Switching direction.
+     */
     _switchWindow(direction) {
 
     }
 
     /**
-     * @param {Clutter.ScrollDirection} direction
+     * @param {Clutter.ScrollDirection} direction - Switching direction.
      */
     _switchWorkspace(direction) {
         const n = global.workspaceManager.n_workspaces;

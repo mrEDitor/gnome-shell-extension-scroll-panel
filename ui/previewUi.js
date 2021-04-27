@@ -7,10 +7,10 @@ class UiPreview extends Gtk.Application {
     vfunc_startup() {
         super.vfunc_startup();
         const file = imports.gi.GLib.getenv('UI');
-        const [appWidget, _] = imports.prefs.buildPrefsView(`${file}.ui`);
+        const uiBuilder = new imports.prefs.UiBuilder(`${file}.ui`);
         this.appWindow = new Gtk.ApplicationWindow({
             application: this,
-            child: appWidget,
+            child: uiBuilder.content,
             title: `Preview ${file}.ui`,
         });
     }

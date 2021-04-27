@@ -1,64 +1,50 @@
 <schemalist gettext-domain="io.github.mreditor.gnome-shell-extensions.scroll-panel">
     <schema id="io.github.mreditor.gnome-shell-extensions.scroll-panel"
-        path="/io/github/mreditor/gnome-shell-extensions/scroll-panel/">
+            path="/io/github/mreditor/gnome-shell-extensions/scroll-panel/">
 
-    <key type="as" name="highlight-path">
-        <default>[]</default>
-        <summary>Current actor path to highlight.</summary>
-        <description>Path to scrollable actor candidate. Should be empty array unless the user is picking an actor right now.</description>
-	</key>
-    <key type="s" name="pick-path-key">
-        <default>''</default>
-        <summary>Setting key to pick actor path for.</summary>
-        <description>Unless empty, used as key of setting to pick actor path for.</description>
-	</key>
-    <key type="as" name="windows-switcher-path">
-        <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft' ]</default>
-        <summary>Windows switcher actor path.</summary>
-        <description>Path to windows switcher scrollable actor. Empty array to disable the switcher.</description>
-	</key>
-    <key type="as" name="workspaces-switcher-path">
-		<default>[ 'uiGroup', 'panelBox', 'panel' ]</default>
-		<summary>Workspaces switcher actor path.</summary>
-		<description>Path to workspaces switcher scrollable actor. Empty array to disable the switcher.</description>
-	</key>
+        <key type="as" name="highlight-path">
+            <default>[]</default>
+            <summary>Current actor path to highlight.</summary>
+            <description>Path to scrollable actor candidate. Should be empty array unless the user is picking an actor
+                right now.
+            </description>
+        </key>
+        <key type="s" name="pick-path-key">
+            <default>''</default>
+            <summary>Setting key to pick actor path for.</summary>
+            <description>Unless empty, used as key of setting to pick actor path for.</description>
+        </key>
+        <key type="as" name="windows-switcher-path">
+            <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft' ]</default>
+            <summary>Windows switcher actor path.</summary>
+            <description>Path to windows switcher scrollable actor. Empty array to disable the switcher.</description>
+        </key>
+        <key type="as" name="workspaces-switcher-path">
+            <default>[ 'uiGroup', 'panelBox', 'panel' ]</default>
+            <summary>Workspaces switcher actor path.</summary>
+            <description>Path to workspaces switcher scrollable actor. Empty array to disable the switcher.
+            </description>
+        </key>
 
-    <!--
-    Device-specific settings are serialized JSON objects with device name
-    selectors (JavaScript regex) as properties key, e.g.:
-    {
-        "Touchpad": {
-            "horizontal": "reverse",
-            "vertical": "disabled",
-            "modifiers": ["<Super_L><Shift_L>"],
-            "resistance": 3,
-            "visualize": true;
-        },
-        "": {
-            "custom_next": ["<button 5>"],
-            "custom_previous": ["<button 4>"],
-            "horizontal": "direct",
-            "vertical": "disabled",
-            "resistance": 1,
-            "visualize": true;
-        },
-    }
-    -->
-    <key type="s" name="workspaces-switcher-devices">
-        <default>'{}'</default>
-        <summary>Device-dependent settings for workspaces switcher.</summary>
-        <description>Stores switcher options that depend on scrolling devices.</description>
-    </key>
-    <key type="s" name="windows-switcher-devices">
-      <default>'{}'</default>
-      <summary>Device-dependent settings for windows switcher.</summary>
-      <description>Stores switcher options that depend on scrolling devices.</description>
-    </key>
-    <key type="s" name="windows-dragger-devices">
-      <default>'{}'</default>
-      <summary>Device-dependent settings for windows dragger.</summary>
-      <description>Stores switcher options that depend on scrolling devices.</description>
-    </key>
+        <!--
+            Device-specific settings are JSON-serialized array of dictionaries.
+            See definitions of `prefsSource.module.*` for object types.
+        -->
+        <key type="s" name="workspaces-switcher-devices">
+            <default>'[]'</default>
+            <summary>Device-dependent settings for workspaces switcher.</summary>
+            <description>Stores switcher options that depend on scrolling devices.</description>
+        </key>
+        <key type="s" name="windows-switcher-devices">
+            <default>'[]'</default>
+            <summary>Device-dependent settings for windows switcher.</summary>
+            <description>Stores switcher options that depend on scrolling devices.</description>
+        </key>
+        <key type="s" name="windows-dragger-devices">
+            <default>'[]'</default>
+            <summary>Device-dependent settings for windows dragger.</summary>
+            <description>Stores switcher options that depend on scrolling devices.</description>
+        </key>
 
-  </schema>
+    </schema>
 </schemalist>
