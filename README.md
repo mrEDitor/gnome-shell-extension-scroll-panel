@@ -1,7 +1,7 @@
 # Scroll Panel extension for Gnome Shell
 
-Extension allows switching between windows or workspaces by scrolling
-Gnome Shell topbar (both in overview and workspace mode).
+Extension allows switching between windows or workspaces by scrolling Gnome
+Shell topbar with mouse or extra buttons (both in overview and workspace mode).
 
 Defaults are:
 
@@ -20,12 +20,16 @@ Target Gnome version is Gnome Shell 40.
 
 		git clone https://github.com/mrEDitor/gnome-shell-extension-scroll-panel
 		cd gnome-shell-extension-scroll-panel
+
+2. Checkout the available latest tag (not tagged commits may be broken):
+
+		git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
 	
-2. Install extension into your Gnome Shell:
+3. Install extension into your Gnome Shell:
 
 		make install
 
-3. Enable (and configure, if needed) extension with
+4. Enable (and configure, if needed) extension with
 
 		gnome-extensions-app
 
