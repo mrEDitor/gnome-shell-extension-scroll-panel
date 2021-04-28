@@ -49,6 +49,7 @@ class ActorScrollHandler {
             this._signalDisconnector = null;
         }
         if (actor) {
+            actor.reactive = true;
             const connectionId = actor.connect(
                 'scroll-event',
                 (source, event) => this._switch(event)
@@ -82,22 +83,22 @@ class ActorScrollHandler {
         }
         const settings = this._getSettings(event.get_source_device());
         const [x, y] = event.get_scroll_delta();
-        this._x += settings.horizontal !== 'disabled' ? x : 0;
-        this._y += settings.vertical !== 'disabled' ? y : 0;
+        this._x += settings.horizontal === 'disabled' ? 0 : x;
+        this._y += settings.vertical === 'disabled' ? 0 : y;
         while (Math.abs(this._x) >= settings.resistance) {
             if (this._x < 0) {
                 this._x += 1;
                 this._onSwitch(
                     settings.horizontal === 'direct'
-                        ? Clutter.ScrollDirection.LEFT
-                        : Clutter.ScrollDirection.RIGHT
+                        ? Clutter.ScrollDirection.RIGHT
+                        : Clutter.ScrollDirection.LEFT
                 );
             } else {
                 this._x -= 1;
                 this._onSwitch(
                     settings.horizontal === 'direct'
-                        ? Clutter.ScrollDirection.RIGHT
-                        : Clutter.ScrollDirection.LEFT
+                        ? Clutter.ScrollDirection.LEFT
+                        : Clutter.ScrollDirection.RIGHT
                 );
             }
         }
@@ -106,15 +107,15 @@ class ActorScrollHandler {
                 this._y += 1;
                 this._onSwitch(
                     settings.vertical === 'direct'
-                        ? Clutter.ScrollDirection.UP
-                        : Clutter.ScrollDirection.DOWN
+                        ? Clutter.ScrollDirection.DOWN
+                        : Clutter.ScrollDirection.UP
                 );
             } else {
                 this._y -= 1;
                 this._onSwitch(
                     settings.vertical === 'direct'
-                        ? Clutter.ScrollDirection.DOWN
-                        : Clutter.ScrollDirection.UP
+                        ? Clutter.ScrollDirection.UP
+                        : Clutter.ScrollDirection.DOWN
                 );
             }
         }

@@ -15,94 +15,25 @@ function _logWarning(message) {
  * Based on Gnome Shell Looking Glass, you can find it at
  * {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/lookingGlass.js}
  * @type {ActorPicker.prototype.constructor}
- * @param {function(Clutter.Actor)} onPicked - Callback for pick completion.
  * Receives resulting actor as argument.
  */
 const ActorPicker = GObject.registerClass(
     class ActorPicker extends Clutter.Effect {
-        _init(onPicked) {
+        _init() {
             super._init();
-            try {
-                /** @type {DebugModule} */
-                const Debug = Me.imports.debug.module;
-                Debug.injectObjectTraceLogs(this, 'prefsCompanion', 'ActorPicker');
-            } catch {
-                // Debug module is optional.
-            }
-
-            /** @type {function(Clutter.Actor)} */
-            this._onPicked = onPicked;
 
             /** @type {Cogl.Pipeline} */
             this._pipeline = null;
 
             /** @type {Clutter.Actor|null} */
             this._targetActor = null;
-
-            const seat = Clutter.get_default_backend().get_default_seat();
-            this._pointerDevice = seat.get_pointer();
-
-            this._eventHandler = new St.BoxLayout({ reactive: true });
-            this._eventHandler.connect(
-                'button-press-event',
-                () => this._onPicked(this._targetActor)
-            );
-            this._eventHandler.connect(
-                'motion-event',
-                (source, event) => this._targetActorOrKeepParent(event.get_source())
-            );
-            this._eventHandler.connect(
-                'scroll-event',
-                (source, event) => this._retargetByEvent(event)
-            );
         }
 
-        /**
-         * Target the actor or keep current one if it's parent of new one.
-         * @param {Clutter.Actor} actor - Actor to target.
-         */
-        _targetActorOrKeepParent(actor) {
-            let target = actor;
-            while (target && target !== this._targetActor) {
-                target = target.get_parent();
-            }
-            if (target !== this._targetActor) {
-                this.targetActor(actor);
-            }
+        get targetActor() {
+            return this._targetActor;
         }
 
-        /**
-         * @param {Clutter.ScrollEvent} event - Event to target by.
-         */
-        _retargetByEvent(event) {
-            let target = event.get_source();
-            if (!this._targetActor) {
-                _logWarning('Actor picker received ScrollEvent, but no target actor set.');
-                this.targetActor(target);
-                return;
-            }
-
-            switch (event.get_scroll_direction()) {
-            case Clutter.ScrollDirection.UP:
-                if (this._targetActor.get_parent()) {
-                    this.targetActor(this._targetActor.get_parent());
-                }
-                return;
-            case Clutter.ScrollDirection.DOWN:
-                if (target !== this._targetActor) {
-                    while (target && target.get_parent() !== this._targetActor) {
-                        target = target.get_parent();
-                    }
-                    this.targetActor(target);
-                }
-            }
-        }
-
-        /**
-         * Highlight new target actor.
-         * @param {Clutter.Actor} actor - Actor to highlight.
-         */
-        targetActor(actor) {
+        set targetActor(actor) {
             if (this._targetActor) {
                 this._targetActor.remove_effect(this);
             }
@@ -111,49 +42,35 @@ const ActorPicker = GObject.registerClass(
 
             if (actor) {
                 actor.add_effect(this);
+                this._pipeline = null;
             }
         }
 
-        /**
-         * Pick actor with mouse.
-         */
-        startPickingActor() {
-            this._pointerDevice.grab(this._eventHandler);
-        }
-
-        /**
-         * Pick actor with mouse.
-         */
-        cancelPickingActor() {
-            this._pointerDevice.ungrab();
-            this.targetActor(null);
-        }
-
         vfunc_paint(node, paintContext) {
-            let actor = this.get_actor();
-
+            const actor = this.get_actor();
             const actorNode = new Clutter.ActorNode(actor, -1);
             node.add_child(actorNode);
 
             if (!this._pipeline) {
                 const framebuffer = paintContext.get_framebuffer();
                 const coglContext = framebuffer.get_context();
-
-                let color = new Cogl.Color();
-                color.init_from_4ub(0xff, 0, 0, 0xc4);
+                const color = new Cogl.Color();
+                if (this._targetActor.reactive) {
+                    color.init_from_4ub(0xFF, 0xFF, 0, 0xC4);
+                } else {
+                    color.init_from_4ub(0xFF, 0, 0, 0xC4);
+                }
 
                 this._pipeline = new Cogl.Pipeline(coglContext);
                 this._pipeline.set_color(color);
             }
 
-            let alloc = actor.get_allocation_box();
-            let width = 2;
-
-            const pipelineNode = new Clutter.PipelineNode(this._pipeline);
-            pipelineNode.set_name('Red Border');
-            node.add_child(pipelineNode);
-
+            const width = 2;
             const box = new Clutter.ActorBox();
+            const alloc = actor.get_allocation_box();
+            const pipelineNode = new Clutter.PipelineNode(this._pipeline);
+            pipelineNode.set_name('Scroll Panel Picker Highlight');
+            node.add_child(pipelineNode);
 
             // clockwise order
             box.set_origin(0, 0);
@@ -182,7 +99,21 @@ const ActorPicker = GObject.registerClass(
  */
 var module = new class PrefsCompanionModule {
     constructor() {
-        this._actorPicker = new ActorPicker(this._onActorPicked.bind(this));
+        this._actorPicker = new ActorPicker();
+
+        const seat = Clutter.get_default_backend().get_default_seat();
+        this._pointerDevice = seat.get_pointer();
+
+        this._eventHandler = new St.BoxLayout({ reactive: true });
+        this._eventHandler.connect('button-press-event', () => {
+            this._onActorPicked();
+        });
+        this._eventHandler.connect('motion-event', (source, event) => {
+            this._targetActorOrKeepParent(event.get_source());
+        });
+        this._eventHandler.connect('scroll-event', (source, event) => {
+            this._retargetByEvent(event);
+        });
     }
 
     /**
@@ -234,6 +165,8 @@ var module = new class PrefsCompanionModule {
      * @returns {function()} Companion stop callback.
      */
     run() {
+        PrefsSource.highlightPath.setValue([]);
+        PrefsSource.pickPathKey.setValue('');
         const cancelHighlight = PrefsSource.highlightPath.onChange(
             this._onHighlightPath.bind(this)
         );
@@ -246,26 +179,95 @@ var module = new class PrefsCompanionModule {
         };
     }
 
-    _onHighlightPath(key, actorPath) {
-        if (!PrefsSource.pickPathKey.value.length) {
-            this._actorPicker.targetActor(this.findActor(actorPath));
+
+    /**
+     * @param {Clutter.Actor} actor - Actor to target.
+     */
+    _targetActorOrKeepParent(actor) {
+        let target = actor;
+        while (target && target !== this._actorPicker.targetActor) {
+            target = target.get_parent();
+        }
+        if (!target) {
+            this._targetActor(actor);
         }
     }
 
+    /**
+     * @param {Clutter.ScrollEvent} event - Event to target by.
+     */
+    _retargetByEvent(event) {
+        /** @type {Clutter.Actor} */
+        let newTarget = event.get_source();
+        const currentTarget = this._actorPicker.targetActor;
+        if (!currentTarget) {
+            _logWarning('Actor picker received ScrollEvent, but no target actor set.');
+            this._targetActor(newTarget);
+            return;
+        }
+
+        switch (event.get_scroll_direction()) {
+        case Clutter.ScrollDirection.UP:
+            if (currentTarget.get_parent() !== global.stage) {
+                this._targetActor(currentTarget.get_parent());
+            }
+            return;
+        case Clutter.ScrollDirection.DOWN:
+            if (newTarget !== currentTarget) {
+                while (newTarget && newTarget.get_parent() !== currentTarget) {
+                    newTarget = newTarget.get_parent();
+                }
+                if (newTarget) {
+                    this._targetActor(newTarget);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param {Clutter.Actor} actor - Actor to target.
+     */
+    _targetActor(actor) {
+        // will call {this._onHighlightPath} automatically
+        PrefsSource.highlightPath.setValue(this.getActorPath(actor));
+    }
+
+    /**
+     * @param {string} key - Source setting key.
+     * @param {string[]} actorPath - Actor path along the view tree.
+     */
+    _onHighlightPath(key, actorPath) {
+        this._actorPicker.targetActor = this.findActor(actorPath);
+    }
+
+    /**
+     * @param {string} key - Source setting key.
+     * @param {string} settingToPickPathFor - Key of setting to fill with picked
+     * actor path (of type {@link string[]}).
+     */
     _onPickPathKey(key, settingToPickPathFor) {
         if (settingToPickPathFor) {
-            this._actorPicker.startPickingActor();
+            this._startPickingActor();
         } else {
-            this._actorPicker.cancelPickingActor();
+            this._stopPickingActor();
         }
     }
 
-    _onActorPicked(actor) {
+    _startPickingActor() {
+        this._pointerDevice.grab(this._eventHandler);
+    }
+
+    _onActorPicked() {
         PrefsSource.setStringArray(
             PrefsSource.pickPathKey.value,
-            this.getActorPath(actor)
+            this.getActorPath(this._actorPicker.targetActor)
         );
         PrefsSource.pickPathKey.setValue('');
-        this._actorPicker.cancelPickingActor();
+        this.cancelPickingActor();
+    }
+
+    _stopPickingActor() {
+        this._pointerDevice.ungrab();
+        PrefsSource.highlightPath.setValue([]);
     }
 }();

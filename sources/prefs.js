@@ -8,6 +8,15 @@ const Gettext = imports.gettext;
  * @param {string} uiFile - File to build widget from.
  */
 class UiBuilder {
+    /**
+     * Get extension object. It CAN NOT be imported as const since
+     * it will break buildPrefsView() call for development environment.
+     * @returns {object} - Current extension accessor.
+     */
+    _me() {
+        return imports.misc.extensionUtils.getCurrentExtension();
+    }
+
     constructor(uiFile) {
         this._builder = Gtk.Builder.new_from_file(uiFile);
         this.content = this._builder.get_object('content');
@@ -19,6 +28,7 @@ class UiBuilder {
         this._aboutBox = this._builder.get_object('about-box');
 
         this._settingActor = this._builder.get_object('setting-actor');
+        this._settingActorChoose = this._builder.get_object('setting-actor-choose');
         this._ruleBox = this._builder.get_object('rule-box');
         this._ruleChooserHint = this._builder.get_object('rule-chooser-hint');
         this._ruleList = this._builder.get_object('rule-list');
@@ -31,6 +41,12 @@ class UiBuilder {
         this._windowsDragger.connect('toggled', () => this._updateLayout());
         this.content.connect('realize', () => {
             this.content.get_root().set_titlebar(this._builder.get_object('titlebar'));
+        });
+        this.content.connect('unrealize', () => {
+            /** @type {PrefsSourceModule} */
+            const PrefsSource = this._me().imports.prefsSource.module;
+            PrefsSource.highlightPath.setValue([]);
+            PrefsSource.pickPathKey.setValue('');
         });
     }
 
@@ -50,16 +66,11 @@ class UiBuilder {
     }
 
     _bindActorHighlight() {
-        /**
-         * Get extension object. It CAN NOT be imported as const since
-         * it will break buildPrefsView() call for development environment.
-         * @returns {object} - Current extension accessor.
-         */
-        const Me = imports.misc.extensionUtils.getCurrentExtension();
         /** @type {PrefsSourceModule} */
-        const PrefsSource = Me.imports.prefsSource.module;
-        PrefsSource.highlightPath.setValue([]);
-        PrefsSource.pickPathKey.setValue('');
+        const PrefsSource = this._me().imports.prefsSource.module;
+        PrefsSource.highlightPath.onChange(() => {
+            this._fetchSettingActor();
+        });
 
         const motionController = new Gtk.EventControllerMotion();
         motionController.connect('enter', () => {
@@ -71,16 +82,19 @@ class UiBuilder {
             );
         });
         motionController.connect('leave', () => {
-            PrefsSource.highlightPath.setValue([]);
+            if (!PrefsSource.pickPathKey.value) {
+                PrefsSource.highlightPath.setValue([]);
+            }
         });
-        this._settingActor.add_controller(motionController);
+        this._settingActorChoose.add_controller(motionController);
 
-        this._settingActor.connect('toggled', button => {
+        this._settingActorChoose.connect('toggled', button => {
             const action = button.active && this._getTab();
             PrefsSource.pickPathKey.setValue(action ? `${action}-path` : '');
         });
         PrefsSource.pickPathKey.onChange((key, value) => {
-            this._settingActor.active = !!value;
+            this._settingActorChoose.active = !!value;
+            this._fetchSettingActor();
         });
     }
 
@@ -97,6 +111,24 @@ class UiBuilder {
         this._aboutBox.visible = isAbout;
         this._settingsBox.visible = !isAbout;
         this._ruleBox.sensitive = activeRule !== null;
+        this._fetchSettingActor();
+    }
+
+    _fetchSettingActor() {
+        /** @type {PrefsSourceModule} */
+        const PrefsSource = this._me().imports.prefsSource.module;
+        if (PrefsSource.pickPathKey.value) {
+            this._settingActor.text = PrefsSource.highlightPath.value.join(' > ');
+            return;
+        }
+
+        const action = this._getTab();
+        if (action) {
+            const value = PrefsSource.getStringArray(`${action}-path`);
+            this._settingActor.text = value.join(' > ');
+        } else {
+            this._settingActor.text = '';
+        }
     }
 
     /**
@@ -131,18 +163,17 @@ class UiBuilder {
      * @returns {Gtk.Box} - Prefs widget.
      */
     build() {
-        const Me = imports.misc.extensionUtils.getCurrentExtension();
         for (const aboutMarkup of [
-            `<span size="larger">${Me.metadata.uuid} ${Me.metadata.semanticVersion}</span>`,
+            `<span size="larger">${this._me().metadata.uuid} ${this._me().metadata.semanticVersion}</span>`,
             `<span>${this._gettext('by <a href="%s">Eduard Minasyan</a>', 'https://mrEDitor.github.io/')}</span>`,
-            `<span>${this._gettext('Homepage: <a href="%1$s">%s</a>', Me.metadata.url)}</span>`,
+            `<span>${this._gettext('Homepage: <a href="%1$s">%s</a>', this._me().metadata.url)}</span>`,
             `<span>${this._gettext(
                 // it's expected to be replaced with localizer copyright
                 'Seems like you are using unlocalized extension, would you like to <a href="%s">localize it</a>?',
-                `${Me.metadata.url}#localization`
+                `${this._me().metadata.url}#localization`
             )}</span>`,
             '',
-            `<span>${this._gettext(Me.metadata.description)}</span>`,
+            `<span>${this._gettext(this._me().metadata.description)}</span>`,
         ]) {
             this._aboutBox.append(new Gtk.Label({
                 marginStart: 15,
@@ -158,7 +189,7 @@ class UiBuilder {
         this._bindActorHighlight();
         return this.content;
     }
-};
+}
 
 /**
  * Initialize preferences submodule.
@@ -169,7 +200,7 @@ function init() {
         /** @type {DebugModule} */
         const Debug = Me.imports.debug.module;
         Debug.logDebug('Initializing prefs widget...');
-        Debug.injectModulesTraceLogs(Me.imports);
+        Debug.injectModulesTraceLogs(this._me().imports);
     } catch {
         // Debug module is optional.
     }

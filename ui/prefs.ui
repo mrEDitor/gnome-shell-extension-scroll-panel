@@ -41,7 +41,9 @@
                 </child>
                 <child>
                     <object class="GtkLabel">
+                        <property name="xalign">0</property>
                         <property name="label" translatable="true">Choose a feature to configure above.</property>
+                        <property name="wrap">true</property>
                     </object>
                 </child>
             </object>
@@ -80,12 +82,23 @@
                                 <property name="label" translatable="yes">Panel to scroll</property>
                                 <property name="halign">start</property>
                                 <property name="hexpand">true</property>
-                                <property name="tooltip-text" translatable="yes">Choose a panel to scroll for selected action. If the extension is enabled, current choice is outlined in red box while mouse pointer is over the button.</property>
+                                <property name="tooltip-text" translatable="yes">Choose a panel to scroll for the selected action. If the extension is enabled, the current choice is outlined in a yellow or green box while the mouse pointer is over the button. Yellow box means that the highlighted panel currently does not have any event listeners and may be inaccessible because of other actors rendered over it. Use scrolling when picking an actor to choose hierarchy level, such as the whole bar instead of the clock box only.</property>
                             </object>
                         </child>
                         <child>
-                            <object class="GtkToggleButton" id="setting-actor">
-                                <property name="icon-name">find-location-symbolic</property>
+                            <object class="GtkBox">
+                                <property name="css-classes">linked</property>
+                                <child>
+                                    <object class="GtkEntry" id="setting-actor">
+                                        <property name="editable">false</property>
+                                        <property name="hexpand">true</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-actor-choose">
+                                        <property name="icon-name">find-location-symbolic</property>
+                                    </object>
+                                </child>
                             </object>
                         </child>
                     </object>
@@ -154,7 +167,27 @@
                                                 </child>
                                                 <child>
                                                     <object class="GtkLabel">
+                                                        <property name="xalign">0</property>
                                                         <property name="label" translatable="true">Create or choose a rule to configure to the left.</property>
+                                                        <property name="wrap">true</property>
+                                                        </object>
+                                                </child>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkInfoBar" id="rule-match-hint">
+                                                <property name="hexpand">true</property>
+                                                <child>
+                                                    <object class="GtkImage">
+                                                        <property name="margin-end">5</property>
+                                                        <property name="icon-name">pan-down-symbolic</property>
+                                                    </object>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkLabel">
+                                                        <property name="xalign">0</property>
+                                                        <property name="label" translatable="true">When multiple conditions are set, the rule will be applied only if the event matches each of them.</property>
+                                                        <property name="wrap">true</property>
                                                     </object>
                                                 </child>
                                             </object>
@@ -189,14 +222,37 @@
                                                         <child>
                                                             <object class="GtkEntry">
                                                                 <layout>
-                                                                    <property name="column-span">2</property>
                                                                     <property name="column">1</property>
                                                                     <property name="row">0</property>
                                                                 </layout>
                                                                 <property name="hexpand">true</property>
-                                                                <property name="buffer">
-                                                                    <object class="GtkEntryBuffer" />
-                                                                </property>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkBox">
+                                                                <layout>
+                                                                    <property name="column">2</property>
+                                                                    <property name="row">0</property>
+                                                                </layout>
+                                                                <property name="hexpand">false</property>
+                                                                <property name="css-classes">linked</property>
+                                                                <child>
+                                                                    <object class="GtkButton" id="rule-promote">
+                                                                        <property name="icon-name">go-up-symbolic</property>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkButton" id="rule-demote">
+                                                                        <property name="icon-name">go-down-symbolic</property>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkButton" id="rule-delete">
+                                                                        <property name="label" translatable="true">Delete rule</property>
+                                                                        <property name="css-classes">destructive-action</property>
+                                                                        <property name="hexpand">true</property>
+                                                                    </object>
+                                                                </child>
                                                             </object>
                                                         </child>
 
@@ -208,7 +264,7 @@
                                                                 </layout>
                                                                 <property name="label" translatable="yes">Device name mask</property>
                                                                 <property name="halign">start</property>
-                                                                <property name="tooltip-text" translatable="yes">JavaScript regluar expression to match device name with to check should the rule be applied to current event.</property>
+                                                                <property name="tooltip-text" translatable="yes">JavaScript regluar expression to match device name to check should the rule be applied to current event.</property>
                                                             </object>
                                                         </child>
                                                         <child>
@@ -223,9 +279,6 @@
                                                                 <child>
                                                                     <object class="GtkEntry">
                                                                         <property name="hexpand">true</property>
-                                                                        <property name="buffer">
-                                                                            <object class="GtkEntryBuffer" />
-                                                                        </property>
                                                                     </object>
                                                                 </child>
                                                                 <child>
@@ -242,6 +295,72 @@
                                                                     <property name="column">0</property>
                                                                     <property name="row">2</property>
                                                                 </layout>
+                                                                <property name="label" translatable="yes">Device vendor identifier mask</property>
+                                                                <property name="halign">start</property>
+                                                                <property name="tooltip-text" translatable="yes">JavaScript regluar expression to match device vendor identifier to check should the rule be applied to current event.</property>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkBox">
+                                                                <layout>
+                                                                    <property name="column-span">2</property>
+                                                                    <property name="column">1</property>
+                                                                    <property name="row">2</property>
+                                                                </layout>
+                                                                <property name="css-classes">linked</property>
+                                                                <property name="hexpand">true</property>
+                                                                <child>
+                                                                    <object class="GtkEntry">
+                                                                        <property name="hexpand">true</property>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkMenuButton">
+                                                                        <property name="icon-name">input-mouse-symbolic</property>
+                                                                    </object>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+
+                                                        <child>
+                                                            <object class="GtkLabel">
+                                                                <layout>
+                                                                    <property name="column">0</property>
+                                                                    <property name="row">3</property>
+                                                                </layout>
+                                                                <property name="label" translatable="yes">Device product identifier mask</property>
+                                                                <property name="halign">start</property>
+                                                                <property name="tooltip-text" translatable="yes">JavaScript regluar expression to match device product identifier to check should the rule be applied to current event.</property>
+                                                            </object>
+                                                        </child>
+                                                        <child>
+                                                            <object class="GtkBox">
+                                                                <layout>
+                                                                    <property name="column-span">2</property>
+                                                                    <property name="column">1</property>
+                                                                    <property name="row">3</property>
+                                                                </layout>
+                                                                <property name="css-classes">linked</property>
+                                                                <property name="hexpand">true</property>
+                                                                <child>
+                                                                    <object class="GtkEntry">
+                                                                        <property name="hexpand">true</property>
+                                                                    </object>
+                                                                </child>
+                                                                <child>
+                                                                    <object class="GtkMenuButton">
+                                                                        <property name="icon-name">input-mouse-symbolic</property>
+                                                                    </object>
+                                                                </child>
+                                                            </object>
+                                                        </child>
+
+                                                        <child>
+                                                            <object class="GtkLabel">
+                                                                <layout>
+                                                                    <property name="column">0</property>
+                                                                    <property name="row">4</property>
+                                                                </layout>
                                                                 <property name="label" translatable="yes">Scrolling resistance</property>
                                                                 <property name="halign">start</property>
                                                                 <property name="tooltip-text" translatable="yes">The distance to scroll to accept another switching step.</property>
@@ -251,9 +370,10 @@
                                                             <object class="GtkBox">
                                                                 <layout>
                                                                     <property name="column">2</property>
-                                                                    <property name="row">2</property>
+                                                                    <property name="row">4</property>
                                                                 </layout>
                                                                 <property name="halign">end</property>
+                                                                <property name="hexpand">false</property>
                                                                 <child>
                                                                     <object class="GtkSpinButton">
                                                                         <property name="numeric">true</property>
@@ -266,7 +386,7 @@
                                                             <object class="GtkLabel">
                                                                 <layout>
                                                                     <property name="column">0</property>
-                                                                    <property name="row">3</property>
+                                                                    <property name="row">5</property>
                                                                 </layout>
                                                                 <property name="label" translatable="yes">Horizontal scrolling</property>
                                                                 <property name="halign">start</property>
@@ -277,7 +397,7 @@
                                                             <object class="GtkBox">
                                                                 <layout>
                                                                     <property name="column">1</property>
-                                                                    <property name="row">3</property>
+                                                                    <property name="row">5</property>
                                                                 </layout>
                                                                 <property name="css-classes">linked</property>
                                                                 <property name="halign">end</property>
@@ -299,8 +419,9 @@
                                                             <object class="GtkMenuButton">
                                                                 <layout>
                                                                     <property name="column">2</property>
-                                                                    <property name="row">3</property>
+                                                                    <property name="row">5</property>
                                                                 </layout>
+                                                                <property name="hexpand">false</property>
                                                                 <property name="label">No modifiers</property>
                                                             </object>
                                                         </child>
@@ -309,7 +430,7 @@
                                                             <object class="GtkLabel">
                                                                 <layout>
                                                                     <property name="column">0</property>
-                                                                    <property name="row">4</property>
+                                                                    <property name="row">6</property>
                                                                 </layout>
                                                                 <property name="label" translatable="yes">Vertical scrolling</property>
                                                                 <property name="halign">start</property>
@@ -320,7 +441,7 @@
                                                             <object class="GtkBox">
                                                                 <layout>
                                                                     <property name="column">1</property>
-                                                                    <property name="row">4</property>
+                                                                    <property name="row">6</property>
                                                                 </layout>
                                                                 <property name="css-classes">linked</property>
                                                                 <property name="halign">end</property>
@@ -342,8 +463,9 @@
                                                             <object class="GtkMenuButton">
                                                                 <layout>
                                                                     <property name="column">2</property>
-                                                                    <property name="row">4</property>
+                                                                    <property name="row">6</property>
                                                                 </layout>
+                                                                <property name="hexpand">false</property>
                                                                 <property name="label">No modifiers</property>
                                                             </object>
                                                         </child>
@@ -352,7 +474,7 @@
                                                             <object class="GtkLabel">
                                                                 <layout>
                                                                     <property name="column">0</property>
-                                                                    <property name="row">5</property>
+                                                                    <property name="row">7</property>
                                                                 </layout>
                                                                 <property name="label" translatable="yes">Step back (custom key)</property>
                                                                 <property name="halign">start</property>
@@ -363,8 +485,9 @@
                                                             <object class="GtkMenuButton">
                                                                 <layout>
                                                                     <property name="column">2</property>
-                                                                    <property name="row">5</property>
+                                                                    <property name="row">7</property>
                                                                 </layout>
+                                                                <property name="hexpand">false</property>
                                                                 <property name="label">No key</property>
                                                             </object>
                                                         </child>
@@ -373,7 +496,7 @@
                                                             <object class="GtkLabel">
                                                                 <layout>
                                                                     <property name="column">0</property>
-                                                                    <property name="row">6</property>
+                                                                    <property name="row">8</property>
                                                                 </layout>
                                                                 <property name="label" translatable="yes">Step forward (custom key)</property>
                                                                 <property name="halign">start</property>
@@ -384,8 +507,9 @@
                                                             <object class="GtkMenuButton">
                                                                 <layout>
                                                                     <property name="column">2</property>
-                                                                    <property name="row">6</property>
+                                                                    <property name="row">8</property>
                                                                 </layout>
+                                                                <property name="hexpand">false</property>
                                                                 <property name="label">No key</property>
                                                             </object>
                                                         </child>
@@ -394,7 +518,7 @@
                                                             <object class="GtkLabel">
                                                                 <layout>
                                                                     <property name="column">0</property>
-                                                                    <property name="row">7</property>
+                                                                    <property name="row">9</property>
                                                                 </layout>
                                                                 <property name="label" translatable="yes">Visualize</property>
                                                                 <property name="halign">start</property>
@@ -405,9 +529,10 @@
                                                             <object class="GtkBox">
                                                                 <layout>
                                                                     <property name="column">2</property>
-                                                                    <property name="row">7</property>
+                                                                    <property name="row">9</property>
                                                                 </layout>
                                                                 <property name="halign">end</property>
+                                                                <property name="hexpand">false</property>
                                                                 <child>
                                                                     <object class="GtkSwitch" id="setting-visualize" />
                                                                 </child>
@@ -415,16 +540,29 @@
                                                         </child>
 
                                                         <child>
-                                                            <object class="GtkButton">
+                                                            <object class="GtkLabel">
                                                                 <layout>
-                                                                    <property name="column">2</property>
-                                                                    <property name="row">8</property>
+                                                                    <property name="column">0</property>
+                                                                    <property name="row">10</property>
                                                                 </layout>
-                                                                <property name="label" translatable="true">Delete rule</property>
-                                                                <property name="css-classes">destructive-action</property>
+                                                                <property name="label" translatable="yes">Cyclic switching</property>
+                                                                <property name="halign">start</property>
+                                                                <property name="tooltip-text" translatable="yes">Should the switcher cycle, i.e. switch between first and last elements when switching out-of-list.</property>
                                                             </object>
                                                         </child>
-
+                                                        <child>
+                                                            <object class="GtkBox">
+                                                                <layout>
+                                                                    <property name="column">2</property>
+                                                                    <property name="row">10</property>
+                                                                </layout>
+                                                                <property name="halign">end</property>
+                                                                <property name="hexpand">false</property>
+                                                                <child>
+                                                                    <object class="GtkSwitch" id="setting-cycle" />
+                                                                </child>
+                                                            </object>
+                                                        </child>
                                                     </object>
                                                 </child>
                                             </object>
