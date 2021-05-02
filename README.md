@@ -33,7 +33,6 @@ Target Gnome version is Gnome Shell 40.
 
 		gnome-extensions-app
 
-
 ## License, feedback and contributions
 
 This software is distributing under MIT (X11) license, provided "as is" and

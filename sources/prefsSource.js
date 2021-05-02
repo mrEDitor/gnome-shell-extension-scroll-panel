@@ -9,7 +9,19 @@ const Me = ExtensionUtils.getCurrentExtension();
  */
 /**
  * @type {string}
- * @name DeviceSettings#deviceMask
+ * @name DeviceSettings#ruleName
+ */
+/**
+ * @type {string}
+ * @name DeviceSettings#deviceNameMask
+ */
+/**
+ * @type {string}
+ * @name DeviceSettings#deviceVendorMask
+ */
+/**
+ * @type {string}
+ * @name DeviceSettings#deviceProductMask
  */
 /**
  * @type {'direct'|'inverted'|'disabled'}
@@ -22,6 +34,10 @@ const Me = ExtensionUtils.getCurrentExtension();
 /**
  * @type {number}
  * @name DeviceSettings#resistance
+ */
+/**
+ * @type {boolean}
+ * @name DeviceSettings#cycle
  */
 /**
  * @type {boolean}
@@ -56,11 +72,12 @@ function _logInfo(message) {
 }
 
 /**
+ * @class
  * String array setting accessor.
  * @param {string} key - Setting key.
  */
-const StringArraySetting = GObject.registerClass(
-    class StringArraySetting extends GObject.Object {
+var StringArraySetting = GObject.registerClass(
+    class _StringArraySetting extends GObject.Object {
         _init(key) {
             // TODO: is it okay to abandon setting change connections?
             SettingsSource.connect(
@@ -73,9 +90,9 @@ const StringArraySetting = GObject.registerClass(
 
             /**
              * GSetting key
-             * @type {string} _key
+             * @type {string} key
              */
-            this._key = key;
+            this.key = key;
 
             /**
              * Current setting value.
@@ -91,11 +108,11 @@ const StringArraySetting = GObject.registerClass(
          */
         onChange(callback) {
             const cId = SettingsSource.connect(
-                `changed::${this._key}`,
-                () => callback(this._key, this.value)
+                `changed::${this.key}`,
+                () => callback(this.key, this.value)
             );
-            this.value = SettingsSource.get_strv(this._key);
-            callback(this._key, this.value);
+            this.value = SettingsSource.get_strv(this.key);
+            callback(this.key, this.value);
             return () => SettingsSource.disconnect(cId);
         }
 
@@ -104,17 +121,18 @@ const StringArraySetting = GObject.registerClass(
          * @param {string[]} value - New value for the setting.
          */
         setValue(value) {
-            SettingsSource.set_strv(this._key, value);
+            SettingsSource.set_strv(this.key, value);
         }
     }
 );
 
 /**
+ * @class
  * String setting accessor.
  * @param {string} key - Setting key.
  */
-const StringSetting = GObject.registerClass(
-    class StringSetting extends GObject.Object {
+var StringSetting = GObject.registerClass(
+    class _StringSetting extends GObject.Object {
         _init(key) {
             // TODO: is it okay to abandon setting change connections?
             SettingsSource.connect(
@@ -127,9 +145,9 @@ const StringSetting = GObject.registerClass(
 
             /**
              * GSetting key
-             * @type {string} _key
+             * @type {string} key
              */
-            this._key = key;
+            this.key = key;
 
             /**
              * Current setting value.
@@ -145,11 +163,11 @@ const StringSetting = GObject.registerClass(
          */
         onChange(callback) {
             const cId = SettingsSource.connect(
-                `changed::${this._key}`,
-                () => callback(this._key, this.value)
+                `changed::${this.key}`,
+                () => callback(this.key, this.value)
             );
-            this.value = SettingsSource.get_string(this._key);
-            callback(this._key, this.value);
+            this.value = SettingsSource.get_string(this.key);
+            callback(this.key, this.value);
             return () => SettingsSource.disconnect(cId);
         }
 
@@ -158,18 +176,19 @@ const StringSetting = GObject.registerClass(
          * @param {string} value - New value for the setting.
          */
         setValue(value) {
-            SettingsSource.set_string(this._key, value);
+            SettingsSource.set_string(this.key, value);
         }
     }
 );
 
 /**
+ * @class
  * JSON setting accessor.
  * @param {string} key - Setting key.
  * @template T
  */
-const JsonSetting = GObject.registerClass(
-    class JsonSetting extends GObject.Object {
+var JsonSetting = GObject.registerClass(
+    class _JsonSetting extends GObject.Object {
         _init(key) {
             // TODO: is it okay to abandon setting change connections?
             SettingsSource.connect(
@@ -183,9 +202,9 @@ const JsonSetting = GObject.registerClass(
 
             /**
              * GSetting key
-             * @type {string} _key
+             * @type {string} key
              */
-            this._key = key;
+            this.key = key;
 
             /**
              * Current setting value.
@@ -201,11 +220,11 @@ const JsonSetting = GObject.registerClass(
          */
         onChange(callback) {
             const cId = SettingsSource.connect(
-                `changed::${this._key}`,
-                () => callback(this._key, this.value)
+                `changed::${this.key}`,
+                () => callback(this.key, this.value)
             );
-            this.value = JSON.parse(SettingsSource.get_string(this._key));
-            callback(this._key, this.value);
+            this.value = JSON.parse(SettingsSource.get_string(this.key));
+            callback(this.key, this.value);
             return () => SettingsSource.disconnect(cId);
         }
 
@@ -214,7 +233,7 @@ const JsonSetting = GObject.registerClass(
          * @param {T} value - New value for the setting.
          */
         setValue(value) {
-            SettingsSource.set_string(this._key, JSON.stringify(value));
+            SettingsSource.set_string(this.key, JSON.stringify(value));
         }
     }
 );
@@ -261,6 +280,20 @@ var module = new class PrefsSourceModule {
          * @type {JsonSetting<DeviceSettings[]>}
          */
         this.windowsSwitcherDevices = new JsonSetting('windows-switcher-devices');
+
+        /**
+         * Windows dragger settings per device.
+         * @type {JsonSetting<DeviceSettings[]>}
+         */
+        this.windowsDraggerDevices = new JsonSetting('windows-dragger-devices');
+
+        /**
+         * Default {@link DeviceSettings} value.
+         * @type {DeviceSettings}
+         */
+        this.defaultDeviceSettings = {
+            resistance: 1,
+        };
     }
 
     /**
@@ -275,16 +308,7 @@ var module = new class PrefsSourceModule {
     }
 
     /**
-     * Get value of the string array setting.
-     * @param {string} key - Setting key.
-     * @returns {string[]} Current value for the setting.
-     */
-    getStringArray(key) {
-        return SettingsSource.get_strv(key);
-    }
-
-    /**
-     * Set new value for a string array setting.
+     * Set new value for string array setting.
      * @param {string} key - Setting key.
      * @param {string[]} value - New value for the setting.
      */

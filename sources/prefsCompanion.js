@@ -56,9 +56,9 @@ const ActorPicker = GObject.registerClass(
                 const coglContext = framebuffer.get_context();
                 const color = new Cogl.Color();
                 if (this._targetActor.reactive) {
-                    color.init_from_4ub(0xFF, 0xFF, 0, 0xC4);
+                    color.init_from_4ub(0, 0xFF, 0, 0xC4);
                 } else {
-                    color.init_from_4ub(0xFF, 0, 0, 0xC4);
+                    color.init_from_4ub(0xFF, 0xFF, 0, 0xC4);
                 }
 
                 this._pipeline = new Cogl.Pipeline(coglContext);

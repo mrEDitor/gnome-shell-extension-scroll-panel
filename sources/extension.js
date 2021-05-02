@@ -1,6 +1,8 @@
 /* exported init */
 
-const { Clutter } = imports.gi;
+const { Clutter, Meta } = imports.gi;
+const { altTab: AltTab } = imports.ui;
+const { workspaceSwitcherPopup: WorkspaceSwitcherPopup } = imports.ui;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 /** @type {PrefsCompanionModule} */
@@ -11,8 +13,9 @@ const PrefsSource = Me.imports.prefsSource.module;
 
 class ActorScrollHandler {
     /**
-     * @param {function(Clutter.ScrollDirection)} onSwitch - Callback for switch
-     * action. The only argument is switching (scrolling) direction.
+     * @param {function(number, DeviceSettings)} onSwitch -
+     * Callback for switch action. Arguments are switching (scrolling) direction
+     * and device settings.
      * @param {JsonSetting<DeviceSettings[]>} settingsSource - Per-device
      * settings source for the switcher.
      */
@@ -31,7 +34,11 @@ class ActorScrollHandler {
         settingsSource.onChange((key, value) => {
             /** @type {DeviceSettings[]} */
             this._settings = (value ?? []).map(
-                v => Object.assign(v, { deviceMask: new RegExp(v.deviceMask) })
+                v => Object.assign(v, {
+                    deviceNameMask: new RegExp(v.deviceNameMask),
+                    deviceProductMask: new RegExp(v.deviceProductMask),
+                    deviceVendorMask: new RegExp(v.deviceVendorMask),
+                })
             );
 
             /** @type {Object.<number, DeviceSettings>} */
@@ -69,9 +76,12 @@ class ActorScrollHandler {
         if (this._settingsCache.hasOwnProperty(cacheKey)) {
             return this._settingsCache[cacheKey];
         }
-        const settings = this._settings.find(s => s.deviceMask.test(device.name)) || {
-            resistance: 1,
-        };
+        const settings = this._settings
+            .find(
+                s => (s.deviceNameMask || '').test(device.name) &&
+                    (s.deviceProductMask || '').test(device.product_id) &&
+                    (s.deviceVendorMask || '').test(device.vendor_id)
+            ) || PrefsSource.defaultDeviceSettings;
         this._settingsCache[cacheKey] = settings;
         return settings;
     }
@@ -85,39 +95,24 @@ class ActorScrollHandler {
         const [x, y] = event.get_scroll_delta();
         this._x += settings.horizontal === 'disabled' ? 0 : x;
         this._y += settings.vertical === 'disabled' ? 0 : y;
-        while (Math.abs(this._x) >= settings.resistance) {
-            if (this._x < 0) {
-                this._x += 1;
-                this._onSwitch(
-                    settings.horizontal === 'direct'
-                        ? Clutter.ScrollDirection.RIGHT
-                        : Clutter.ScrollDirection.LEFT
-                );
-            } else {
-                this._x -= 1;
-                this._onSwitch(
-                    settings.horizontal === 'direct'
-                        ? Clutter.ScrollDirection.LEFT
-                        : Clutter.ScrollDirection.RIGHT
-                );
-            }
+
+        // zero resistance would constantly scroll everything around
+        const resistance = Math.max(0.0001, settings.resistance);
+        if (Math.abs(this._x) >= resistance) {
+            const signedMultiplier = settings.horizontal === 'direct' ? +1 : -1;
+            this._onSwitch(
+                signedMultiplier * Math.trunc(this._x / resistance),
+                settings
+            );
+            this._x %= resistance;
         }
-        while (Math.abs(this._y) >= settings.resistance) {
-            if (this._y < 0) {
-                this._y += 1;
-                this._onSwitch(
-                    settings.vertical === 'direct'
-                        ? Clutter.ScrollDirection.DOWN
-                        : Clutter.ScrollDirection.UP
-                );
-            } else {
-                this._y -= 1;
-                this._onSwitch(
-                    settings.vertical === 'direct'
-                        ? Clutter.ScrollDirection.UP
-                        : Clutter.ScrollDirection.DOWN
-                );
-            }
+        if (Math.abs(this._y) >= resistance) {
+            const signedMultiplier = settings.horizontal === 'direct' ? +1 : -1;
+            this._onSwitch(
+                signedMultiplier * Math.trunc(this._y / resistance),
+                settings
+            );
+            this._y %= resistance;
         }
     }
 }
@@ -138,6 +133,9 @@ var module = new class ExtensionModule {
             this._switchWindow.bind(this),
             PrefsSource.windowsSwitcherDevices
         );
+
+        /** @type {WorkspaceSwitcherPopup.WorkspaceSwitcherPopup} */
+        this._workspacesSwitcherPopup = null;
     }
 
     enable() {
@@ -169,31 +167,51 @@ var module = new class ExtensionModule {
     }
 
     /**
-     * @param {Clutter.ScrollDirection} direction - Switching direction.
+     * @param {number} distance - Switching distance, signed.
+     * @param {DeviceSettings} settings - Applicable device settings.
      */
-    _switchWindow(direction) {
-
+    _switchWindow(distance, settings) {
+        /*
+        const appPopup = new AltTab.WindowSwitcherPopup({
+            reactive: false,
+        });
+        if (!appPopup.show(/*settings['setting-invert']=/0, 0, 0)) {
+            appPopup.destroy();
+        }
+        */
     }
 
     /**
-     * @param {Clutter.ScrollDirection} direction - Switching direction.
+     * @param {number} distance - Switching distance, signed.
+     * @param {DeviceSettings} settings - Applicable device settings.
      */
-    _switchWorkspace(direction) {
-        const n = global.workspaceManager.n_workspaces;
-        let workspaceIndex = global.workspaceManager.get_active_workspace_index();
-        switch (direction) {
-        case Clutter.ScrollDirection.UP:
-        case Clutter.ScrollDirection.LEFT:
-            workspaceIndex = (workspaceIndex - 1 + n) % n;
-            break;
-        case Clutter.ScrollDirection.DOWN:
-        case Clutter.ScrollDirection.RIGHT:
-            workspaceIndex = (workspaceIndex + 1) % n;
-            break;
+    _switchWorkspace(distance, settings) {
+        let index = global.workspaceManager.get_active_workspace_index();
+        const count = global.workspaceManager.n_workspaces;
+        if (!this._workspacesSwitcherPopup) {
+            this._workspacesSwitcherPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup({
+                reactive: false,
+            });
+            this._workspacesSwitcherPopup.connect('destroy', () => {
+                this._workspacesSwitcherPopup = null;
+            });
         }
-        global.workspaceManager
-            .get_workspace_by_index(workspaceIndex)
-            .activate(global.get_current_time());
+
+        if (distance < 0) {
+            // such that `modBallast > abs(distance) && modBallast % count == 0`
+            const modBallast = -distance * count;
+            index = settings.cycle
+                ? (index + distance + modBallast) % count
+                : Math.max(0, index + distance);
+            this._workspacesSwitcherPopup.display(Meta.MotionDirection.LEFT, index);
+        } else {
+            index = settings.cycle
+                ? (index + distance) % count
+                : Math.min(index + distance, count - 1);
+            this._workspacesSwitcherPopup.display(Meta.MotionDirection.RIGHT, index);
+        }
+
+        global.workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
     }
 
     /**
@@ -271,13 +289,6 @@ var module = new class ExtensionModule {
                         : event.get_scroll_direction()
                     );
                 } else {
-                    const appPopup = new AltTab.WindowSwitcherPopup();
-                    popupContext.appPopup = appPopup;
-                    appPopup.connect('destroy', () => popupContext.appPopup = null);
-                    get_actor(appPopup).reactive = false;
-                    if (!appPopup.show(settings['setting-invert'], 0, 0)) {
-                        appPopup.destroy();
-                    }
                 }
             } else if (Math.abs(_delta_windows) >= settings['setting-pressure']) {
                 _delta_windows -= direction * settings['setting-pressure'];
