@@ -54,11 +54,22 @@ var module = new class DebugModule {
                 case 'function':
                     log(`[${Me.metadata.uuid}][STP] Symbol '${symbolName}' found in module '${moduleName}', patching constructor...`);
                     modules[moduleName][symbolName] = (...args) => {
-                        const instance = new moduleSymbol(...args);
-                        if (typeof instance === 'object') {
-                            this.injectObjectTraceLogs(instance, moduleName, symbolName);
+                        try {
+                            const instance = new moduleSymbol(...args);
+                            if (typeof instance === 'object') {
+                                this.injectObjectTraceLogs(
+                                    instance,
+                                    moduleName,
+                                    symbolName
+                                );
+                            }
+                            return instance;
+                        } catch (e) {
+                            // TODO: we may detect error type here to support
+                            //       exceptions being thrown by constructor.
+                            log(`[${Me.metadata.uuid}][STP] Instance of class '${symbolName}' from module '${moduleName}' patching problem:\n${e}`);
+                            return moduleSymbol(...args);
                         }
-                        return instance;
                     };
                 }
             }

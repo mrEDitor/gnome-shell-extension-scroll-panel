@@ -5,45 +5,64 @@
         <key type="as" name="highlight-path">
             <default>[]</default>
             <summary>Current actor path to highlight.</summary>
-            <description>Path to scrollable actor candidate. Should be empty array unless the user is picking an actor
-                right now.
-            </description>
+            <description>Path to scrollable actor candidate. Should be empty array unless the user is picking an actor right now.</description>
         </key>
-        <key type="s" name="pick-path-key">
+        <key type="s" name="picking-actor-path-action">
             <default>''</default>
-            <summary>Setting key to pick actor path for.</summary>
-            <description>Unless empty, used as key of setting to pick actor path for.</description>
+            <summary>Name of switch action currently being picking actor for.</summary>
+            <description>Unless empty, used in 'VALUE-path' as key of setting to pick actor path for.</description>
         </key>
+
+        <key type="as" name="workspaces-switcher-path">
+            <default>[ 'uiGroup', 'panelBox', 'panel' ]</default>
+            <summary>Workspaces switcher actor path.</summary>
+            <description>Path to workspaces switcher scrollable actor. Empty array to disable the switcher.</description>
+        </key>
+        <key type="d" name="workspaces-switcher-horizontal-multiplier">
+            <default>1</default>
+            <summary>Horizontal scrolling multiplier for switching workspaces.</summary>
+            <description>Distance multiplier of workspaces switching for horizontal scrolling.</description>
+        </key>
+        <key type="d" name="workspaces-switcher-vertical-multiplier">
+            <default>1</default>
+            <summary>Vertical scrolling multiplier for switching workspaces.</summary>
+            <description>Distance multiplier of workspaces switching for vertical scrolling.</description>
+        </key>
+        <key type="b" name="workspaces-switcher-cycle">
+            <default>true</default>
+            <summary>Enable cyclic scrolling for switching workspaces.</summary>
+            <description>Whether is workspaces switching is cyclic.</description>
+        </key>
+        <key type="b" name="workspaces-switcher-visualize">
+            <default>true</default>
+            <summary>Visualize dragging workspaces.</summary>
+            <description>Whether visualize workspaces switching or not.</description>
+        </key>
+
         <key type="as" name="windows-switcher-path">
             <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft' ]</default>
             <summary>Windows switcher actor path.</summary>
             <description>Path to windows switcher scrollable actor. Empty array to disable the switcher.</description>
         </key>
-        <key type="as" name="workspaces-switcher-path">
-            <default>[ 'uiGroup', 'panelBox', 'panel' ]</default>
-            <summary>Workspaces switcher actor path.</summary>
-            <description>Path to workspaces switcher scrollable actor. Empty array to disable the switcher.
-            </description>
+        <key type="d" name="windows-switcher-horizontal-multiplier">
+            <default>1</default>
+            <summary>Horizontal scrolling multiplier for switching windows.</summary>
+            <description>Distance multiplier of windows switching for horizontal scrolling.</description>
         </key>
-
-        <!--
-            Device-specific settings are JSON-serialized array of dictionaries.
-            See definitions of `prefsSource.module.*` for object types.
-        -->
-        <key type="s" name="workspaces-switcher-devices">
-            <default>'[]'</default>
-            <summary>Device-dependent settings for workspaces switcher.</summary>
-            <description>Stores switcher options that depend on scrolling devices.</description>
+        <key type="d" name="windows-switcher-vertical-multiplier">
+            <default>1</default>
+            <summary>Vertical scrolling multiplier for switching windows.</summary>
+            <description>Distance multiplier of windows switching for vertical scrolling.</description>
         </key>
-        <key type="s" name="windows-switcher-devices">
-            <default>'[]'</default>
-            <summary>Device-dependent settings for windows switcher.</summary>
-            <description>Stores switcher options that depend on scrolling devices.</description>
+        <key type="b" name="windows-switcher-cycle">
+            <default>true</default>
+            <summary>Enable cyclic scrolling for switching windows.</summary>
+            <description>Whether is windows switching is cyclic.</description>
         </key>
-        <key type="s" name="windows-dragger-devices">
-            <default>'[]'</default>
-            <summary>Device-dependent settings for windows dragger.</summary>
-            <description>Stores switcher options that depend on scrolling devices.</description>
+        <key type="b" name="windows-switcher-visualize">
+            <default>true</default>
+            <summary>Visualize dragging windows.</summary>
+            <description>Whether visualize windows switching or not.</description>
         </key>
 
     </schema>

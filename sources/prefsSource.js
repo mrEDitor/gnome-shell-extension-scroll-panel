@@ -5,46 +5,6 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
 /**
- * @interface DeviceSettings
- */
-/**
- * @type {string}
- * @name DeviceSettings#ruleName
- */
-/**
- * @type {string}
- * @name DeviceSettings#deviceNameMask
- */
-/**
- * @type {string}
- * @name DeviceSettings#deviceVendorMask
- */
-/**
- * @type {string}
- * @name DeviceSettings#deviceProductMask
- */
-/**
- * @type {'direct'|'inverted'|'disabled'}
- * @name DeviceSettings#horizontal
- */
-/**
- * @type {'direct'|'inverted'|'disabled'}
- * @name DeviceSettings#vertical
- */
-/**
- * @type {number}
- * @name DeviceSettings#resistance
- */
-/**
- * @type {boolean}
- * @name DeviceSettings#cycle
- */
-/**
- * @type {boolean}
- * @name DeviceSettings#visualize
- */
-
-/**
  * GSettings-based settings source.
  * @type {Gio.Settings}
  */
@@ -73,37 +33,44 @@ function _logInfo(message) {
 
 /**
  * @class
- * String array setting accessor.
- * @param {string} key - Setting key.
+ * Base class for setting objects.
  */
-var StringArraySetting = GObject.registerClass(
-    class _StringArraySetting extends GObject.Object {
-        _init(key) {
-            // TODO: is it okay to abandon setting change connections?
-            SettingsSource.connect(
-                `changed::${key}`,
-                () => {
-                    this.value = SettingsSource.get_strv(key);
-                    _logInfo(`Setting ${key} set to: ${this.value}`);
-                }
-            );
-
-            /**
-             * GSetting key
-             * @type {string} key
-             */
+const Setting = GObject.registerClass(
+    /**
+     * @template T
+     */
+    class _Setting extends GObject.Object {
+        /**
+         * @param {string} key - Setting key.
+         * @param {function(): T} getter - Setting getter.
+         * @param {function(T)} setter - Setting setter.
+         */
+        _init(key, getter, setter) {
             this.key = key;
+            this._setter = setter;
 
-            /**
-             * Current setting value.
-             * @type {string[]} value
-             */
-            this.value = SettingsSource.get_strv(key);
+            // Bind "update own value" callback first to fetch new value before
+            // other callbacks will be called. Signal call order is guaranteed:
+            // https://developer.gnome.org/gobject/stable/gobject-Signals.html
+            // TODO: is it okay to abandon setting change connections?
+            this.onChange(() => {
+                // noinspection JSVoidFunctionReturnValueUsed
+                /** @type {T} */
+                this.value = getter();
+                _logInfo(`Setting ${key} set to: ${this.value}`);
+            });
         }
 
         /**
-         * Subscribe a callback for setting value changes.
-         * @param {function(string, string[])} callback - Callback for value change.
+         * @param {T} value - New value for setting.
+         */
+        setValue(value) {
+            this._setter(value);
+        }
+
+        /**
+         * Subscribe a callback for setting value changes and call it initially.
+         * @param {function(string, T)} callback - Value change callback
          * @returns {function()} - Callback for subscription cancellation.
          */
         onChange(callback) {
@@ -111,129 +78,8 @@ var StringArraySetting = GObject.registerClass(
                 `changed::${this.key}`,
                 () => callback(this.key, this.value)
             );
-            this.value = SettingsSource.get_strv(this.key);
             callback(this.key, this.value);
             return () => SettingsSource.disconnect(cId);
-        }
-
-        /**
-         * Set new value for the setting.
-         * @param {string[]} value - New value for the setting.
-         */
-        setValue(value) {
-            SettingsSource.set_strv(this.key, value);
-        }
-    }
-);
-
-/**
- * @class
- * String setting accessor.
- * @param {string} key - Setting key.
- */
-var StringSetting = GObject.registerClass(
-    class _StringSetting extends GObject.Object {
-        _init(key) {
-            // TODO: is it okay to abandon setting change connections?
-            SettingsSource.connect(
-                `changed::${key}`,
-                () => {
-                    this.value = SettingsSource.get_string(key);
-                    _logInfo(`Setting ${key} set to: ${this.value}`);
-                }
-            );
-
-            /**
-             * GSetting key
-             * @type {string} key
-             */
-            this.key = key;
-
-            /**
-             * Current setting value.
-             * @type {string} value
-             */
-            this.value = SettingsSource.get_string(key);
-        }
-
-        /**
-         * Subscribe a callback for setting value changes.
-         * @param {function(string, string)} callback - Callback for value change.
-         * @returns {function()} - Callback for subscription cancellation.
-         */
-        onChange(callback) {
-            const cId = SettingsSource.connect(
-                `changed::${this.key}`,
-                () => callback(this.key, this.value)
-            );
-            this.value = SettingsSource.get_string(this.key);
-            callback(this.key, this.value);
-            return () => SettingsSource.disconnect(cId);
-        }
-
-        /**
-         * Set new value for the setting.
-         * @param {string} value - New value for the setting.
-         */
-        setValue(value) {
-            SettingsSource.set_string(this.key, value);
-        }
-    }
-);
-
-/**
- * @class
- * JSON setting accessor.
- * @param {string} key - Setting key.
- * @template T
- */
-var JsonSetting = GObject.registerClass(
-    class _JsonSetting extends GObject.Object {
-        _init(key) {
-            // TODO: is it okay to abandon setting change connections?
-            SettingsSource.connect(
-                `changed::${key}`,
-                () => {
-                    const value = SettingsSource.get_string(key);
-                    this.value = JSON.parse(value);
-                    _logInfo(`Setting ${key} set to: ${value}`);
-                }
-            );
-
-            /**
-             * GSetting key
-             * @type {string} key
-             */
-            this.key = key;
-
-            /**
-             * Current setting value.
-             * @type {T} value
-             */
-            this.value = JSON.parse(SettingsSource.get_string(key));
-        }
-
-        /**
-         * Subscribe a callback for setting value changes.
-         * @param {function(string, T)} callback - Callback for value change.
-         * @returns {function()} - Callback for subscription cancellation.
-         */
-        onChange(callback) {
-            const cId = SettingsSource.connect(
-                `changed::${this.key}`,
-                () => callback(this.key, this.value)
-            );
-            this.value = JSON.parse(SettingsSource.get_string(this.key));
-            callback(this.key, this.value);
-            return () => SettingsSource.disconnect(cId);
-        }
-
-        /**
-         * Set new value for the setting.
-         * @param {T} value - New value for the setting.
-         */
-        setValue(value) {
-            SettingsSource.set_string(this.key, JSON.stringify(value));
         }
     }
 );
@@ -242,62 +88,89 @@ var module = new class PrefsSourceModule {
     constructor() {
         /**
          * Path along the scene view to the actor to highlight.
-         * The setting is used for extension-settings communication only and intended
-         * to be empty when to setting widget is open.
-         * @type {StringArraySetting}
+         * The setting is used for extension-settings communication only and
+         * intended to be empty when to setting widget is open.
+         * @type {_Setting<string[]>}
          */
-        this.highlightPath = new StringArraySetting('highlight-path');
+        this.highlightPath = this._createStringArraySetting('highlight-path');
 
         /**
-         * Name of setting currently being picking. It should be a string array, namely
-         * either 'workspaces-switcher-path' or 'windows-switcher-path'.
-         * The setting is used for extension-settings communication only and intended
-         * to be empty when no settings widget is open.
-         * @type {StringSetting}
+         * Name of switch action currently being picking actor for. It's values
+         * should be a string array.
+         * The setting is used for extension-settings communication only and
+         * intended to be empty when no settings widget is open.
+         * @type {_Setting<string>}
          */
-        this.pickPathKey = new StringSetting('pick-path-key');
+        this.pickingActorPathAction = this._createStringSetting('picking-actor-path-action');
 
         /**
-         * Path along the scene view to the actor to switch workspaces when scrolling over.
-         * @type {StringArraySetting}
+         * @type {string}
          */
-        this.workspacesSwitcherPath = new StringArraySetting('workspaces-switcher-path');
+        this.workspacesSwitcher = 'workspaces-switcher';
 
         /**
-         * Path along the scene view to the actor to switch windows when scrolling over.
-         * @type {StringArraySetting}
+         * @type {string}
          */
-        this.windowsSwitcherPath = new StringArraySetting('windows-switcher-path');
+        this.windowsSwitcher = 'windows-switcher';
 
         /**
-         * Workspaces switcher settings per device.
-         * @type {JsonSetting<DeviceSettings[]>}
+         * @type {string}
          */
-        this.workspacesSwitcherDevices = new JsonSetting('workspaces-switcher-devices');
+        this.windowsDragger = 'windows-dragger';
 
         /**
-         * Windows switcher settings per device.
-         * @type {JsonSetting<DeviceSettings[]>}
+         * Cache for {@link _setting(key)}.
          */
-        this.windowsSwitcherDevices = new JsonSetting('windows-switcher-devices');
-
-        /**
-         * Windows dragger settings per device.
-         * @type {JsonSetting<DeviceSettings[]>}
-         */
-        this.windowsDraggerDevices = new JsonSetting('windows-dragger-devices');
-
-        /**
-         * Default {@link DeviceSettings} value.
-         * @type {DeviceSettings}
-         */
-        this.defaultDeviceSettings = {
-            resistance: 1,
-        };
+        this._settings = [];
     }
 
     /**
-     * Subscribe callback to any setting change.
+     * Path along the scene view to the actor to make it a scrollable switcher.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<string[]>} - Switcher action setting.
+     */
+    switcherActorPath(action) {
+        return this._setting(this._createStringArraySetting, `${action}-path`);
+    }
+
+    /**
+     * Horizontal switching distance multiplier.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<number>} - Switcher horizontal multiplier setting.
+     */
+    switcherHorizontalMultiplier(action) {
+        return this._setting(this._createNumericSetting, `${action}-horizontal-multiplier`);
+    }
+
+    /**
+     * Vertical switching distance multiplier.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<number>} - Switcher vertical multiplier setting.
+     */
+    switcherVerticalMultiplier(action) {
+        return this._setting(this._createNumericSetting, `${action}-vertical-multiplier`);
+    }
+
+    /**
+     * Whether cyclic switching enabled.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<boolean>} - Cyclic switching setting.
+     */
+    switcherCycle(action) {
+        return this._setting(this._createBooleanSetting, `${action}-cycle`);
+    }
+
+    /**
+     * Whether switching should be visualized.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<boolean>} - Visualize switching setting.
+     */
+    switcherVisualize(action) {
+        return this._setting(this._createBooleanSetting, `${action}-visualize`);
+    }
+
+    /**
+     * Subscribe callback to any setting change and call callback initially.
      * @param {function()} callback - Callback for settings change.
      * @returns {function()} - Callback for unsubscription.
      */
@@ -308,11 +181,65 @@ var module = new class PrefsSourceModule {
     }
 
     /**
-     * Set new value for string array setting.
      * @param {string} key - Setting key.
-     * @param {string[]} value - New value for the setting.
+     * @returns {_Setting<boolean>} - Boolean setting.
      */
-    setStringArray(key, value) {
-        SettingsSource.set_strv(key, value);
+    _createBooleanSetting(key) {
+        return new Setting(
+            key,
+            () => SettingsSource.get_boolean(key),
+            value => SettingsSource.set_boolean(key, value)
+        );
+    }
+
+    /**
+     * @param {string} key - Setting key.
+     * @returns {_Setting<number>} - Numeric setting.
+     */
+    _createNumericSetting(key) {
+        return new Setting(
+            key,
+            () => SettingsSource.get_double(key),
+            value => SettingsSource.set_double(key, value)
+        );
+    }
+
+    /**
+     * @param {string} key - Setting key.
+     * @returns {_Setting<string>} - String setting.
+     */
+    _createStringSetting(key) {
+        return new Setting(
+            key,
+            () => SettingsSource.get_string(key),
+            value => SettingsSource.set_string(key, value)
+        );
+    }
+
+    /**
+     * @param {string} key - Setting key.
+     * @returns {_Setting<string[]>} - String array setting.
+     */
+    _createStringArraySetting(key) {
+        return new Setting(
+            key,
+            () => SettingsSource.get_strv(key),
+            value => SettingsSource.set_strv(key, value)
+        );
+    }
+
+    /**
+     * @template T
+     * @param {function(string): T} settingFactory - Setting object factory.
+     * @param {string} key - Setting key.
+     * @returns {T} - Requested setting object.
+     */
+    _setting(settingFactory, key) {
+        let setting = this._settings[key];
+        if (!setting) {
+            setting = settingFactory(key);
+            this._settings[key] = setting;
+        }
+        return setting;
     }
 }();

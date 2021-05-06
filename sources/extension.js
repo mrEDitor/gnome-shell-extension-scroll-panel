@@ -1,6 +1,6 @@
 /* exported init */
 
-const { Clutter, Meta } = imports.gi;
+const { Clutter, GLib, Meta } = imports.gi;
 const { altTab: AltTab } = imports.ui;
 const { workspaceSwitcherPopup: WorkspaceSwitcherPopup } = imports.ui;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
@@ -13,37 +13,16 @@ const PrefsSource = Me.imports.prefsSource.module;
 
 class ActorScrollHandler {
     /**
-     * @param {function(number, DeviceSettings)} onSwitch -
-     * Callback for switch action. Arguments are switching (scrolling) direction
-     * and device settings.
-     * @param {JsonSetting<DeviceSettings[]>} settingsSource - Per-device
-     * settings source for the switcher.
+     * @param {string} action - Action identifier from {@link PrefsSource}.
+     * @param {function(number)} onSwitch - Callback for switch action.
+     * The only argument is switching distance (-N for left, +N for right).
      */
-    constructor(onSwitch, settingsSource) {
+    constructor(action, onSwitch) {
+        this._action = action;
         this._onSwitch = onSwitch;
-
-        /** @type {number} */
-        this._x = null;
-
-        /** @type {number} */
-        this._y = null;
 
         /** @type {function()|null} */
         this._signalDisconnector = null;
-
-        settingsSource.onChange((key, value) => {
-            /** @type {DeviceSettings[]} */
-            this._settings = (value ?? []).map(
-                v => Object.assign(v, {
-                    deviceNameMask: new RegExp(v.deviceNameMask),
-                    deviceProductMask: new RegExp(v.deviceProductMask),
-                    deviceVendorMask: new RegExp(v.deviceVendorMask),
-                })
-            );
-
-            /** @type {Object.<number, DeviceSettings>} */
-            this._settingsCache = {};
-        });
     }
 
     /**
@@ -67,53 +46,12 @@ class ActorScrollHandler {
         }
     }
 
-    /**
-     * @param {Clutter.InputDevice} device - Device to get settings for.
-     * @returns {DeviceSettings} - Device settings.
-     */
-    _getSettings(device) {
-        const cacheKey = `${device.vendor_id}_${device.product_id}`;
-        if (this._settingsCache.hasOwnProperty(cacheKey)) {
-            return this._settingsCache[cacheKey];
-        }
-        const settings = this._settings
-            .find(
-                s => (s.deviceNameMask || '').test(device.name) &&
-                    (s.deviceProductMask || '').test(device.product_id) &&
-                    (s.deviceVendorMask || '').test(device.vendor_id)
-            ) || PrefsSource.defaultDeviceSettings;
-        this._settingsCache[cacheKey] = settings;
-        return settings;
-    }
-
     _switch(event) {
-        if (event.get_scroll_direction() !== Clutter.ScrollDirection.SMOOTH) {
-            // seems like all events are doubled as both smooth and directed
-            return;
-        }
-        const settings = this._getSettings(event.get_source_device());
         const [x, y] = event.get_scroll_delta();
-        this._x += settings.horizontal === 'disabled' ? 0 : x;
-        this._y += settings.vertical === 'disabled' ? 0 : y;
-
-        // zero resistance would constantly scroll everything around
-        const resistance = Math.max(0.0001, settings.resistance);
-        if (Math.abs(this._x) >= resistance) {
-            const signedMultiplier = settings.horizontal === 'direct' ? +1 : -1;
-            this._onSwitch(
-                signedMultiplier * Math.trunc(this._x / resistance),
-                settings
-            );
-            this._x %= resistance;
-        }
-        if (Math.abs(this._y) >= resistance) {
-            const signedMultiplier = settings.horizontal === 'direct' ? +1 : -1;
-            this._onSwitch(
-                signedMultiplier * Math.trunc(this._y / resistance),
-                settings
-            );
-            this._y %= resistance;
-        }
+        this._onSwitch(
+            x * PrefsSource.switcherHorizontalMultiplier(this._action).value ||
+            y * PrefsSource.switcherVerticalMultiplier(this._action).value
+        );
     }
 }
 
@@ -126,12 +64,12 @@ var module = new class ExtensionModule {
         /** @type {function()[]} */
         this._signalDisconnectors = [];
         this._workspacesSwitcherHandler = new ActorScrollHandler(
-            this._switchWorkspace.bind(this),
-            PrefsSource.workspacesSwitcherDevices
+            PrefsSource.workspacesSwitcher,
+            this._switchWorkspace.bind(this)
         );
         this._windowsSwitcherHandler = new ActorScrollHandler(
-            this._switchWindow.bind(this),
-            PrefsSource.windowsSwitcherDevices
+            PrefsSource.windowsSwitcher,
+            this._switchWindow.bind(this)
         );
 
         /** @type {WorkspaceSwitcherPopup.WorkspaceSwitcherPopup} */
@@ -156,21 +94,24 @@ var module = new class ExtensionModule {
     _updateHandlers() {
         this._workspacesSwitcherHandler.handleActor(
             PrefsCompanion.findActor(
-                PrefsSource.workspacesSwitcherPath.value
+                PrefsSource.switcherActorPath(
+                    PrefsSource.workspacesSwitcher
+                ).value
             )
         );
         this._windowsSwitcherHandler.handleActor(
             PrefsCompanion.findActor(
-                PrefsSource.windowsSwitcherPath.value
+                PrefsSource.switcherActorPath(
+                    PrefsSource.windowsSwitcher
+                ).value
             )
         );
     }
 
     /**
      * @param {number} distance - Switching distance, signed.
-     * @param {DeviceSettings} settings - Applicable device settings.
      */
-    _switchWindow(distance, settings) {
+    _switchWindow(distance) {
         /*
         const appPopup = new AltTab.WindowSwitcherPopup({
             reactive: false,
@@ -183,12 +124,18 @@ var module = new class ExtensionModule {
 
     /**
      * @param {number} distance - Switching distance, signed.
-     * @param {DeviceSettings} settings - Applicable device settings.
      */
-    _switchWorkspace(distance, settings) {
+    _switchWorkspace(distance) {
+        const cycle = PrefsSource.switcherCycle(
+            PrefsSource.workspacesSwitcher
+        );
+        const visualize = PrefsSource.switcherVisualize(
+            PrefsSource.workspacesSwitcher
+        );
+
         let index = global.workspaceManager.get_active_workspace_index();
         const count = global.workspaceManager.n_workspaces;
-        if (!this._workspacesSwitcherPopup) {
+        if (!this._workspacesSwitcherPopup && visualize) {
             this._workspacesSwitcherPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup({
                 reactive: false,
             });
@@ -200,18 +147,20 @@ var module = new class ExtensionModule {
         if (distance < 0) {
             // such that `modBallast > abs(distance) && modBallast % count == 0`
             const modBallast = -distance * count;
-            index = settings.cycle
+            index = cycle
                 ? (index + distance + modBallast) % count
                 : Math.max(0, index + distance);
-            this._workspacesSwitcherPopup.display(Meta.MotionDirection.LEFT, index);
+            this._workspacesSwitcherPopup?.display(Meta.MotionDirection.LEFT, index);
         } else {
-            index = settings.cycle
+            index = cycle
                 ? (index + distance) % count
                 : Math.min(index + distance, count - 1);
-            this._workspacesSwitcherPopup.display(Meta.MotionDirection.RIGHT, index);
+            this._workspacesSwitcherPopup?.display(Meta.MotionDirection.RIGHT, index);
         }
 
-        global.workspaceManager.get_workspace_by_index(index).activate(global.get_current_time());
+        global.workspaceManager
+            .get_workspace_by_index(index)
+            .activate(global.get_current_time());
     }
 
     /**

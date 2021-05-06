@@ -1,6 +1,6 @@
 SOURCE_FILES := $(filter-out debug.js, $(wildcard *.js))
 
-.PHONY: build debug install
+.PHONY: build debug install $(BUILD_DIR)/metadata.json
 
 build : $(BUILD_DIR)/metadata.json $(addprefix $(BUILD_DIR)/, $(SOURCE_FILES))
 	-rm '$(BUILD_DIR)/debug.js'
@@ -12,7 +12,7 @@ install : $(INSTALL_DIR)/metadata.json $(addprefix $(INSTALL_DIR)/, $(SOURCE_FIL
 
 $(BUILD_DIR)/metadata.json : metadata.json
 	mkdir -p '$(BUILD_DIR)'
-	cp metadata.json '$(BUILD_DIR)'
+	jq ".semanticVersion = .semanticVersion + \"+git-`git rev-parse --short HEAD`\"" metadata.json > '$@'
 
 $(BUILD_DIR)/%.js : %.js
 	mkdir -p '$(BUILD_DIR)'

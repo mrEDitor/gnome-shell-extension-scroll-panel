@@ -166,12 +166,12 @@ var module = new class PrefsCompanionModule {
      */
     run() {
         PrefsSource.highlightPath.setValue([]);
-        PrefsSource.pickPathKey.setValue('');
+        PrefsSource.pickingActorPathAction.setValue('');
         const cancelHighlight = PrefsSource.highlightPath.onChange(
-            this._onHighlightPath.bind(this)
+            this._onHighlightPathChange.bind(this)
         );
-        const cancelPicker = PrefsSource.pickPathKey.onChange(
-            this._onPickPathKey.bind(this)
+        const cancelPicker = PrefsSource.pickingActorPathAction.onChange(
+            this._onPickingActorPathActionChange.bind(this)
         );
         return () => {
             cancelHighlight();
@@ -236,7 +236,7 @@ var module = new class PrefsCompanionModule {
      * @param {string} key - Source setting key.
      * @param {string[]} actorPath - Actor path along the view tree.
      */
-    _onHighlightPath(key, actorPath) {
+    _onHighlightPathChange(key, actorPath) {
         this._actorPicker.targetActor = this.findActor(actorPath);
     }
 
@@ -245,7 +245,7 @@ var module = new class PrefsCompanionModule {
      * @param {string} settingToPickPathFor - Key of setting to fill with picked
      * actor path (of type {@link string[]}).
      */
-    _onPickPathKey(key, settingToPickPathFor) {
+    _onPickingActorPathActionChange(key, settingToPickPathFor) {
         if (settingToPickPathFor) {
             this._startPickingActor();
         } else {
@@ -258,12 +258,10 @@ var module = new class PrefsCompanionModule {
     }
 
     _onActorPicked() {
-        PrefsSource.setStringArray(
-            PrefsSource.pickPathKey.value,
-            this.getActorPath(this._actorPicker.targetActor)
-        );
-        PrefsSource.pickPathKey.setValue('');
-        this.cancelPickingActor();
+        PrefsSource
+            .switcherActorPath(PrefsSource.pickingActorPathAction.value)
+            .setValue(this.getActorPath(this._actorPicker.targetActor));
+        PrefsSource.pickingActorPathAction.setValue('');
     }
 
     _stopPickingActor() {
