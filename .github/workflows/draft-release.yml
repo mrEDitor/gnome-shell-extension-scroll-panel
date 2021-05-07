@@ -33,6 +33,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.draft_release.outputs.upload_url }}
-          asset_path: ./scroll-panel@mreditor.github.com.zip
-          asset_name: scroll-panel@mreditor.github.com.zip
+          asset_path: ./build/io.github.mreditor.gnome-shell-extensions.scroll-panel.zip
+          asset_name: io.github.mreditor.gnome-shell-extensions.scroll-panel.zip
           asset_content_type: application/zip
