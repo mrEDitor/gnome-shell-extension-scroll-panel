@@ -2,9 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
-"Report-Msgid-Bugs-To: "
-"https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/issues\n"
-"POT-Creation-Date: 2021-05-07 23:35+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-08 00:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -13,28 +12,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "by <a href=\"%s\">Eduard Minasyan</a>"
-msgstr ""
-
-msgid "Homepage: <a href=\"%1$s\">%s</a>"
-msgstr ""
-
-msgid ""
-"Seems like you are using unlocalized extension, would you like to <a href="
-"\"%s\">localize it</a>?"
-msgstr "Leave your suggestions and localizations on the project page!"
-
-msgid ""
-"This extension allows switching between windows or workspaces by scrolling "
-"Gnome Shell topbar with mouse (both in overview and workspace modes)."
-msgstr ""
-
 #: ../ui/prefs.ui:11
 msgid "Switching workspaces"
 msgstr ""
 
 #: ../ui/prefs.ui:17
 msgid "Switching windows"
+msgstr ""
+
+#: ../ui/prefs.ui:39
+msgid "Choose a feature to configure above."
 msgstr ""
 
 #: ../ui/prefs.ui:73
@@ -119,3 +106,8 @@ msgstr ""
 #: ../ui/prefs.ui:280
 msgid "Should the switcher be shown because of the action."
 msgstr ""
+
+#~ msgid ""
+#~ "Seems like you are using unlocalized extension, would you like to <a href="
+#~ "\"%s\">localize it</a>?"
+#~ msgstr "Leave your suggestions and localizations on the project page!"
