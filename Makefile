@@ -122,5 +122,5 @@ $(BUILD_DIR)/$(DOMAIN).zip : build
 	test -n '$(BUILD_DIR)'
 	$(eval TEMP_DIR := $(shell mktemp -d))
 	$(MAKE) install BUILD_DIR='$(BUILD_DIR)' INSTALL_DIR='$(TEMP_DIR)'
-	zip -r '$(BUILD_DIR)/$(DOMAIN).zip' '$(TEMP_DIR)'/*
+	cd '$(TEMP_DIR)/$(DOMAIN)' && zip -r '$(BUILD_DIR)/$(DOMAIN).zip' *
 	rm -r '$(TEMP_DIR)'
