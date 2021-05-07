@@ -1,6 +1,6 @@
 /* exported init */
 
-const { Clutter, Meta } = imports.gi;
+const { Clutter, GLib, Meta } = imports.gi;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
@@ -92,6 +92,9 @@ var module = new class ExtensionModule {
 
         /** @type {WorkspaceSwitcherPopup.WorkspaceSwitcherPopup} */
         this._workspacesSwitcherPopup = null;
+
+        this._windowSwitchTimeoutHandle = null;
+        this._workspaceSwitchTimeoutHandle = null;
     }
 
     enable() {
@@ -130,11 +133,19 @@ var module = new class ExtensionModule {
      * @param {number} distance - Switching distance, signed.
      */
     _switchWindow(distance) {
-        const cycle = PrefsSource.switcherCycle(
-            PrefsSource.windowsSwitcher
-        );
-        const visualize = PrefsSource.switcherVisualize(
-            PrefsSource.windowsSwitcher
+        if (!distance || this._windowSwitchTimeoutHandle) {
+            return;
+        }
+        const switcher = PrefsSource.windowsSwitcher;
+        const cycle = PrefsSource.switcherCycle(switcher).value;
+        const visualize = PrefsSource.switcherVisualize(switcher).value;
+        this._windowSwitchTimeoutHandle = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT,
+            PrefsSource.switcherTimeout(switcher).value, // ms
+            () => {
+                this._windowSwitchTimeoutHandle = null;
+                return GLib.SOURCE_REMOVE;
+            }
         );
 
         const mode = Meta.TabList.NORMAL;
@@ -146,12 +157,12 @@ var module = new class ExtensionModule {
         let index = windows.indexOf(currentWindow) + distance;
         // such that `modBallast > abs(distance) && modBallast % count == 0`
         const modBallast = Math.abs(distance) * windows.length;
-        index = cycle.value
+        index = cycle
             ? (index + modBallast) % windows.length
             : Math.min(Math.max(0, index), windows.length - 1);
         windows[index].activate(global.get_current_time());
 
-        if (visualize.value) {
+        if (visualize) {
             if (!this._windowSwitcherPopup?.tryDisplay(index)) {
                 this._windowSwitcherPopup = new WindowSwitcherPopup(windows);
                 this._windowSwitcherPopup.connect('destroy', () => {
@@ -166,16 +177,25 @@ var module = new class ExtensionModule {
      * @param {number} distance - Switching distance, signed.
      */
     _switchWorkspace(distance) {
-        const cycle = PrefsSource.switcherCycle(
-            PrefsSource.workspacesSwitcher
-        );
-        const visualize = PrefsSource.switcherVisualize(
-            PrefsSource.workspacesSwitcher
+        if (!distance || this._workspaceSwitchTimeoutHandle) {
+            return;
+        }
+
+        const switcher = PrefsSource.workspacesSwitcher;
+        const cycle = PrefsSource.switcherCycle(switcher).value;
+        const visualize = PrefsSource.switcherVisualize(switcher).value;
+        this._workspaceSwitchTimeoutHandle = GLib.timeout_add(
+            GLib.PRIORITY_DEFAULT,
+            PrefsSource.switcherTimeout(switcher).value, // ms
+            () => {
+                this._workspaceSwitchTimeoutHandle = null;
+                return GLib.SOURCE_REMOVE;
+            }
         );
 
         let index = global.workspaceManager.get_active_workspace_index();
         const count = global.workspaceManager.n_workspaces;
-        if (!this._workspacesSwitcherPopup && visualize.value) {
+        if (!this._workspacesSwitcherPopup && visualize) {
             this._workspacesSwitcherPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup({
                 reactive: false,
             });
@@ -187,12 +207,12 @@ var module = new class ExtensionModule {
         if (distance < 0) {
             // such that `modBallast > abs(distance) && modBallast % count == 0`
             const modBallast = Math.abs(distance) * count;
-            index = cycle.value
+            index = cycle
                 ? (index + distance + modBallast) % count
                 : Math.max(0, index + distance);
             this._workspacesSwitcherPopup?.display(Meta.MotionDirection.LEFT, index);
         } else {
-            index = cycle.value
+            index = cycle
                 ? (index + distance) % count
                 : Math.min(index + distance, count - 1);
             this._workspacesSwitcherPopup?.display(Meta.MotionDirection.RIGHT, index);

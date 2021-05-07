@@ -52,7 +52,11 @@ export HELP
 help :
 	@echo "$$HELP"
 
-all : lint build zip
+all : clean build lint zip
+
+clean :
+	rm -rf '$(BUILD_DIR)'
+	mkdir -p '$(BUILD_DIR)'
 
 build :
 	test -n '$(DOMAIN)'

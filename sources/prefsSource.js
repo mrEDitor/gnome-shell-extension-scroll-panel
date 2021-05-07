@@ -170,6 +170,15 @@ var module = new class PrefsSourceModule {
     }
 
     /**
+     * Timeout (in milliseconds) to ignore further scrolling after switching.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<number>} - Switching timeout setting.
+     */
+    switcherTimeout(action) {
+        return this._setting(this._createNumericSetting, `${action}-timeout`);
+    }
+
+    /**
      * Subscribe callback to any setting change and call callback initially.
      * @param {function()} callback - Callback for settings change.
      * @returns {function()} - Callback for unsubscription.

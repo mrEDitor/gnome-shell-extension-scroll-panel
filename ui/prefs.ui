@@ -170,6 +170,46 @@
                             <property name="column">0</property>
                             <property name="row">3</property>
                         </layout>
+                        <property name="label" translatable="yes">Switching timeout</property>
+                        <property name="halign">start</property>
+                        <property name="tooltip-text" translatable="yes">Timeout for switching event and it's animation: further scrolling events in this timeout will be ignored.</property>
+                    </object>
+                </child>
+                <child>
+                    <object class="GtkBox">
+                        <layout>
+                            <property name="column">1</property>
+                            <property name="row">3</property>
+                        </layout>
+                        <property name="css-classes">linked</property>
+                        <property name="spacing">10</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">false</property>
+                        <child>
+                            <object class="GtkSpinButton" id="setting-timeout">
+                                <property name="adjustment">
+                                    <object class="GtkAdjustment">
+                                        <property name="lower">0</property>
+                                        <property name="upper">10000</property>
+                                        <property name="step-increment">50</property>
+                                    </object>
+                                </property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkLabel">
+                                <property name="label" translatable="yes">ms</property>
+                            </object>
+                        </child>
+                    </object>
+                </child>
+
+                <child>
+                    <object class="GtkLabel">
+                        <layout>
+                            <property name="column">0</property>
+                            <property name="row">4</property>
+                        </layout>
                         <property name="label" translatable="yes">Cyclic switching</property>
                         <property name="halign">start</property>
                         <property name="tooltip-text" translatable="yes">Should the switcher cycle, i.e. switch between first and last elements when switching out-of-list.</property>
@@ -179,7 +219,7 @@
                     <object class="GtkBox">
                         <layout>
                             <property name="column">1</property>
-                            <property name="row">3</property>
+                            <property name="row">4</property>
                         </layout>
                         <property name="halign">end</property>
                         <property name="hexpand">false</property>
@@ -193,7 +233,7 @@
                     <object class="GtkLabel">
                         <layout>
                             <property name="column">0</property>
-                            <property name="row">4</property>
+                            <property name="row">5</property>
                         </layout>
                         <property name="label" translatable="yes">Visualize</property>
                         <property name="halign">start</property>
@@ -204,7 +244,7 @@
                     <object class="GtkBox">
                         <layout>
                             <property name="column">1</property>
-                            <property name="row">4</property>
+                            <property name="row">5</property>
                         </layout>
                         <property name="halign">end</property>
                         <property name="hexpand">false</property>

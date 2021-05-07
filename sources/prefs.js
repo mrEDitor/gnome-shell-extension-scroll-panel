@@ -48,6 +48,13 @@ class PrefsTab {
     }
 
     /**
+     * @returns {_Setting<number>} - Timeout setting.
+     */
+    get timeout() {
+        return _prefsSource().switcherTimeout(this.id);
+    }
+
+    /**
      * @returns {_Setting<boolean>} - Cyclic switching setting.
      */
     get cycle() {
@@ -103,6 +110,7 @@ class UiBuilder {
         this._invertedHorizontal = this._builder.get_object('setting-inverted-horizontal');
         this._directVertical = this._builder.get_object('setting-direct-vertical');
         this._invertedVertical = this._builder.get_object('setting-inverted-vertical');
+        this._timeout = this._builder.get_object('setting-timeout');
         this._cycle = this._builder.get_object('setting-cycle');
         this._visualize = this._builder.get_object('setting-visualize');
 
@@ -213,6 +221,12 @@ class UiBuilder {
                 tab.verticalMultiplier.setValue(widget.active ? -1 : 0);
             })
         );
+        this._timeout.connect(
+            'value-changed',
+            this._createSettingCallback((tab, widget) => {
+                tab.timeout.setValue(widget.value);
+            })
+        );
         this._cycle.connect(
             'notify::active',
             this._createSettingCallback((tab, widget) => {
@@ -252,6 +266,7 @@ class UiBuilder {
         this._invertedHorizontal.active = tab?.horizontalMultiplier.value === -1;
         this._directVertical.active = tab?.verticalMultiplier.value === 1;
         this._invertedVertical.active = tab?.verticalMultiplier.value === -1;
+        this._timeout.value = tab?.timeout.value || 0;
         this._cycle.active = tab?.cycle.value || false;
         this._visualize.active = tab?.visualize.value || false;
     }

@@ -35,8 +35,13 @@
         </key>
         <key type="b" name="workspaces-switcher-visualize">
             <default>true</default>
-            <summary>Visualize dragging workspaces.</summary>
+            <summary>Visualize switching workspaces.</summary>
             <description>Whether visualize workspaces switching or not.</description>
+        </key>
+        <key type="d" name="workspaces-switcher-timeout">
+            <default>350</default>
+            <summary>Workspaces switching timeout.</summary>
+            <description>After switching, further scrolling will be ignored by workspaces switcher for the timeout.</description>
         </key>
 
         <key type="as" name="windows-switcher-path">
@@ -61,8 +66,13 @@
         </key>
         <key type="b" name="windows-switcher-visualize">
             <default>true</default>
-            <summary>Visualize dragging windows.</summary>
+            <summary>Visualize switching windows.</summary>
             <description>Whether visualize windows switching or not.</description>
+        </key>
+        <key type="d" name="windows-switcher-timeout">
+            <default>350</default>
+            <summary>Windows switching timeout.</summary>
+            <description>After switching, further scrolling will be ignored by windows switcher for the timeout.</description>
         </key>
 
     </schema>
