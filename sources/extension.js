@@ -76,13 +76,15 @@ var module = new class ExtensionModule {
     constructor() {
         /** @type {function()[]} */
         this._signalDisconnectors = [];
+
+        // prefer `module` over `this` here to enable debug-tracing
         this._workspacesSwitcherHandler = new ActorScrollHandler(
             PrefsSource.workspacesSwitcher,
-            this._switchWorkspace.bind(this)
+            distance => module._switchWorkspace(distance)
         );
         this._windowsSwitcherHandler = new ActorScrollHandler(
             PrefsSource.windowsSwitcher,
-            this._switchWindow.bind(this)
+            distance => module._switchWindow(distance)
         );
 
         /** @type {WindowSwitcherPopup} */
