@@ -1,0 +1,143 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-07 23:35+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../ui/prefs.ui:11
+msgid "Switching workspaces"
+msgstr "Переключение рабочих мест"
+
+#: ../ui/prefs.ui:17
+msgid "Switching windows"
+msgstr "Переключение окон"
+
+#: ../ui/prefs.ui:73
+msgid "Panel to scroll"
+msgstr "Панель для прокрутки"
+
+#: ../ui/prefs.ui:75
+msgid ""
+"Choose a panel to scroll for the selected action. If the extension is "
+"enabled, the current choice is outlined in a yellow or green box while the "
+"mouse pointer is over the button. Yellow box means that the highlighted "
+"panel currently does not have any event listeners and may be inaccessible "
+"because of other actors rendered over it. Use scrolling when picking an "
+"actor to choose hierarchy level, such as the whole bar instead of the clock "
+"box only."
+msgstr ""
+"Выберите панель, которая будет выполнять настраиваемое действие при "
+"прокрутке. Если расширение активно, текущая выбранная панель будет обведена "
+"жёлтым или зелёный прямоугольником, пока указатель мыши находится на кнопке "
+"выбора. Жёлтая обводка показывает, что выбранная панель ещё не имеет "
+"обработчиков событий и может быть недоступной для прокрутки, если поверх неё "
+"отрисованы другие элементы интерфейса. Для изменения уровня иерархии во "
+"время выбора панели (например, выбора между часами и всей панелью) "
+"используйте прокрутку."
+
+#: ../ui/prefs.ui:105
+msgid "Panel minimum width"
+msgstr "Минимальная ширина панели"
+
+#: ../ui/prefs.ui:107
+msgid "Minimum width for actor."
+msgstr ""
+"Минимальная ширина, до которой будет расширен выбранный элемент интерфейса."
+
+#: ../ui/prefs.ui:133
+msgid "px"
+msgstr ""
+
+#: ../ui/prefs.ui:145
+msgid "Horizontal scrolling"
+msgstr "Горизонтальная прокрутка"
+
+#: ../ui/prefs.ui:147
+msgid "Whether horizontal scrolling should cause forward or back step."
+msgstr ""
+"Должна ли горизонтальная прокрутка восприниматься как переключение вперёд "
+"или назад."
+
+#: ../ui/prefs.ui:161 ../ui/prefs.ui:195
+msgid "Direct"
+msgstr "Прямая"
+
+#: ../ui/prefs.ui:167 ../ui/prefs.ui:201
+msgid "Inverted"
+msgstr "Обратная"
+
+#: ../ui/prefs.ui:179
+msgid "Vertical scrolling"
+msgstr "Вертикальная прокрутка"
+
+#: ../ui/prefs.ui:181
+msgid "Whether vertical scrolling should cause forward or back step."
+msgstr ""
+"Должна ли вертикальная прокрутка восприниматься как переключение вперёд или "
+"назад."
+
+#: ../ui/prefs.ui:213
+msgid "Switching timeout"
+msgstr "Задержка следующего переключения"
+
+#: ../ui/prefs.ui:215
+msgid ""
+"Timeout for switching event: further scrolling events in this timeout will "
+"be ignored."
+msgstr ""
+"Задержка следующего переключения: до её истечения последующие события "
+"прокруткибудут проигнорированы."
+
+#: ../ui/prefs.ui:241
+msgid "ms"
+msgstr ""
+
+#: ../ui/prefs.ui:253
+msgid "Cyclic switching"
+msgstr "Циклическая прокрутка"
+
+#: ../ui/prefs.ui:255
+msgid ""
+"Should the switcher cycle, i.e. switch between first and last elements when "
+"switching out-of-list."
+msgstr ""
+"Должна ли прокрутка зацикливаться, т.е. переключаться между первым и "
+"последнимэлементами при выходе за границы списка элементов."
+
+#: ../ui/prefs.ui:278
+msgid "Visualize"
+msgstr "Визуализация"
+
+#: ../ui/prefs.ui:280
+msgid "Should the switcher be shown because of the action."
+msgstr "Должно ли действие быть визуализировано всплывающим переключателем."
+
+#~ msgid "by <a href=\"%s\">Eduard Minasyan</a>"
+#~ msgstr "Автор: <a href=\"%s\">Эдуард Минасян</a>"
+
+#~ msgid "Homepage: <a href=\"%1$s\">%s</a>"
+#~ msgstr "Домашняя страница: <a href=\"%1$s\">%s</a>"
+
+#~ msgid ""
+#~ "Seems like you are using unlocalized extension, would you like to <a href="
+#~ "\"%s\">localize it</a>?"
+#~ msgstr ""
+#~ "Оставляйте свои предложения по доработке и локализации на странице "
+#~ "проекта!"
+
+#~ msgid ""
+#~ "This extension allows switching between windows or workspaces by "
+#~ "scrolling Gnome Shell topbar with mouse (both in overview and workspace "
+#~ "modes)."
+#~ msgstr ""
+#~ "Расширение позволяет переключаться между окнами или рабочими местами "
+#~ "путём прокрутки верхней панели Gnome Shell колесиком мыши (как в режиме "
+#~ "обзора, так и при работе)."

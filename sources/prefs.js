@@ -1,7 +1,6 @@
 /* exported init, buildPrefsWidget, UiBuilder */
 
 const Gtk = imports.gi.Gtk;
-const Gettext = imports.gettext;
 // WARNING: No shell or extension imports allowed here or in class constructors
 // since it will break buildPrefsView() call for development environment.
 
@@ -144,18 +143,19 @@ class UiBuilder {
      * @returns {Gtk.Box} - {@link UiBuilder.widget} with bindings.
      */
     bindPrefs() {
+        const gettext = this._gettext();
         for (const aboutLine of [
             `<span size="larger">${_me().metadata.name} ${_me().metadata.version || ''}</span>`,
             `<span size="smaller">${_me().metadata.uuid} v${_me().metadata.semanticVersion}</span>`,
-            `<span>${this._gettext('by <a href="%s">Eduard Minasyan</a>', 'https://mrEDitor.github.io/')}</span>`,
-            `<span>${this._gettext('Homepage: <a href="%1$s">%s</a>', _me().metadata.url)}</span>`,
-            `<span>${this._gettext(
+            `<span>${gettext('by <a href="%s">Eduard Minasyan</a>', 'https://mrEDitor.github.io/')}</span>`,
+            `<span>${gettext('Homepage: <a href="%1$s">%s</a>', _me().metadata.url)}</span>`,
+            `<span>${gettext(
                 // it's expected to be replaced with localizer copyright
                 'Seems like you are using unlocalized extension, would you like to <a href="%s">localize it</a>?',
                 `${_me().metadata.url}#localization`
             )}</span>`,
             '',
-            `<span>${this._gettext(_me().metadata.description)}</span>`,
+            `<span>${gettext(_me().metadata.description)}</span>`,
         ]) {
             this._aboutBox.append(new Gtk.Label({
                 marginStart: 15,
@@ -321,18 +321,22 @@ class UiBuilder {
     }
 
     /**
-     * Gettext localization helper with formatting abilities.
-     * @param {string} message - Message to localize.
-     * @param {string} args - Arguments to replace %s (or %1$s) tokens in message.
-     * @return {string} - Localized string.
+     * Create Gettext localization helper with formatting abilities.
+     * @return {function(string, ...string[]): string} - Gettext localization
+     * helper with formatting abilities. The first method argument is message
+     * body, the second is message variables to replace %s and %1$s with.
      */
-    _gettext(message, ...args) {
-        let iter = 0;
-        return Gettext.gettext(message)
-            .replaceAll(
-                /%(?:%|([1-9][0-9]*\$)?s)/g,
-                (q, i) => q === '%%' ? '%' : args[i ? parseInt(i) - 1 : iter++]
-            );
+    _gettext() {
+        const gettext = imports.gettext;
+        const gettextDomain =  gettext.domain(_me().metadata['gettext-domain']);
+        return (message, ...args) => {
+            let iter = 0;
+            return gettextDomain.gettext(message)
+                .replaceAll(
+                    /%(?:%|([1-9][0-9]*\$)?s)/g,
+                    (q, i) => q === '%%' ? '%' : args[i ? parseInt(i) - 1 : iter++]
+                );
+        };
     }
 }
 
@@ -348,8 +352,7 @@ function init() {
     } catch {
         // Debug module is optional.
     }
-    const Config = imports.misc.config;
-    Gettext.bindtextdomain(_me().metadata['gettext-domain'], Config.LOCALEDIR);
+    imports.misc.extensionUtils.initTranslations();
 }
 
 /**

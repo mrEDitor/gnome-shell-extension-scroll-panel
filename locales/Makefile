@@ -4,14 +4,19 @@ LOCALE_FILES := $(addsuffix /LC_MESSAGES/$(DOMAIN).mo, $(LOCALE_NAMES))
 .PHONY : build install
 
 ifneq ($(LOCALE_NAMES),)
-build : $(addprefix $(BUILD_DIR), $(LOCALE_FILES))
-install : $(addprefix $(INSTALL_DIR), $(LOCALE_FILES))
+build : messages.pot $(addprefix $(BUILD_DIR)/, $(LOCALE_FILES))
+install : $(addprefix $(INSTALL_DIR)/, $(LOCALE_FILES))
 endif
 
 messages.pot : $(wildcard ../sources/*.js) $(wildcard ../sources/*.json) $(wildcard ../ui/*.ui)
 	$(eval TEMP_POT := $(shell mktemp "XXXXXXX.diff.pot"))
-	xgettext --keyword=_gettext ../sources/*.js ../sources/*.json ../ui/*.ui --output='$(TEMP_POT)'
+	xgettext --language=JavaScript ../sources/*.json --output='$(TEMP_POT)'
 	msgmerge --update messages.pot '$(TEMP_POT)'
+	xgettext --language=JavaScript --keyword=gettext  ../sources/*.js --output='$(TEMP_POT)'
+	msgmerge --update messages.pot '$(TEMP_POT)'
+	xgettext --language=Glade ../ui/*.ui --output='$(TEMP_POT)'
+	msgmerge --update messages.pot '$(TEMP_POT)'
+	for po in *.po; do echo msgmerge --update $$po messages.pot; done
 	rm '$(TEMP_POT)'
 
 %.po : messages.pot
@@ -23,7 +28,7 @@ $(BUILD_DIR)/%/LC_MESSAGES/$(DOMAIN).mo : %.po
 	msgfmt -o '$@' '$^'
 
 $(INSTALL_DIR)/%/LC_MESSAGES/$(DOMAIN).mo : $(BUILD_DIR)/%/LC_MESSAGES/$(DOMAIN).mo
-	test -n '$(DOMAIN)'
+	test -n '$(DOMAIN)'install
 	test -n '$(BUILD_DIR)'
 	test -n '$(INSTALL_DIR)' && mkdir -p '$(INSTALL_DIR)/$*/LC_MESSAGES/'
 	cp '$^' '$@'

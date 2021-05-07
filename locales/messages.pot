@@ -2,8 +2,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
-"Report-Msgid-Bugs-To: github.com/mrEDitor/gnome-shell-extension-scroll-panel/issues\n"
-"POT-Creation-Date: 2021-04-11 05:08+0300\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-07 23:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -13,77 +13,92 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../ui/prefs.ui:11
-msgid "Not listed devices"
-msgstr ""
-
-#: ../ui/prefs.ui:32
 msgid "Switching workspaces"
 msgstr ""
 
-#: ../ui/prefs.ui:33
-msgid ""
-"Switching active workspace by scrolling a mousewheel above the clock panel"
-msgstr ""
-
-#: ../ui/prefs.ui:37
+#: ../ui/prefs.ui:17
 msgid "Switching windows"
 msgstr ""
 
-#: ../ui/prefs.ui:38
-msgid ""
-"Switching active window by scrolling a mousewheel above the application menu"
-msgstr ""
-
-#: ../ui/prefs.ui:53
-msgid "Switch windows when scrolling over Overview button"
-msgstr ""
-
-#: ../ui/prefs.ui:63
-msgid "Switch workspaces when scrolling over free space on topbar"
-msgstr ""
-
 #: ../ui/prefs.ui:73
-msgid "This device (click here)"
+msgid "Panel to scroll"
 msgstr ""
 
-#: ../ui/prefs.ui:87
-msgid "Enable"
-msgstr ""
-
-#: ../ui/prefs.ui:113
+#: ../ui/prefs.ui:75
 msgid ""
-"Distance to go for a mousewheel, required to trigger an action.\n"
-"Hint: you can scroll this spinner to change it's value."
+"Choose a panel to scroll for the selected action. If the extension is "
+"enabled, the current choice is outlined in a yellow or green box while the "
+"mouse pointer is over the button. Yellow box means that the highlighted "
+"panel currently does not have any event listeners and may be inaccessible "
+"because of other actors rendered over it. Use scrolling when picking an "
+"actor to choose hierarchy level, such as the whole bar instead of the clock "
+"box only."
 msgstr ""
 
-#: ../ui/prefs.ui:130
-msgid "Required pressure"
+#: ../ui/prefs.ui:105
+msgid "Panel minimum width"
 msgstr ""
 
-#: ../ui/prefs.ui:137
-msgid "Cyclic scrolling"
+#: ../ui/prefs.ui:107
+msgid "Minimum width for actor."
 msgstr ""
 
-#: ../ui/prefs.ui:146
-msgid "Invert direction"
+#: ../ui/prefs.ui:133
+msgid "px"
 msgstr ""
 
-#: ../ui/prefs.ui:155
-msgid "Show switcher"
+#: ../ui/prefs.ui:145
+msgid "Horizontal scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:185
-msgid "Name"
+#: ../ui/prefs.ui:147
+msgid "Whether horizontal scrolling should cause forward or back step."
 msgstr ""
 
-#: ../ui/prefs.ui:199
-msgid "Remove"
+#: ../ui/prefs.ui:161 ../ui/prefs.ui:195
+msgid "Direct"
 msgstr ""
 
-#: ../ui/prefs.ui:239
-msgid "Actions"
+#: ../ui/prefs.ui:167 ../ui/prefs.ui:201
+msgid "Inverted"
 msgstr ""
 
-#: ../ui/prefs.ui:274
-msgid "Please, select action(s) and device(s) to configure."
+#: ../ui/prefs.ui:179
+msgid "Vertical scrolling"
+msgstr ""
+
+#: ../ui/prefs.ui:181
+msgid "Whether vertical scrolling should cause forward or back step."
+msgstr ""
+
+#: ../ui/prefs.ui:213
+msgid "Switching timeout"
+msgstr ""
+
+#: ../ui/prefs.ui:215
+msgid ""
+"Timeout for switching event: further scrolling events in this timeout will "
+"be ignored."
+msgstr ""
+
+#: ../ui/prefs.ui:241
+msgid "ms"
+msgstr ""
+
+#: ../ui/prefs.ui:253
+msgid "Cyclic switching"
+msgstr ""
+
+#: ../ui/prefs.ui:255
+msgid ""
+"Should the switcher cycle, i.e. switch between first and last elements when "
+"switching out-of-list."
+msgstr ""
+
+#: ../ui/prefs.ui:278
+msgid "Visualize"
+msgstr ""
+
+#: ../ui/prefs.ui:280
+msgid "Should the switcher be shown because of the action."
 msgstr ""

@@ -102,7 +102,7 @@
                             <property name="column">0</property>
                             <property name="row">1</property>
                         </layout>
-                        <property name="label" translatable="yes">Actor minimum width</property>
+                        <property name="label" translatable="yes">Panel minimum width</property>
                         <property name="halign">start</property>
                         <property name="tooltip-text" translatable="yes">Minimum width for actor.</property>
                     </object>
