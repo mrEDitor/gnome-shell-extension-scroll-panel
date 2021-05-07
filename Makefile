@@ -85,13 +85,13 @@ ifneq ($(wildcard $(INSTALL_DIR)/$(DOMAIN)/),)
 	$(eval TEMP_DIR := $(shell mktemp -d))
 	$(MAKE) debug install BUILD_DIR='$(TEMP_DIR)' INSTALL_DIR='$(TEMP_DIR)/INSTALL_DIR'
 ifeq ($(FORCE),)
-	echo 'Marking changed files as out-of-package:'
+	# Marking changed files as out-of-package:
 	cd '$(INSTALL_DIR)/$(DOMAIN)' && find . -type f -exec sh -c '\
 		cmp "$(INSTALL_DIR)/$(DOMAIN)/$$1" "$(TEMP_DIR)/INSTALL_DIR/$(DOMAIN)/$$1" && \
 		rm "$(INSTALL_DIR)/$(DOMAIN)/$$1" || true ; \
 		' sh {} \;
 else
-	echo 'Generating changed files diff before deletion:'
+	# Generating changed files diff before deletion:
 	cd '$(INSTALL_DIR)/$(DOMAIN)' && find . -type f -exec sh -c '\
 		diff -uN "$(INSTALL_DIR)/$(DOMAIN)/$$1" "$(TEMP_DIR)/INSTALL_DIR/$(DOMAIN)/$$1" ; \
 		rm "$(INSTALL_DIR)/$(DOMAIN)/$$1" || true ; \
