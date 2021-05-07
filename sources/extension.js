@@ -16,7 +16,7 @@ const PrefsSource = Me.imports.prefsSource.module;
 class ActorScrollHandler {
     /**
      * @param {string} action - Action identifier from {@link PrefsSource}.
-     * @param {function(number)} onSwitch - Callback for switch action.
+     * @param {function(number): boolean} onSwitch - Callback for switch action.
      * The only argument is switching distance (-N for left, +N for right).
      */
     constructor(action, onSwitch) {
@@ -53,17 +53,15 @@ class ActorScrollHandler {
         const verticalMultiplier = PrefsSource.switcherVerticalMultiplier(this._action);
         switch (event.get_scroll_direction()) {
         case Clutter.ScrollDirection.LEFT:
-            this._onSwitch(-horizontalMultiplier.value);
-            return true;
+            return this._onSwitch(-horizontalMultiplier.value);
         case Clutter.ScrollDirection.RIGHT:
-            this._onSwitch(horizontalMultiplier.value);
-            return true;
+            return this._onSwitch(horizontalMultiplier.value);
         case Clutter.ScrollDirection.UP:
-            this._onSwitch(-verticalMultiplier.value);
-            return true;
+            return this._onSwitch(-verticalMultiplier.value);
         case Clutter.ScrollDirection.DOWN:
-            this._onSwitch(verticalMultiplier.value);
-            return true;
+            return this._onSwitch(verticalMultiplier.value);
+        default:
+            return false;
         }
     }
 }
@@ -131,17 +129,19 @@ var module = new class ExtensionModule {
 
     /**
      * @param {number} distance - Switching distance, signed.
+     * @returns {boolean} - Whether switching performed.
      */
     _switchWindow(distance) {
         if (!distance || this._windowSwitchTimeoutHandle) {
-            return;
+            return false;
         }
         const switcher = PrefsSource.windowsSwitcher;
         const cycle = PrefsSource.switcherCycle(switcher).value;
         const visualize = PrefsSource.switcherVisualize(switcher).value;
+        const timeout = PrefsSource.switcherTimeout(switcher).value;
         this._windowSwitchTimeoutHandle = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
-            PrefsSource.switcherTimeout(switcher).value, // ms
+            timeout, // ms
             () => {
                 this._windowSwitchTimeoutHandle = null;
                 return GLib.SOURCE_REMOVE;
@@ -160,33 +160,40 @@ var module = new class ExtensionModule {
         index = cycle
             ? (index + modBallast) % windows.length
             : Math.min(Math.max(0, index), windows.length - 1);
-        windows[index].activate(global.get_current_time());
 
         if (visualize) {
-            if (!this._windowSwitcherPopup?.tryDisplay(index)) {
+            if (!this._windowSwitcherPopup?.tryDisplay(index, 1.5 * timeout)) {
                 this._windowSwitcherPopup = new WindowSwitcherPopup(windows);
                 this._windowSwitcherPopup.connect('destroy', () => {
+                    const selectIndex = this._windowSwitcherPopup.selectedIndex;
+                    windows[selectIndex].activate(global.get_current_time());
                     this._windowSwitcherPopup = null;
                 });
-                this._windowSwitcherPopup.tryDisplay(index);
+                this._windowSwitcherPopup.tryDisplay(index, 1.5 * timeout);
             }
+        } else {
+            windows[index].activate(global.get_current_time());
         }
+
+        return true;
     }
 
     /**
      * @param {number} distance - Switching distance, signed.
+     * @returns {boolean} - Whether switching performed.
      */
     _switchWorkspace(distance) {
         if (!distance || this._workspaceSwitchTimeoutHandle) {
-            return;
+            return false;
         }
 
         const switcher = PrefsSource.workspacesSwitcher;
         const cycle = PrefsSource.switcherCycle(switcher).value;
         const visualize = PrefsSource.switcherVisualize(switcher).value;
+        const timeout = PrefsSource.switcherTimeout(switcher).value;
         this._workspaceSwitchTimeoutHandle = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
-            PrefsSource.switcherTimeout(switcher).value, // ms
+            timeout, // ms
             () => {
                 this._workspaceSwitchTimeoutHandle = null;
                 return GLib.SOURCE_REMOVE;
@@ -221,6 +228,7 @@ var module = new class ExtensionModule {
         global.workspaceManager
             .get_workspace_by_index(index)
             .activate(global.get_current_time());
+        return true;
     }
 }();
 

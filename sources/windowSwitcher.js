@@ -14,6 +14,7 @@ var WindowSwitcherPopup = GObject.registerClass(
         _init(windows) {
             super._init();
             this.reactive = false;
+            this.selectedIndex = 0;
             this._visibilityTimeoutHandle = 0;
 
             // These fields are defined and used by parent class, do not rename them.
@@ -25,19 +26,22 @@ var WindowSwitcherPopup = GObject.registerClass(
         /**
          * Try display switcher.
          * @param {number} activeIndex - 0-based index of element to highlight.
+         * @param {number} timeout - Timeout (in milliseconds) before hiding of
+         * the switcher.
          * @returns {boolean} - Whether switcher was successfully displayed.
          */
-        tryDisplay(activeIndex) {
+        tryDisplay(activeIndex, timeout) {
+            this.selectedIndex = activeIndex;
             if (this._items.length === 0) {
                 return false;
             } else {
-                this._resetVisibilityTimeout();
+                this._resetVisibilityTimeout(timeout);
                 this._switcherList.highlight(activeIndex);
                 return true;
             }
         }
 
-        _resetVisibilityTimeout() {
+        _resetVisibilityTimeout(timeout) {
             this.visible = true;
 
             if (this._visibilityTimeoutHandle !== 0) {
@@ -46,7 +50,7 @@ var WindowSwitcherPopup = GObject.registerClass(
 
             this._visibilityTimeoutHandle = GLib.timeout_add(
                 GLib.PRIORITY_DEFAULT,
-                1500, // ms
+                timeout, // ms
                 () => {
                     this.destroy();
                     this._visibilityTimeoutHandle = 0;
