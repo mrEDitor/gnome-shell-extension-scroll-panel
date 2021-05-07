@@ -18,6 +18,11 @@
             <summary>Workspaces switcher actor path.</summary>
             <description>Path to workspaces switcher scrollable actor. Empty array to disable the switcher.</description>
         </key>
+        <key type="d" name="workspaces-switcher-width">
+            <default>250</default>
+            <summary>Workspaces switcher actor minimum width.</summary>
+            <description>Minimum width to set for workspaces switcher scrollable actor.</description>
+        </key>
         <key type="d" name="workspaces-switcher-horizontal-multiplier">
             <default>1</default>
             <summary>Horizontal scrolling multiplier for switching workspaces.</summary>
@@ -45,9 +50,14 @@
         </key>
 
         <key type="as" name="windows-switcher-path">
-            <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft' ]</default>
+            <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft', '1', '0' ]</default>
             <summary>Windows switcher actor path.</summary>
             <description>Path to windows switcher scrollable actor. Empty array to disable the switcher.</description>
+        </key>
+        <key type="d" name="windows-switcher-width">
+            <default>250</default>
+            <summary>Windows switcher actor minimum width.</summary>
+            <description>Minimum width to set for windows switcher scrollable actor.</description>
         </key>
         <key type="d" name="windows-switcher-horizontal-multiplier">
             <default>1</default>

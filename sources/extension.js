@@ -30,19 +30,23 @@ class ActorScrollHandler {
     /**
      * Subscribe for scrolling signals of specified actor.
      * @param {Clutter.Actor|null} actor - Actor to scroll signals of.
+     * @param {number} minWidth - Minimum width to set for actor.
      */
-    handleActor(actor) {
+    handleActor(actor, minWidth) {
         if (this._signalDisconnector) {
             this._signalDisconnector();
             this._signalDisconnector = null;
         }
         if (actor) {
+            const oldMinWidth = actor.min_width || 0;
+            actor.min_width = Math.max(minWidth, oldMinWidth);
             actor.reactive = true;
             const connectionId = actor.connect(
                 'scroll-event',
                 (source, event) => this._switch(event)
             );
             this._signalDisconnector = () => {
+                actor.min_width = oldMinWidth;
                 actor.disconnect(connectionId);
             };
         }
@@ -98,32 +102,40 @@ var module = new class ExtensionModule {
     enable() {
         this._signalDisconnectors.push(
             PrefsCompanion.run(),
-            PrefsSource.onChange(this._updateHandlers.bind(this))
+            PrefsSource.onChange(() => {
+                // prefer `module` over `this` here to enable debug-tracing
+                module._updateHandler(
+                    this._workspacesSwitcherHandler,
+                    PrefsSource.workspacesSwitcher
+                );
+                module._updateHandler(
+                    this._windowsSwitcherHandler,
+                    PrefsSource.windowsSwitcher
+                );
+            })
         );
     }
 
     disable() {
-        this._windowsSwitcherHandler.handleActor(null);
-        this._workspacesSwitcherHandler.handleActor(null);
+        this._windowsSwitcherHandler.handleActor(null, 0);
+        this._workspacesSwitcherHandler.handleActor(null, 0);
         for (const disconnector of this._signalDisconnectors) {
             disconnector();
         }
     }
 
-    _updateHandlers() {
-        this._workspacesSwitcherHandler.handleActor(
-            PrefsCompanion.findActor(
-                PrefsSource.switcherActorPath(
-                    PrefsSource.workspacesSwitcher
-                ).value
-            )
-        );
-        this._windowsSwitcherHandler.handleActor(
-            PrefsCompanion.findActor(
-                PrefsSource.switcherActorPath(
-                    PrefsSource.windowsSwitcher
-                ).value
-            )
+    _updateHandler(handler, switcher) {
+        // There is no reason to handle switcher actor if all multipliers are 0.
+        const anyOfSwitcherMultipliersIsSet =
+            PrefsSource.switcherHorizontalMultiplier(switcher).value ||
+            PrefsSource.switcherVerticalMultiplier(switcher).value;
+        handler.handleActor(
+            anyOfSwitcherMultipliersIsSet
+                ? PrefsCompanion.findActor(
+                    PrefsSource.switcherActorPath(switcher).value
+                )
+                : null,
+            PrefsSource.switcherActorWidth(switcher).value
         );
     }
 
@@ -153,8 +165,13 @@ var module = new class ExtensionModule {
         const windows = global.display.get_tab_list(mode, workspace);
         windows.sort((a, b) => a.get_stable_sequence() - b.get_stable_sequence());
 
-        const currentWindow = global.display.get_tab_current(mode, workspace);
-        let index = windows.indexOf(currentWindow) + distance;
+        let index = distance;
+        if (visualize && this._windowSwitcherPopup) {
+            index += this._windowSwitcherPopup.selectedIndex;
+        } else {
+            const currentWindow = global.display.get_tab_current(mode, workspace);
+            index += windows.indexOf(currentWindow);
+        }
         // such that `modBallast > abs(distance) && modBallast % count == 0`
         const modBallast = Math.abs(distance) * windows.length;
         index = cycle

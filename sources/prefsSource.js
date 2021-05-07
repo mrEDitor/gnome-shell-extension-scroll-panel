@@ -114,11 +114,6 @@ var module = new class PrefsSourceModule {
         this.windowsSwitcher = 'windows-switcher';
 
         /**
-         * @type {string}
-         */
-        this.windowsDragger = 'windows-dragger';
-
-        /**
          * Cache for {@link _setting(key)}.
          */
         this._settings = [];
@@ -131,6 +126,15 @@ var module = new class PrefsSourceModule {
      */
     switcherActorPath(action) {
         return this._setting(this._createStringArraySetting, `${action}-path`);
+    }
+
+    /**
+     * Minimum width for scrollable widget actor.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<number>} - Switcher action setting.
+     */
+    switcherActorWidth(action) {
+        return this._setting(this._createNumericSetting, `${action}-width`);
     }
 
     /**

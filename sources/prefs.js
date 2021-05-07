@@ -34,6 +34,13 @@ class PrefsTab {
     }
 
     /**
+     * @returns {_Setting<number>} - Actor width setting.
+     */
+    get actorWidth() {
+        return _prefsSource().switcherActorWidth(this.id);
+    }
+
+    /**
      * @returns {_Setting<number>} - Horizontal multiplier setting.
      */
     get horizontalMultiplier() {
@@ -75,7 +82,6 @@ class PrefsTab {
  */
 class UiBuilder {
     constructor(uiFile) {
-        this._uiFile = uiFile;
         this._builder = Gtk.Builder.new_from_file(uiFile);
 
         /**
@@ -103,9 +109,10 @@ class UiBuilder {
             this._windowsSwitcherTab,
         ];
 
-        this._settingActorChoose = this._builder.get_object('setting-actor-choose');
-        this._settingActor = this._builder.get_object('setting-actor');
+        this._actorChoose = this._builder.get_object('setting-actor-choose');
+        this._actor = this._builder.get_object('setting-actor');
 
+        this._actorWidth = this._builder.get_object('setting-actor-width');
         this._directHorizontal = this._builder.get_object('setting-direct-horizontal');
         this._invertedHorizontal = this._builder.get_object('setting-inverted-horizontal');
         this._directVertical = this._builder.get_object('setting-direct-vertical');
@@ -183,10 +190,10 @@ class UiBuilder {
                 _prefsSource().highlightPath.setValue([]);
             }
         });
-        this._settingActorChoose.add_controller(motionController);
+        this._actorChoose.add_controller(motionController);
 
         // bind actor picker
-        this._settingActorChoose.connect('toggled', button => {
+        this._actorChoose.connect('toggled', button => {
             // Active tab is not null since it's setting is visible.
             _prefsSource().pickingActorPathAction.setValue(
                 button.active ? this._getActiveTab().id : ''
@@ -197,6 +204,12 @@ class UiBuilder {
         _prefsSource().highlightPath.onChange(() => this._fetchActorSetting());
         _prefsSource().pickingActorPathAction.onChange(() => this._fetchActorSetting());
 
+        this._actorWidth.connect(
+            'value-changed',
+            this._createSettingCallback((tab, widget) => {
+                tab.actorWidth.setValue(widget.value);
+            })
+        );
         this._directHorizontal.connect(
             'toggled',
             this._createSettingCallback((tab, widget) => {
@@ -262,6 +275,7 @@ class UiBuilder {
         this._fetchActorSetting();
 
         const tab = this._getActiveTab();
+        this._actorWidth.value = tab?.actorWidth.value || 0;
         this._directHorizontal.active = tab?.horizontalMultiplier.value === 1;
         this._invertedHorizontal.active = tab?.horizontalMultiplier.value === -1;
         this._directVertical.active = tab?.verticalMultiplier.value === 1;
@@ -275,12 +289,12 @@ class UiBuilder {
         const tab = this._getActiveTab();
         if (_prefsSource().pickingActorPathAction.value) {
             const actorPath = _prefsSource().highlightPath.value;
-            this._settingActor.text = actorPath.join(' > ');
-            this._settingActorChoose.active = true;
+            this._actor.text = actorPath.join(' > ');
+            this._actorChoose.active = true;
         } else if (tab) {
             const actorPath = tab.actorPath.value;
-            this._settingActor.text = actorPath.join(' > ');
-            this._settingActorChoose.active = false;
+            this._actor.text = actorPath.join(' > ');
+            this._actorChoose.active = false;
         }
     }
 
