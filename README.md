@@ -10,7 +10,7 @@ Defaults are:
 - hold Super key and scroll anywhere to switch workspaces (Gnome Shell feature);
 - hold Super+Shift keys and scroll a window to take it to another workspaces while switching.
 
-You can install the extension from [extensions.gnome.org](https://extensions.gnome.org/extension/1096/).
+You can install the extension from [extensions.gnome.org](https://extensions.gnome.org/extension/4257/).
 
 Target Gnome version is Gnome Shell 40.
 
@@ -45,10 +45,10 @@ https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/
 ## Localization
 
 1. Open [`locales/messages.pot`](locales/messages.pot) file with text editor or
-favorite .po-editor (e.g. you GTranslator or POEdit).
+favorite .po-editor (e.g. GTranslator or POEdit).
 
 2. Translate the text, name resulting .po-file after the target locale (e.g.
-`en_US.po`), and save it back to [`locales`](locales) directory. 
+`en.po` or `en_US.po`), and save it back to [`locales`](locales) directory. 
 
 3. Go back to project root and build whole project with `make`.
 
@@ -57,7 +57,7 @@ favorite .po-editor (e.g. you GTranslator or POEdit).
 
 Previous versions are available as:
 
-- [extensions.gnome.org page](https://extensions.gnome.org/extension/932/) for Gnome Shell 3.14-3.18;
-- [extensions.gnome.org page](https://extensions.gnome.org/extension/1096/) for Gnome Shell 3.20-3.38; 
+- [extensions.gnome.org page](https://extensions.gnome.org/extension/932/) for v1 (Gnome Shell 3.14-3.18);
+- [extensions.gnome.org page](https://extensions.gnome.org/extension/1096/) for v3 (Gnome Shell 3.20-3.38);
 - [source code at GitHub.com](https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/);
 - [releases at GitHub.com](https://github.com/mrEDitor/gnome-shell-extension-scroll-panel/releases).
