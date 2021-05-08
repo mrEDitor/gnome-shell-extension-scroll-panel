@@ -40,6 +40,13 @@ class PrefsTab {
     }
 
     /**
+     * @returns {_Setting<string>} - Actor content align setting.
+     */
+    get actorAlign() {
+        return _prefsSource().switcherActorAlign(this.id);
+    }
+
+    /**
      * @returns {_Setting<number>} - Horizontal multiplier setting.
      */
     get horizontalMultiplier() {
@@ -110,8 +117,11 @@ class UiBuilder {
 
         this._actorChoose = this._builder.get_object('setting-actor-choose');
         this._actor = this._builder.get_object('setting-actor');
-
         this._actorWidth = this._builder.get_object('setting-actor-width');
+        this._actorWidthEnable = this._builder.get_object('setting-actor-width-enable');
+        this._actorAlignStart = this._builder.get_object('setting-actor-align-start');
+        this._actorAlignCenter = this._builder.get_object('setting-actor-align-center');
+        this._actorAlignEnd = this._builder.get_object('setting-actor-align-end');
         this._directHorizontal = this._builder.get_object('setting-direct-horizontal');
         this._invertedHorizontal = this._builder.get_object('setting-inverted-horizontal');
         this._directVertical = this._builder.get_object('setting-direct-vertical');
@@ -210,6 +220,31 @@ class UiBuilder {
                 tab.actorWidth.setValue(widget.value);
             })
         );
+        this._actorWidthEnable.connect(
+            'toggled',
+            this._createSettingCallback((tab, widget) => {
+                tab.actorWidth.setValue(widget.active ? this._actorWidth.value : -1);
+                this._actorWidth.sensitive = widget.active;
+            })
+        );
+        this._actorAlignStart.connect(
+            'toggled',
+            this._createSettingCallback((tab, widget) => {
+                tab.actorAlign.setValue(widget.active ? 'start' : '');
+            })
+        );
+        this._actorAlignCenter.connect(
+            'toggled',
+            this._createSettingCallback((tab, widget) => {
+                tab.actorAlign.setValue(widget.active ? 'center' : '');
+            })
+        );
+        this._actorAlignEnd.connect(
+            'toggled',
+            this._createSettingCallback((tab, widget) => {
+                tab.actorAlign.setValue(widget.active ? 'end' : '');
+            })
+        );
         this._directHorizontal.connect(
             'toggled',
             this._createSettingCallback((tab, widget) => {
@@ -275,7 +310,9 @@ class UiBuilder {
         this._fetchActorSetting();
 
         const tab = this._getActiveTab();
-        this._actorWidth.value = tab?.actorWidth.value || 0;
+        this._actorWidth.value = tab?.actorWidth.value >= 0 ? tab?.actorWidth.value : 300;
+        this._actorWidth.sensitive = tab?.actorWidth.value !== -1;
+        this._actorWidthEnable.active = tab?.actorWidth.value !== -1;
         this._directHorizontal.active = tab?.horizontalMultiplier.value === 1;
         this._invertedHorizontal.active = tab?.horizontalMultiplier.value === -1;
         this._directVertical.active = tab?.verticalMultiplier.value === 1;

@@ -33,24 +33,45 @@ class ActorScrollHandler {
     /**
      * Subscribe for scrolling signals of specified actor.
      * @param {Clutter.Actor|null} actor - Actor to scroll signals of.
-     * @param {number} minWidth - Minimum width to set for actor.
+     * @param {number?} width - Fixed width to set for actor.
+     * @param {string?} align - Align to set for actor.
      */
-    handleActor(actor, minWidth) {
+    handleActor(actor, width, align) {
         if (this._signalDisconnector) {
             this._signalDisconnector();
             this._signalDisconnector = null;
         }
         if (actor) {
-            const oldMinWidth = actor.min_width || 0;
-            actor.min_width = Math.max(minWidth, oldMinWidth);
+            const oldWidth = actor.natural_width_set ? actor.natural_width : null;
+            const oldAlign = actor.x_align || 0;
+            if (actor.min_width <= width) {
+                actor.natural_width = width;
+            }
+            switch (align) {
+            case 'start':
+                actor.x_align = Clutter.ActorAlign.START;
+                break;
+            case 'center':
+                actor.x_align = Clutter.ActorAlign.CENTER;
+                break;
+            case 'end':
+                actor.x_align = Clutter.ActorAlign.END;
+                break;
+            }
+
             actor.reactive = true;
             const connectionId = actor.connect(
                 'scroll-event',
                 (source, event) => this._switch(event)
             );
             this._signalDisconnector = () => {
-                actor.min_width = oldMinWidth;
                 actor.disconnect(connectionId);
+                actor.x_align = oldAlign;
+                if (oldWidth === null) {
+                    actor.natural_width_set = false;
+                } else {
+                    actor.natural_width = oldWidth;
+                }
             };
         }
     }
@@ -68,7 +89,8 @@ class ActorScrollHandler {
         case Clutter.ScrollDirection.DOWN:
             return this._onSwitch(verticalMultiplier.value);
         default:
-            return false;
+            // Switcher should absorb unknown gestures during timeout.
+            return this._onSwitch(0);
         }
     }
 }
@@ -105,23 +127,40 @@ var module = new class ExtensionModule {
     enable() {
         this._signalDisconnectors.push(
             PrefsCompanion.run(),
-            PrefsSource.onChange(() => {
-                // prefer `module` over `this` here to enable debug-tracing
-                module._updateHandler(
-                    this._workspacesSwitcherHandler,
-                    PrefsSource.workspacesSwitcher
-                );
-                module._updateHandler(
+
+            // prefer `module` over `this` here to enable debug-tracing
+            PrefsSource.onChange(
+                () => module._updateHandler(
                     this._windowsSwitcherHandler,
                     PrefsSource.windowsSwitcher
-                );
-            })
+                ),
+                [
+                    PrefsSource.switcherHorizontalMultiplier(PrefsSource.windowsSwitcher),
+                    PrefsSource.switcherVerticalMultiplier(PrefsSource.windowsSwitcher),
+                    PrefsSource.switcherActorPath(PrefsSource.windowsSwitcher),
+                    PrefsSource.switcherActorWidth(PrefsSource.windowsSwitcher),
+                    PrefsSource.switcherActorAlign(PrefsSource.windowsSwitcher),
+                ]
+            ),
+            PrefsSource.onChange(
+                () => module._updateHandler(
+                    this._workspacesSwitcherHandler,
+                    PrefsSource.workspacesSwitcher
+                ),
+                [
+                    PrefsSource.switcherHorizontalMultiplier(PrefsSource.workspacesSwitcher),
+                    PrefsSource.switcherVerticalMultiplier(PrefsSource.workspacesSwitcher),
+                    PrefsSource.switcherActorPath(PrefsSource.workspacesSwitcher),
+                    PrefsSource.switcherActorWidth(PrefsSource.workspacesSwitcher),
+                    PrefsSource.switcherActorAlign(PrefsSource.workspacesSwitcher),
+                ]
+            )
         );
     }
 
     disable() {
-        this._windowsSwitcherHandler.handleActor(null, 0);
-        this._workspacesSwitcherHandler.handleActor(null, 0);
+        this._windowsSwitcherHandler.handleActor(null);
+        this._workspacesSwitcherHandler.handleActor(null);
         for (const disconnector of this._signalDisconnectors) {
             disconnector();
         }
@@ -138,7 +177,8 @@ var module = new class ExtensionModule {
                     PrefsSource.switcherActorPath(switcher).value
                 )
                 : null,
-            PrefsSource.switcherActorWidth(switcher).value
+            PrefsSource.switcherActorWidth(switcher).value,
+            PrefsSource.switcherActorAlign(switcher).value
         );
     }
 
@@ -147,9 +187,13 @@ var module = new class ExtensionModule {
      * @returns {boolean} - Whether switching performed.
      */
     _switchWindow(distance) {
-        if (!distance || this._windowSwitchTimeoutHandle) {
+        if (!distance) {
             return false;
         }
+        if (this._windowSwitchTimeoutHandle) {
+            return true;
+        }
+
         const switcher = PrefsSource.windowsSwitcher;
         const cycle = PrefsSource.switcherCycle(switcher).value;
         const visualize = PrefsSource.switcherVisualize(switcher).value;
@@ -203,8 +247,11 @@ var module = new class ExtensionModule {
      * @returns {boolean} - Whether switching performed.
      */
     _switchWorkspace(distance) {
-        if (!distance || this._workspaceSwitchTimeoutHandle) {
+        if (!distance) {
             return false;
+        }
+        if (this._workspaceSwitchTimeoutHandle) {
+            return true;
         }
 
         const switcher = PrefsSource.workspacesSwitcher;

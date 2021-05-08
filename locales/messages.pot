@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-08 10:41+0300\n"
+"POT-Creation-Date: 2021-05-08 16:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,6 +11,28 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../sources/prefs.js
+msgid "by <a href=\"%s\">Eduard Minasyan</a>"
+msgstr ""
+
+#: ../sources/prefs.js
+msgid "Homepage: <a href=\"%1$s\">%s</a>"
+msgstr ""
+
+# this is expected to be used for translator's credits
+#: ../sources/prefs.js
+msgid ""
+"Seems like you are using unlocalized extension, would you like to <a href="
+"\"%s\">localize it</a>?"
+msgstr ""
+
+#: ../sources/metadata.json
+msgid ""
+"This extension allows switching between windows or workspaces by "
+"scrolling Gnome Shell topbar with mouse (both in overview and workspace "
+"modes)."
+msgstr ""
 
 #: ../ui/prefs.ui:11
 msgid "Switching workspaces"
@@ -31,20 +53,19 @@ msgstr ""
 #: ../ui/prefs.ui:75
 msgid ""
 "Choose a panel to scroll for the selected action. If the extension is "
-"enabled, the current choice is outlined in a yellow or green box while the "
-"mouse pointer is over the button. Yellow box means that the highlighted "
-"panel currently does not have any event listeners and may be inaccessible "
-"because of other actors rendered over it. Use scrolling when picking an "
-"actor to choose hierarchy level, such as the whole bar instead of the clock "
-"box only."
+"enabled, the current choice is outlined in a colored box while the mouse "
+"pointer is over the button. Yellow box means that the highlighted panel "
+"currently does not have any event listeners and may be inaccessible because "
+"of other actors rendered over it. Use scrolling when picking an actor to "
+"choose hierarchy level, such as the whole bar instead of the clock box only."
 msgstr ""
 
 #: ../ui/prefs.ui:105
-msgid "Panel minimum width"
+msgid "Panel fixed width"
 msgstr ""
 
 #: ../ui/prefs.ui:107
-msgid "Minimum width for actor."
+msgid "Set fixed width for the scrollable panel."
 msgstr ""
 
 #: ../ui/prefs.ui:133
@@ -52,57 +73,77 @@ msgid "px"
 msgstr ""
 
 #: ../ui/prefs.ui:145
-msgid "Horizontal scrolling"
+msgid "Panel content align"
 msgstr ""
 
 #: ../ui/prefs.ui:147
+msgid "Set content align for the scrollable panel."
+msgstr ""
+
+#: ../ui/prefs.ui:161
+msgid "Start"
+msgstr ""
+
+#: ../ui/prefs.ui:167
+msgid "Center"
+msgstr ""
+
+#: ../ui/prefs.ui:173
+msgid "End"
+msgstr ""
+
+#: ../ui/prefs.ui:185
+msgid "Horizontal scrolling"
+msgstr ""
+
+#: ../ui/prefs.ui:187
 msgid "Whether horizontal scrolling should cause forward or back step."
 msgstr ""
 
-#: ../ui/prefs.ui:161 ../ui/prefs.ui:195
+#: ../ui/prefs.ui:201 ../ui/prefs.ui:235
 msgid "Direct"
 msgstr ""
 
-#: ../ui/prefs.ui:167 ../ui/prefs.ui:201
+#: ../ui/prefs.ui:207 ../ui/prefs.ui:241
 msgid "Inverted"
 msgstr ""
 
-#: ../ui/prefs.ui:179
+#: ../ui/prefs.ui:219
 msgid "Vertical scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:181
+#: ../ui/prefs.ui:221
 msgid "Whether vertical scrolling should cause forward or back step."
 msgstr ""
 
-#: ../ui/prefs.ui:213
+#: ../ui/prefs.ui:253
 msgid "Switching timeout"
 msgstr ""
 
-#: ../ui/prefs.ui:215
+#: ../ui/prefs.ui:255
 msgid ""
 "Timeout for switching event: further scrolling events in this timeout will "
 "be ignored."
 msgstr ""
 
-#: ../ui/prefs.ui:241
+#: ../ui/prefs.ui:281
 msgid "ms"
 msgstr ""
 
-#: ../ui/prefs.ui:253
+#: ../ui/prefs.ui:293
 msgid "Cyclic switching"
 msgstr ""
 
-#: ../ui/prefs.ui:255
+#: ../ui/prefs.ui:295
 msgid ""
 "Should the switcher cycle, i.e. switch between first and last elements when "
 "switching out-of-list."
 msgstr ""
 
-#: ../ui/prefs.ui:278
+#: ../ui/prefs.ui:318
 msgid "Visualize"
 msgstr ""
 
-#: ../ui/prefs.ui:280
+#: ../ui/prefs.ui:320
 msgid "Should the switcher be shown because of the action."
 msgstr ""

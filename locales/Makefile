@@ -10,12 +10,9 @@ endif
 
 messages.pot : $(wildcard ../sources/*.js) $(wildcard ../sources/*.json) $(wildcard ../ui/*.ui)
 	$(eval TEMP_POT := $(shell mktemp "XXXXXXX.diff.pot"))
-	xgettext --language=JavaScript ../sources/*.json --output='$(TEMP_POT)'
-	msgmerge --update --previous messages.pot '$(TEMP_POT)'
-	xgettext --language=JavaScript --keyword=gettext  ../sources/*.js --output='$(TEMP_POT)'
-	msgmerge --update --previous messages.pot '$(TEMP_POT)'
-	xgettext --language=Glade ../ui/*.ui --output='$(TEMP_POT)'
-	msgmerge --update --previous messages.pot '$(TEMP_POT)'
+	xgettext --language=JavaScript ../sources/*.json --join-existing --output='$(TEMP_POT)'
+	xgettext --language=JavaScript --keyword=gettext  ../sources/*.js --join-existing --output='$(TEMP_POT)'
+	xgettext --language=Glade ../ui/*.ui --join-existing --output='$(TEMP_POT)'
 	for po in *.po; do echo msgmerge --update --previous $$po messages.pot; done
 	rm '$(TEMP_POT)'
 

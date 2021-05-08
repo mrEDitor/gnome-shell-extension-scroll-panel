@@ -88,9 +88,7 @@ var module = new class DebugModule {
         if (instance === this) {
             return;
         }
-        const memberNames = Object.getOwnPropertyNames(
-            Object.getPrototypeOf(instance)
-        );
+        const memberNames = Object.getOwnPropertyNames(instance);
         for (const memberName of memberNames) {
             const member = instance[memberName];
             if (typeof member !== 'function') {

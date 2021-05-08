@@ -99,7 +99,7 @@ else
 endif
 	find '$(INSTALL_DIR)/$(DOMAIN)' -type d -empty -delete
 	test -d '$(INSTALL_DIR)/$(DOMAIN)' \
-		&& echo 'Protected and out-of-package files left untouched:' 1>&2 \
+		&& echo 'Protected and out-of-package files left untouched, re-run with FORCE=1 to remove them:' 1>&2 \
 		&& tree '$(INSTALL_DIR)/$(DOMAIN)' 1>&2 \
 		|| true
 	rm -r '$(TEMP_DIR)'

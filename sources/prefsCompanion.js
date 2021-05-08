@@ -15,7 +15,6 @@ function _logWarning(message) {
  * Based on Gnome Shell Looking Glass, you can find it at
  * {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/lookingGlass.js}
  * @type {ActorPicker.prototype.constructor}
- * Receives resulting actor as argument.
  */
 const ActorPicker = GObject.registerClass(
     class ActorPicker extends Clutter.Effect {
@@ -55,10 +54,10 @@ const ActorPicker = GObject.registerClass(
                 const framebuffer = paintContext.get_framebuffer();
                 const coglContext = framebuffer.get_context();
                 const color = new Cogl.Color();
-                if (this._targetActor.reactive) {
-                    color.init_from_4ub(0, 0xFF, 0, 0xC4);
+                if (!this._targetActor.reactive) {
+                    color.init_from_4ub(0xFF, 0xFF, 0, 0xC4); // yellow
                 } else {
-                    color.init_from_4ub(0xFF, 0xFF, 0, 0xC4);
+                    color.init_from_4ub(0, 0xFF, 0, 0xC4); // green
                 }
 
                 this._pipeline = new Cogl.Pipeline(coglContext);

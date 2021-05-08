@@ -114,7 +114,7 @@ var module = new class PrefsSourceModule {
     /**
      * Path along the scene view to the actor to make it a scrollable switcher.
      * @param {string} action - Switcher action identifier.
-     * @returns {_Setting<string[]>} - Switcher action setting.
+     * @returns {_Setting<string[]>} - Switcher actor path setting.
      */
     switcherActorPath(action) {
         return this._setting(this._createStringArraySetting, `${action}-path`);
@@ -123,10 +123,19 @@ var module = new class PrefsSourceModule {
     /**
      * Minimum width for scrollable widget actor.
      * @param {string} action - Switcher action identifier.
-     * @returns {_Setting<number>} - Switcher action setting.
+     * @returns {_Setting<number>} - Switcher actor width setting.
      */
     switcherActorWidth(action) {
         return this._setting(this._createNumericSetting, `${action}-width`);
+    }
+
+    /**
+     * Content align for scrollable widget actor.
+     * @param {string} action - Switcher action identifier.
+     * @returns {_Setting<string>} - Switcher actor align setting.
+     */
+    switcherActorAlign(action) {
+        return this._setting(this._createStringSetting, `${action}-align`);
     }
 
     /**
@@ -176,10 +185,18 @@ var module = new class PrefsSourceModule {
 
     /**
      * Subscribe callback to any setting change and call callback initially.
+     * <p>
+     * Note: settings not passed to {@param settings} MAY have outdated values
+     * during callback invocation.
+     * </p>
      * @param {function()} callback - Callback for settings change.
+     * @param {_Setting[]} settings - Settings to update before callback
+     * invocation.
      * @returns {function()} - Callback for unsubscription.
      */
-    onChange(callback) {
+    // eslint-disable-next-line no-unused-vars
+    onChange(callback, settings) {
+        // Settings are required just to ensure they are in this._setting() cache.
         const cId = SettingsSource.connect('changed', () => callback());
         callback();
         return () => SettingsSource.disconnect(cId);

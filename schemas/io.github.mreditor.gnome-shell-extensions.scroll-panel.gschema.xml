@@ -18,10 +18,15 @@
             <summary>Workspaces switcher actor path.</summary>
             <description>Path to workspaces switcher scrollable actor. Empty array to disable the switcher.</description>
         </key>
+        <key type="s" name="workspaces-switcher-align">
+            <default>''</default>
+            <summary>Workspaces switcher actor content align.</summary>
+            <description>Workspaces switcher scrollable actor align, either 'left', 'right', 'center' or '' (keep unchanged).</description>
+        </key>
         <key type="d" name="workspaces-switcher-width">
-            <default>250</default>
-            <summary>Workspaces switcher actor minimum width.</summary>
-            <description>Minimum width to set for workspaces switcher scrollable actor.</description>
+            <default>-1</default>
+            <summary>Workspaces switcher actor fixed width.</summary>
+            <description>Fixed width to set for workspaces switcher scrollable actor.</description>
         </key>
         <key type="d" name="workspaces-switcher-horizontal-multiplier">
             <default>1</default>
@@ -54,10 +59,15 @@
             <summary>Windows switcher actor path.</summary>
             <description>Path to windows switcher scrollable actor. Empty array to disable the switcher.</description>
         </key>
+        <key type="s" name="windows-switcher-align">
+            <default>''</default>
+            <summary>Windows switcher actor content align.</summary>
+            <description>Windows switcher scrollable actor align, either 'left', 'right', 'center' or '' (keep unchanged).</description>
+        </key>
         <key type="d" name="windows-switcher-width">
             <default>250</default>
-            <summary>Windows switcher actor minimum width.</summary>
-            <description>Minimum width to set for windows switcher scrollable actor.</description>
+            <summary>Windows switcher actor fixed width.</summary>
+            <description>Fixed width to set for windows switcher scrollable actor.</description>
         </key>
         <key type="d" name="windows-switcher-horizontal-multiplier">
             <default>1</default>
