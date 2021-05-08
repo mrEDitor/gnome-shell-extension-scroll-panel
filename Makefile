@@ -11,18 +11,15 @@ Usage (with `: dependencies` according to make syntax):
 		- Show this message.
 	all : lint build zip
 		- Build every artifact of the extension inside `BUILD_DIR`; does NOT run
-		`debug`, `install` or `uninstall` targets.
+		`install` or `uninstall` targets.
 	build :
-		- Build the extension inside `BUILD_DIR` without debug files; any debug
-		files built earlier will be deleted.
-	debug : build
-		- Build the extension inside `BUILD_DIR` with debug files.
+		- Build the extension inside `BUILD_DIR`.
 	lint : eslintrc-gjs.yml eslintrc-shell.yml
 		- Run linter on project files. Required config files will be downloaded
 		from https://gitlab.gnome.org/GNOME/gnome-shell-extensions/ if missed.
 	install : build uninstall
 		- Install the built extension from `BUILD_DIR` to `INSTALL_DIR`. Since
-		dependency on `build`, run `debug install` if debug version is required.
+		dependency on `build`, set `DEBUG=1` if debug version is required.
 	uninstall : build
 		- Delete files from `INSTALL_DIR`, if they are similar to built ones. If
 		you want to remove files despite are they similar to built ones or not,
@@ -44,10 +41,12 @@ Variables:
 		- If set, `uninstall` target will delete non-similar files keeping diff
 		in standard output. Intended to be used for uninstalling or upgrading
 		extension when not having source code of installed version.
+	DEBUG = $(DEBUG)
+		- If set, `build` target will include the debug module.
 endef
 export HELP
 
-.PHONY : help all build debug lint install uninstall zip
+.PHONY : help all build lint install uninstall zip
 
 help :
 	@echo "$$HELP"
@@ -65,9 +64,6 @@ build :
 	$(MAKE) -C locales build BUILD_DIR='$(BUILD_DIR)/locale'
 	$(MAKE) -C schemas build BUILD_DIR='$(BUILD_DIR)/schemas'
 	$(MAKE) -C ui build BUILD_DIR='$(BUILD_DIR)'
-
-debug : build
-	$(MAKE) -C sources debug BUILD_DIR='$(BUILD_DIR)'
 
 lint : eslintrc-gjs.yml eslintrc-shell.yml
 	eslint --ignore-pattern '$(BUILD_DIR)' .
@@ -87,7 +83,7 @@ uninstall :
 	test -n '$(INSTALL_DIR)'
 ifneq ($(wildcard $(INSTALL_DIR)/$(DOMAIN)/),)
 	$(eval TEMP_DIR := $(shell mktemp -d))
-	$(MAKE) debug install BUILD_DIR='$(TEMP_DIR)' INSTALL_DIR='$(TEMP_DIR)/INSTALL_DIR'
+	$(MAKE) install BUILD_DIR='$(TEMP_DIR)' INSTALL_DIR='$(TEMP_DIR)/INSTALL_DIR'
 ifeq ($(FORCE),)
 	# Marking changed files as out-of-package:
 	cd '$(INSTALL_DIR)/$(DOMAIN)' && find . -type f -exec sh -c '\

@@ -4,6 +4,9 @@ const { Clutter, GLib, Meta } = imports.gi;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
+/** @type {DebugModule|null} */
+const Debug = Me.imports.debug?.module;
+
 /** @type WindowSwitcherPopup */
 const WindowSwitcherPopup = Me.imports.windowSwitcher.WindowSwitcherPopup;
 
@@ -254,13 +257,7 @@ var module = new class ExtensionModule {
  * @returns {ExtensionModule} - Extension main module.
  */
 function init() {
-    try {
-        /** @type {DebugModule} */
-        const Debug = Me.imports.debug.module;
-        Debug.logDebug('Initializing shell extension...');
-        Debug.injectModulesTraceLogs(Me.imports);
-    } catch {
-        // Debug module is optional.
-    }
+    Debug?.logDebug('Initializing shell extension...');
+    Debug?.injectModulesTraceLogs(Me.imports);
     return module;
 }

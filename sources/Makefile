@@ -1,15 +1,19 @@
-SOURCE_FILES := $(filter-out debug.js, $(wildcard *.js))
+SOURCE_FILES := $(wildcard *.js)
 BUILD_METADATA ?= git-`git rev-parse --short HEAD`
 
-.PHONY: build debug install $(BUILD_DIR)/metadata.json
+.PHONY: build install
+.PHONY: $(BUILD_DIR)/metadata.json $(BUILD_DIR)/debug.js
 
 build : $(BUILD_DIR)/metadata.json $(addprefix $(BUILD_DIR)/, $(SOURCE_FILES))
-	-rm '$(BUILD_DIR)/debug.js'
 
-debug : $(BUILD_DIR)/debug.js
+$(BUILD_DIR)/debug.js :
+ifeq ($(DEBUG),)
+	echo > '$@'
+else
+	cp debug.js '$@'
+endif
 
 install : $(INSTALL_DIR)/metadata.json $(addprefix $(INSTALL_DIR)/, $(SOURCE_FILES))
-	-cp '$(BUILD_DIR)/debug.js' '$(INSTALL_DIR)'
 
 $(BUILD_DIR)/metadata.json : metadata.json
 	mkdir -p '$(BUILD_DIR)'

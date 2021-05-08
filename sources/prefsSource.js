@@ -4,6 +4,9 @@ const { Gio, GObject } = imports.gi;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
+/** @type {DebugModule|null} */
+const Debug = Me.imports.debug?.module;
+
 /**
  * GSettings-based settings source.
  * @type {Gio.Settings}
@@ -21,15 +24,6 @@ const SettingsSource = new Gio.Settings({
                 true
             ),
 });
-
-/**
- * Log informational message.
- * @param {string} message - Message to log.
- * @see logDebug
- */
-function _logInfo(message) {
-    log(`[${Me.metadata.uuid}][INF] ${message}`);
-}
 
 /**
  * @class
@@ -52,12 +46,10 @@ const Setting = GObject.registerClass(
             // Bind "update own value" callback first to fetch new value before
             // other callbacks will be called. Signal call order is guaranteed:
             // https://developer.gnome.org/gobject/stable/gobject-Signals.html
-            // TODO: is it okay to abandon setting change connections?
             this.onChange(() => {
-                // noinspection JSVoidFunctionReturnValueUsed
                 /** @type {T} */
                 this.value = getter();
-                _logInfo(`Setting ${key} set to: ${this.value}`);
+                Debug?.logDebug(`Setting ${key} set to: ${this.value}`);
             });
         }
 
