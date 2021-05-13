@@ -17,7 +17,7 @@ jobs:
           [[ \
             `git tag --points-at` \
             == \
-            v`jq -r '.[\"semantic-version\"] + "-gnome" + .[\"shell-version\"][-1]' sources/metadata.json` \
+            v`jq -r '.["semantic-version"] + "-gnome" + .["shell-version"][-1]' sources/metadata.json` \
           ]]
       - name: Build project
         run: |

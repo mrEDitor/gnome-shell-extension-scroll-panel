@@ -1,5 +1,5 @@
 SOURCE_FILES := $(wildcard *.js)
-BUILD_METADATA ?= git-`git rev-parse --short HEAD`
+BUILD_METADATA ?= git-$(shell git rev-parse --short HEAD)
 
 .PHONY: build install
 .PHONY: $(BUILD_DIR)/metadata.json $(BUILD_DIR)/debug.js
@@ -17,7 +17,7 @@ install : $(INSTALL_DIR)/metadata.json $(addprefix $(INSTALL_DIR)/, $(SOURCE_FIL
 
 $(BUILD_DIR)/metadata.json : metadata.json
 	mkdir -p '$(BUILD_DIR)'
-	jq ".[\"semantic-version\"] = .[\"semantic-version\"] + \"+$(BUILD_METADATA)\"" metadata.json > '$@'
+	jq '.["semantic-version"] = .["semantic-version"] + "+$(BUILD_METADATA)"' metadata.json > '$@'
 
 $(BUILD_DIR)/%.js : %.js
 	mkdir -p '$(BUILD_DIR)'
