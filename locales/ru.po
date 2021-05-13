@@ -17,8 +17,8 @@ msgid "by <a href=\"%s\">Eduard Minasyan</a>"
 msgstr "Автор: <a href=\"%s\">Эдуард Минасян</a>"
 
 #: ../sources/prefs.js
-msgid "Homepage: <a href=\"%1$s\">%s</a>"
-msgstr "Домашняя страница: <a href=\"%1$s\">%s</a>"
+msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
+msgstr "Домашняя страница: <a href=\"%1$s\">%1$s</a>"
 
 #: ../sources/prefs.js
 msgid ""
@@ -70,12 +70,10 @@ msgstr ""
 "выбора между часами и всей панелью) используйте прокрутку."
 
 #: ../ui/prefs.ui:105
-#, fuzzy
 msgid "Panel fixed width"
 msgstr "Фиксированная ширина панели"
 
 #: ../ui/prefs.ui:107
-#, fuzzy
 msgid "Set fixed width for the scrollable panel."
 msgstr "Фиксированная ширина, до которой будет расширена выбранная панель."
 

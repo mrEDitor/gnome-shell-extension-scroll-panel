@@ -55,284 +55,307 @@
             </object>
         </child>
         <child>
-            <object class="GtkGrid" id="settings-box">
+            <object class="GtkScrolledWindow">
                 <property name="hexpand">true</property>
                 <property name="vexpand">true</property>
-                <property name="margin-start">30</property>
-                <property name="margin-end">30</property>
-                <property name="margin-top">30</property>
-                <property name="margin-bottom">30</property>
-                <property name="row-spacing">10</property>
-                <property name="column-spacing">25</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">automatic</property>
                 <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">0</property>
-                        </layout>
-                        <property name="label" translatable="yes">Panel to scroll</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Choose a panel to scroll for the selected action. If the extension is enabled, the current choice is outlined in a colored box while the mouse pointer is over the button. Yellow box means that the highlighted panel currently does not have any event listeners and may be inaccessible because of other actors rendered over it. Use scrolling when picking an actor to choose hierarchy level, such as the whole bar instead of the clock box only.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">0</property>
-                        </layout>
-                        <property name="css-classes">linked</property>
-                        <child>
-                            <object class="GtkEntry" id="setting-actor">
-                                <property name="editable">false</property>
-                                <property name="hexpand">true</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-actor-choose">
-                                <property name="icon-name">find-location-symbolic</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
-
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">1</property>
-                        </layout>
-                        <property name="label" translatable="yes">Panel fixed width</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Set fixed width for the scrollable panel.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">1</property>
-                        </layout>
-                        <property name="css-classes">linked</property>
-                        <property name="spacing">10</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">false</property>
-                        <child>
-                            <object class="GtkCheckButton" id="setting-actor-width-enable" />
-                        </child>
-                        <child>
-                            <object class="GtkSpinButton" id="setting-actor-width">
-                                <property name="adjustment">
-                                    <object class="GtkAdjustment">
-                                        <property name="lower">0</property>
-                                        <property name="upper">10000</property>
-                                        <property name="step-increment">5</property>
-                                    </object>
-                                </property>
-                            </object>
-                        </child>
+                    <object class="GtkGrid" id="settings-box">
+                        <property name="valign">start</property>
+                        <property name="hexpand">true</property>
+                        <property name="vexpand">false</property>
+                        <property name="margin-start">30</property>
+                        <property name="margin-end">30</property>
+                        <property name="margin-top">30</property>
+                        <property name="margin-bottom">30</property>
+                        <property name="row-homogeneous">true</property>
+                        <property name="row-spacing">10</property>
+                        <property name="column-spacing">25</property>
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">px</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
-
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">2</property>
-                        </layout>
-                        <property name="label" translatable="yes">Panel content align</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Set content align for the scrollable panel.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">2</property>
-                        </layout>
-                        <property name="css-classes">linked</property>
-                        <property name="halign">end</property>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-actor-align-start">
-                                <property name="group">actor-align</property>
-                                <property name="label" translatable="yes">Start</property>
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">0</property>
+                                </layout>
+                                <property name="label" translatable="yes">Panel to scroll</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Choose a panel to scroll for the selected action. If the extension is enabled, the current choice is outlined in a colored box while the mouse pointer is over the button. Yellow box means that the highlighted panel currently does not have any event listeners and may be inaccessible because of other actors rendered over it. Use scrolling when picking an actor to choose hierarchy level, such as the whole bar instead of the clock box only.</property>
                             </object>
                         </child>
                         <child>
-                            <object class="GtkToggleButton" id="setting-actor-align-center">
-                                <property name="group">actor-align</property>
-                                <property name="label" translatable="yes">Center</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-actor-align-end">
-                                <property name="group">actor-align</property>
-                                <property name="label" translatable="yes">End</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
-
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">3</property>
-                        </layout>
-                        <property name="label" translatable="yes">Horizontal scrolling</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Whether horizontal scrolling should cause forward or back step.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">3</property>
-                        </layout>
-                        <property name="css-classes">linked</property>
-                        <property name="halign">end</property>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-direct-horizontal">
-                                <property name="group">horizontal-scroll-mode</property>
-                                <property name="label" translatable="yes">Direct</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-inverted-horizontal">
-                                <property name="group">horizontal-scroll-mode</property>
-                                <property name="label" translatable="yes">Inverted</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
-
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">4</property>
-                        </layout>
-                        <property name="label" translatable="yes">Vertical scrolling</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Whether vertical scrolling should cause forward or back step.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">4</property>
-                        </layout>
-                        <property name="css-classes">linked</property>
-                        <property name="halign">end</property>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-direct-vertical">
-                                <property name="group">vertical-scroll-mode</property>
-                                <property name="label" translatable="yes">Direct</property>
-                            </object>
-                        </child>
-                        <child>
-                            <object class="GtkToggleButton" id="setting-inverted-vertical">
-                                <property name="group">vertical-scroll-mode</property>
-                                <property name="label" translatable="yes">Inverted</property>
-                            </object>
-                        </child>
-                    </object>
-                </child>
-
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">5</property>
-                        </layout>
-                        <property name="label" translatable="yes">Switching timeout</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Timeout for switching event: further scrolling events in this timeout will be ignored.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">5</property>
-                        </layout>
-                        <property name="css-classes">linked</property>
-                        <property name="spacing">10</property>
-                        <property name="halign">end</property>
-                        <property name="hexpand">false</property>
-                        <child>
-                            <object class="GtkSpinButton" id="setting-timeout">
-                                <property name="adjustment">
-                                    <object class="GtkAdjustment">
-                                        <property name="lower">0</property>
-                                        <property name="upper">10000</property>
-                                        <property name="step-increment">50</property>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">0</property>
+                                </layout>
+                                <property name="css-classes">linked</property>
+                                <child>
+                                    <object class="GtkEntry" id="setting-actor">
+                                        <property name="editable">false</property>
+                                        <property name="hexpand">true</property>
+                                        <property name="valign">center</property>
                                     </object>
-                                </property>
+                                </child>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-actor-choose">
+                                        <property name="icon-name">find-location-symbolic</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
                             </object>
                         </child>
+
                         <child>
                             <object class="GtkLabel">
-                                <property name="label" translatable="yes">ms</property>
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">1</property>
+                                </layout>
+                                <property name="label" translatable="yes">Panel fixed width</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Set fixed width for the scrollable panel.</property>
                             </object>
                         </child>
-                    </object>
-                </child>
-
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">6</property>
-                        </layout>
-                        <property name="label" translatable="yes">Cyclic switching</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Should the switcher cycle, i.e. switch between first and last elements when switching out-of-list.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">6</property>
-                        </layout>
-                        <property name="halign">end</property>
-                        <property name="hexpand">false</property>
                         <child>
-                            <object class="GtkSwitch" id="setting-cycle" />
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">1</property>
+                                </layout>
+                                <property name="spacing">10</property>
+                                <property name="halign">end</property>
+                                <property name="hexpand">false</property>
+                                <child>
+                                    <object class="GtkCheckButton" id="setting-actor-width-enable" />
+                                </child>
+                                <child>
+                                    <object class="GtkSpinButton" id="setting-actor-width">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="lower">0</property>
+                                                <property name="upper">10000</property>
+                                                <property name="step-increment">5</property>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel">
+                                        <property name="label" translatable="yes">px</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
                         </child>
-                    </object>
-                </child>
 
-                <child>
-                    <object class="GtkLabel">
-                        <layout>
-                            <property name="column">0</property>
-                            <property name="row">7</property>
-                        </layout>
-                        <property name="label" translatable="yes">Visualize</property>
-                        <property name="halign">start</property>
-                        <property name="tooltip-text" translatable="yes">Should the switcher be shown because of the action.</property>
-                    </object>
-                </child>
-                <child>
-                    <object class="GtkBox">
-                        <layout>
-                            <property name="column">1</property>
-                            <property name="row">7</property>
-                        </layout>
-                        <property name="halign">end</property>
-                        <property name="hexpand">false</property>
                         <child>
-                            <object class="GtkSwitch" id="setting-visualize" />
+                            <object class="GtkLabel">
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">2</property>
+                                </layout>
+                                <property name="label" translatable="yes">Panel content align</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Set content align for the scrollable panel.</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">2</property>
+                                </layout>
+                                <property name="css-classes">linked</property>
+                                <property name="halign">end</property>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-actor-align-start">
+                                        <property name="group">actor-align</property>
+                                        <property name="label" translatable="yes">Start</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-actor-align-center">
+                                        <property name="group">actor-align</property>
+                                        <property name="label" translatable="yes">Center</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-actor-align-end">
+                                        <property name="group">actor-align</property>
+                                        <property name="label" translatable="yes">End</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkLabel">
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">3</property>
+                                </layout>
+                                <property name="label" translatable="yes">Horizontal scrolling</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Whether horizontal scrolling should cause forward or back step.</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">3</property>
+                                </layout>
+                                <property name="css-classes">linked</property>
+                                <property name="halign">end</property>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-direct-horizontal">
+                                        <property name="group">horizontal-scroll-mode</property>
+                                        <property name="label" translatable="yes">Direct</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-inverted-horizontal">
+                                        <property name="group">horizontal-scroll-mode</property>
+                                        <property name="label" translatable="yes">Inverted</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkLabel">
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">4</property>
+                                </layout>
+                                <property name="label" translatable="yes">Vertical scrolling</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Whether vertical scrolling should cause forward or back step.</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">4</property>
+                                </layout>
+                                <property name="css-classes">linked</property>
+                                <property name="halign">end</property>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-direct-vertical">
+                                        <property name="group">vertical-scroll-mode</property>
+                                        <property name="label" translatable="yes">Direct</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-inverted-vertical">
+                                        <property name="group">vertical-scroll-mode</property>
+                                        <property name="label" translatable="yes">Inverted</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkLabel">
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">5</property>
+                                </layout>
+                                <property name="label" translatable="yes">Switching timeout</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Timeout for switching event: further scrolling events in this timeout will be ignored.</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">5</property>
+                                </layout>
+                                <property name="css-classes">linked</property>
+                                <property name="spacing">10</property>
+                                <property name="halign">end</property>
+                                <property name="hexpand">false</property>
+                                <child>
+                                    <object class="GtkSpinButton" id="setting-timeout">
+                                        <property name="valign">center</property>
+                                        <property name="adjustment">
+                                            <object class="GtkAdjustment">
+                                                <property name="lower">0</property>
+                                                <property name="upper">10000</property>
+                                                <property name="step-increment">50</property>
+                                            </object>
+                                        </property>
+                                    </object>
+                                </child>
+                                <child>
+                                    <object class="GtkLabel">
+                                        <property name="label" translatable="yes">ms</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkLabel">
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">6</property>
+                                </layout>
+                                <property name="label" translatable="yes">Cyclic switching</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Should the switcher cycle, i.e. switch between first and last elements when switching out-of-list.</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">6</property>
+                                </layout>
+                                <property name="halign">end</property>
+                                <child>
+                                    <object class="GtkSwitch" id="setting-cycle">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
+                        </child>
+
+                        <child>
+                            <object class="GtkLabel">
+                                <layout>
+                                    <property name="column">0</property>
+                                    <property name="row">7</property>
+                                </layout>
+                                <property name="label" translatable="yes">Visualize</property>
+                                <property name="halign">start</property>
+                                <property name="tooltip-text" translatable="yes">Should the switcher be shown because of the action.</property>
+                            </object>
+                        </child>
+                        <child>
+                            <object class="GtkBox">
+                                <layout>
+                                    <property name="column">1</property>
+                                    <property name="row">7</property>
+                                </layout>
+                                <property name="halign">end</property>
+                                <child>
+                                    <object class="GtkSwitch" id="setting-visualize">
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                            </object>
                         </child>
                     </object>
                 </child>

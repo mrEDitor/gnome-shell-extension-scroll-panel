@@ -24,7 +24,11 @@ class ActorScrollHandler {
      */
     constructor(action, onSwitch) {
         this._action = action;
-        this._onSwitch = onSwitch;
+        this._onSwitch = distance => {
+            return onSwitch(distance)
+                ? Clutter.EVENT_STOP
+                : Clutter.EVENT_PROPAGATE;
+        };
 
         /** @type {function()|null} */
         this._signalDisconnector = null;
@@ -77,6 +81,10 @@ class ActorScrollHandler {
     }
 
     _switch(event) {
+        if (event.is_pointer_emulated()) {
+            return Clutter.EVENT_PROPAGATE;
+        }
+
         const horizontalMultiplier = PrefsSource.switcherHorizontalMultiplier(this._action);
         const verticalMultiplier = PrefsSource.switcherVerticalMultiplier(this._action);
         switch (event.get_scroll_direction()) {
@@ -88,6 +96,16 @@ class ActorScrollHandler {
             return this._onSwitch(-verticalMultiplier.value);
         case Clutter.ScrollDirection.DOWN:
             return this._onSwitch(verticalMultiplier.value);
+        case Clutter.ScrollDirection.SMOOTH: {
+            const [x, y] = event.get_scroll_delta();
+            return this._onSwitch(
+                Math.trunc(
+                    Math.abs(x) > Math.abs(y)
+                        ? x * horizontalMultiplier.value
+                        : y * verticalMultiplier.value
+                )
+            );
+        }
         default:
             // Switcher should absorb unknown gestures during timeout.
             return this._onSwitch(0);

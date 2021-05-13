@@ -158,7 +158,7 @@ class UiBuilder {
             `<span size="larger">${_me().metadata.name} ${_me().metadata.version || ''}</span>`,
             `<span size="smaller">${_me().metadata.uuid} v${_me().metadata.semanticVersion}</span>`,
             `<span>${gettext('by <a href="%s">Eduard Minasyan</a>', 'https://mrEDitor.github.io/')}</span>`,
-            `<span>${gettext('Homepage: <a href="%1$s">%s</a>', _me().metadata.url)}</span>`,
+            `<span>${gettext('Homepage: <a href="%1$s">%1$s</a>', _me().metadata.url)}</span>`,
             `<span>${gettext(
                 // it's expected to be replaced with localizer copyright
                 'Seems like you are using unlocalized extension, would you like to <a href="%s">localize it</a>?',
@@ -362,18 +362,12 @@ class UiBuilder {
      * @return {function(string, ...string[]): string} - Gettext localization
      * helper with formatting abilities. The first method argument is message
      * body, the second is message variables to replace %s and %1$s with.
+     * %s and %1$s notations can not be mixed.
      */
     _gettext() {
         const gettext = imports.gettext;
         const gettextDomain =  gettext.domain(_me().metadata['gettext-domain']);
-        return (message, ...args) => {
-            let iter = 0;
-            return gettextDomain.gettext(message)
-                .replaceAll(
-                    /%(?:%|([1-9][0-9]*\$)?s)/g,
-                    (q, i) => q === '%%' ? '%' : args[i ? parseInt(i) - 1 : iter++]
-                );
-        };
+        return (message, ...args) => gettextDomain.gettext(message).format(args);
     }
 }
 

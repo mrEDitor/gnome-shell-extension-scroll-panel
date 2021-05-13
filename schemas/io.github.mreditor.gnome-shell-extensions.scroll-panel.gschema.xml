@@ -55,7 +55,7 @@
         </key>
 
         <key type="as" name="windows-switcher-path">
-            <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft', '1', '0' ]</default>
+            <default>[ 'uiGroup', 'panelBox', 'panel', 'panelLeft' ]</default>
             <summary>Windows switcher actor path.</summary>
             <description>Path to windows switcher scrollable actor. Empty array to disable the switcher.</description>
         </key>

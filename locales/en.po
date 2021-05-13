@@ -17,7 +17,7 @@ msgid "by <a href=\"%s\">Eduard Minasyan</a>"
 msgstr ""
 
 #: ../sources/prefs.js
-msgid "Homepage: <a href=\"%1$s\">%s</a>"
+msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
 msgstr ""
 
 #: ../sources/prefs.js
