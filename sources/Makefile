@@ -17,7 +17,7 @@ install : $(INSTALL_DIR)/metadata.json $(addprefix $(INSTALL_DIR)/, $(SOURCE_FIL
 
 $(BUILD_DIR)/metadata.json : metadata.json
 	mkdir -p '$(BUILD_DIR)'
-	jq ".semanticVersion = .semanticVersion + \"+$(BUILD_METADATA)\"" metadata.json > '$@'
+	jq ".[\"semantic-version\"] = .[\"semantic-version\"] + \"+$(BUILD_METADATA)\"" metadata.json > '$@'
 
 $(BUILD_DIR)/%.js : %.js
 	mkdir -p '$(BUILD_DIR)'

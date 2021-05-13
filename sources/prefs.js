@@ -156,7 +156,7 @@ class UiBuilder {
         const gettext = this._gettext();
         for (const aboutLine of [
             `<span size="larger">${_me().metadata.name} ${_me().metadata.version || ''}</span>`,
-            `<span size="smaller">${_me().metadata.uuid} v${_me().metadata.semanticVersion}</span>`,
+            `<span size="smaller">${_me().metadata.uuid} v${_me().metadata['semantic-version']}</span>`,
             `<span>${gettext('by <a href="%s">Eduard Minasyan</a>', 'https://mrEDitor.github.io/')}</span>`,
             `<span>${gettext('Homepage: <a href="%1$s">%1$s</a>', _me().metadata.url)}</span>`,
             `<span>${gettext(
