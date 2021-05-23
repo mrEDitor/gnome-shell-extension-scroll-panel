@@ -31,7 +31,9 @@ Target Gnome version is Gnome Shell 40.
 
 		make install
 
-4. Enable (and configure, if needed) extension with
+4. Re-login to Gnome Shell.
+   
+5. Enable (and configure, if needed) extension with:
 
 		gnome-extensions-app
 
