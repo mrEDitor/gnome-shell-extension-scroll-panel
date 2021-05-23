@@ -1,12 +1,15 @@
 export DOMAIN ?= io.github.mreditor.gnome-shell-extensions.scroll-panel
 BUILD_DIR ?= build
 INSTALL_DIR ?= $(HOME)/.local/share/gnome-shell/extensions
+BUILD_DIR := $(abspath $(BUILD_DIR))
+INSTALL_DIR := $(abspath $(INSTALL_DIR))
+
+ESLINT ?= eslint
+WGET ?= wget
+
 DEBUG ?=
 FORCE ?=
 UI ?=
-
-BUILD_DIR := $(abspath $(BUILD_DIR))
-INSTALL_DIR := $(abspath $(INSTALL_DIR))
 
 define HELP
 Usage (with `: dependencies` according to make syntax):
@@ -42,6 +45,8 @@ Variables:
 		- Gnome Shell extensions directory to use during `install` and
 		`uninstall`. To install extension globally, you can use
 		`/usr/share/gnome-shell/extensions` on most systems.
+
+Flags:
 	DEBUG = $(DEBUG)
 		- If set, `build` target will include the debug module.
 	FORCE = $(FORCE)
@@ -50,6 +55,10 @@ Variables:
 		extension when not having source code of installed version.
 	UI = $(UI)
 		- UI filename to work with (for `preview` target).
+
+Tools:
+	ESLINT = $(ESLINT)
+	WGET = $(WGET)
 endef
 export HELP
 
@@ -74,7 +83,7 @@ build :
 	$(MAKE) -C ui build BUILD_DIR='$(BUILD_DIR)'
 
 lint : eslintrc-gjs.yml eslintrc-shell.yml
-	eslint --ignore-pattern '$(BUILD_DIR)' .
+	$(ESLINT) --ignore-pattern '$(BUILD_DIR)' .
 	$(MAKE) -C ui lint
 
 preview : build
@@ -119,10 +128,10 @@ endif
 zip : $(BUILD_DIR)/$(DOMAIN).zip
 
 eslintrc-gjs.yml :
-	wget https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-gjs.yml
+	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-gjs.yml
 
 eslintrc-shell.yml :
-	wget https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-shell.yml
+	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-shell.yml
 
 $(BUILD_DIR)/$(DOMAIN).zip : build
 	test -n '$(DOMAIN)'

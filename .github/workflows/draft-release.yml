@@ -22,10 +22,9 @@ jobs:
       - name: Build project
         run: |
           shopt -s expand_aliases
-          alias eslint="npx eslint"
           sudo apt-get install gettext
           npm install eslint
-          make lint zip
+          ESLINT='npx eslint' make lint zip
       - name: Draft Release
         id: draft_release
         uses: actions/create-release@master
