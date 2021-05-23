@@ -21,7 +21,7 @@ jobs:
           ]]
       - name: Build project
         run: |
-          sudo apt-get install gettext
+          sudo apt-get install gettext eslint
           make lint zip
       - name: Draft Release
         id: draft_release
