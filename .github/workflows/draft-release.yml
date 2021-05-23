@@ -21,8 +21,7 @@ jobs:
           ]]
       - name: Build project
         run: |
-          shopt -s expand_aliases
-          sudo apt-get install gettext
+          sudo apt-get install gettext libgtk-4-bin
           npm install eslint
           ESLINT='npx eslint' make lint zip
       - name: Draft Release
