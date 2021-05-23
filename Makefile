@@ -75,7 +75,7 @@ build :
 
 lint : eslintrc-gjs.yml eslintrc-shell.yml
 	eslint --ignore-pattern '$(BUILD_DIR)' .
-	$(MAKE) -C ui lint BUILD_DIR='$(BUILD_DIR)'
+	$(MAKE) -C ui lint
 
 preview : build
 	$(MAKE) -C ui preview BUILD_DIR='$(BUILD_DIR)' UI='$(UI)'

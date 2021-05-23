@@ -23,9 +23,9 @@ Target Gnome version is Gnome Shell 40.
 		git clone https://github.com/mrEDitor/gnome-shell-extension-scroll-panel
 		cd gnome-shell-extension-scroll-panel
 
-2. Checkout the available latest tag (not tagged commits may be broken):
+2. Checkout the latest available tag (not tagged commits may be broken):
 
-		git checkout $(git describe --tags `git rev-list --tags --max-count=1`)
+		git checkout $(git rev-list --tags --max-count=1)
 	
 3. Install extension into your Gnome Shell:
 
