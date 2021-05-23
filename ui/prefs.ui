@@ -6,6 +6,12 @@
             <object class="GtkBox">
                 <property name="css-classes">linked</property>
                 <child>
+                    <object class="GtkToggleButton" id="about">
+                        <property name="group">tab-chooser</property>
+                        <property name="label" translatable="yes">About</property>
+                    </object>
+                </child>
+                <child>
                     <object class="GtkToggleButton" id="workspaces-switcher">
                         <property name="group">tab-chooser</property>
                         <property name="label" translatable="yes">Switching workspaces</property>
@@ -55,7 +61,7 @@
             </object>
         </child>
         <child>
-            <object class="GtkScrolledWindow">
+            <object class="GtkScrolledWindow" id="scroll-box">
                 <property name="hexpand">true</property>
                 <property name="vexpand">true</property>
                 <property name="hscrollbar-policy">never</property>
@@ -72,6 +78,7 @@
                         <property name="row-homogeneous">true</property>
                         <property name="row-spacing">10</property>
                         <property name="column-spacing">25</property>
+
                         <child>
                             <object class="GtkLabel">
                                 <layout>
@@ -170,6 +177,13 @@
                                 <property name="css-classes">linked</property>
                                 <property name="halign">end</property>
                                 <child>
+                                    <object class="GtkToggleButton" id="setting-actor-align-off">
+                                        <property name="group">actor-align</property>
+                                        <property name="label" translatable="yes">System</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                                <child>
                                     <object class="GtkToggleButton" id="setting-actor-align-start">
                                         <property name="group">actor-align</property>
                                         <property name="label" translatable="yes">Start</property>
@@ -213,6 +227,13 @@
                                 <property name="css-classes">linked</property>
                                 <property name="halign">end</property>
                                 <child>
+                                    <object class="GtkToggleButton" id="setting-off-horizontal">
+                                        <property name="group">horizontal-scroll-mode</property>
+                                        <property name="label" translatable="yes">Off</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
+                                <child>
                                     <object class="GtkToggleButton" id="setting-direct-horizontal">
                                         <property name="group">horizontal-scroll-mode</property>
                                         <property name="label" translatable="yes">Direct</property>
@@ -248,6 +269,13 @@
                                 </layout>
                                 <property name="css-classes">linked</property>
                                 <property name="halign">end</property>
+                                <child>
+                                    <object class="GtkToggleButton" id="setting-off-vertical">
+                                        <property name="group">vertical-scroll-mode</property>
+                                        <property name="label" translatable="yes">Off</property>
+                                        <property name="valign">center</property>
+                                    </object>
+                                </child>
                                 <child>
                                     <object class="GtkToggleButton" id="setting-direct-vertical">
                                         <property name="group">vertical-scroll-mode</property>

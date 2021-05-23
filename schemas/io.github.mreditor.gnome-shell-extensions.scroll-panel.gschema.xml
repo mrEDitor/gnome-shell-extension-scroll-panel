@@ -39,7 +39,7 @@
             <description>Distance multiplier of workspaces switching for vertical scrolling.</description>
         </key>
         <key type="b" name="workspaces-switcher-cycle">
-            <default>true</default>
+            <default>false</default>
             <summary>Enable cyclic scrolling for switching workspaces.</summary>
             <description>Whether is workspaces switching is cyclic.</description>
         </key>

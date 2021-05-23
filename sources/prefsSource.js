@@ -1,62 +1,74 @@
-/* exported module */
+/* exported PrefsSource */
 
 const { Gio, GObject } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Me = ExtensionUtils.getCurrentExtension();
-
-/** @type {DebugModule|null} */
-const Debug = Me.imports.debug?.module;
-
-/**
- * GSettings-based settings source.
- * @type {Gio.Settings}
- */
-const SettingsSource = new Gio.Settings({
-    settings_schema:
-        Gio.SettingsSchemaSource
-            .new_from_directory(
-                Me.dir.get_child('schemas').get_path(),
-                Gio.SettingsSchemaSource.get_default(),
-                false
-            )
-            .lookup(
-                Me.metadata['settings-schema'],
-                true
-            ),
-});
+// WARNING: No shell or extension imports allowed here or in class constructors
+// since it will break buildPrefsView() call for development environment.
 
 /**
  * @class
  * Base class for setting objects.
  */
-const Setting = GObject.registerClass(
+var Setting = GObject.registerClass(
     /**
      * @template T
      */
     class _Setting extends GObject.Object {
         /**
+         * @constructor
+         * @param {Gio.Settings} source - Setting source.
          * @param {string} key - Setting key.
+         * @param {T} defaultValue - Default setting value.
          * @param {function(): T} getter - Setting getter.
          * @param {function(T)} setter - Setting setter.
          */
-        _init(key, getter, setter) {
+        _init(source, key, defaultValue, getter, setter) {
             this.key = key;
+            this._defaultValue = defaultValue;
+            this._getter = getter;
             this._setter = setter;
-
-            // Bind "update own value" callback first to fetch new value before
-            // other callbacks will be called. Signal call order is guaranteed:
-            // https://developer.gnome.org/gobject/stable/gobject-Signals.html
-            this.onChange(() => {
-                /** @type {T} */
-                this.value = getter();
-                Debug?.logDebug(`Setting ${key} set to: ${this.value}`);
-            });
+            this._source = source;
         }
 
         /**
-         * @param {T} value - New value for setting.
+         * Bind "update own value" callback.
+         * Should be called before accessing value in any way in order to
+         * register value fetching before other callbacks will be called.
+         * Signal call order is guaranteed:
+         * https://developer.gnome.org/gobject/stable/gobject-Signals.html
+         * @returns {function()} - Tracking disposer callback. Should be called
+         * to cleanup resources when setting is not needed anymore.
          */
-        setValue(value) {
+        trackChanges() {
+            /** @type {DebugModule|null} */
+            let debug = null;
+            try {
+                const extension = imports.misc.extensionUtils.getCurrentExtension();
+                debug = extension.imports.debug?.module;
+            } catch {
+                // Debug module is optional.
+            }
+
+            return this.onChange(() => {
+                /** @type {T} */
+                this._value = this._getter();
+                debug?.logDebug(`Setting ${this.key} set to: ${this._value}`);
+            });
+        }
+
+        useDefault() {
+            this._value = this._defaultValue;
+            this._setter = () => {};
+        }
+
+        get defaultValue() {
+            return this._defaultValue;
+        }
+
+        get value() {
+            return this._value;
+        }
+
+        set value(value) {
             this._setter(value);
         }
 
@@ -66,18 +78,33 @@ const Setting = GObject.registerClass(
          * @returns {function()} - Callback for subscription cancellation.
          */
         onChange(callback) {
-            const cId = SettingsSource.connect(
+            const cId = this._source.connect(
                 `changed::${this.key}`,
-                () => callback(this.key, this.value)
+                () => callback(this.key, this._value)
             );
-            callback(this.key, this.value);
-            return () => SettingsSource.disconnect(cId);
+            callback(this.key, this._value);
+            return () => {
+                this._source.disconnect(cId);
+            };
         }
     }
 );
 
-var module = new class PrefsSourceModule {
-    constructor() {
+var PrefsSource = class _PrefsSource {
+    /**
+     * @param {object} extension - Extension object to create prefs source for.
+     */
+    constructor(extension) {
+        const parentSchema = Gio.SettingsSchemaSource.get_default();
+        const path = extension.dir.get_child('schemas').get_path();
+        const schema = extension.metadata['settings-schema'];
+        this._source = new Gio.Settings({
+            settings_schema:
+                Gio.SettingsSchemaSource
+                    .new_from_directory(path, parentSchema, false)
+                    .lookup(schema, true),
+        });
+
         /**
          * Path along the scene view to the actor to highlight.
          * The setting is used for extension-settings communication only and
@@ -107,8 +134,9 @@ var module = new class PrefsSourceModule {
 
         /**
          * Cache for {@link _setting(key)}.
+         * @type {object<string, _Setting>}
          */
-        this._settings = [];
+        this._settings = {};
     }
 
     /**
@@ -117,7 +145,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<string[]>} - Switcher actor path setting.
      */
     switcherActorPath(action) {
-        return this._setting(this._createStringArraySetting, `${action}-path`);
+        return this._getSetting(
+            this._createStringArraySetting.bind(this),
+            `${action}-path`
+        );
     }
 
     /**
@@ -126,7 +157,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<number>} - Switcher actor width setting.
      */
     switcherActorWidth(action) {
-        return this._setting(this._createNumericSetting, `${action}-width`);
+        return this._getSetting(
+            this._createNumericSetting.bind(this),
+            `${action}-width`
+        );
     }
 
     /**
@@ -135,7 +169,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<string>} - Switcher actor align setting.
      */
     switcherActorAlign(action) {
-        return this._setting(this._createStringSetting, `${action}-align`);
+        return this._getSetting(
+            this._createStringSetting.bind(this),
+            `${action}-align`
+        );
     }
 
     /**
@@ -144,7 +181,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<number>} - Switcher horizontal multiplier setting.
      */
     switcherHorizontalMultiplier(action) {
-        return this._setting(this._createNumericSetting, `${action}-horizontal-multiplier`);
+        return this._getSetting(
+            this._createNumericSetting.bind(this),
+            `${action}-horizontal-multiplier`
+        );
     }
 
     /**
@@ -153,7 +193,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<number>} - Switcher vertical multiplier setting.
      */
     switcherVerticalMultiplier(action) {
-        return this._setting(this._createNumericSetting, `${action}-vertical-multiplier`);
+        return this._getSetting(
+            this._createNumericSetting.bind(this),
+            `${action}-vertical-multiplier`
+        );
     }
 
     /**
@@ -162,7 +205,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<boolean>} - Cyclic switching setting.
      */
     switcherCycle(action) {
-        return this._setting(this._createBooleanSetting, `${action}-cycle`);
+        return this._getSetting(
+            this._createBooleanSetting.bind(this),
+            `${action}-cycle`
+        );
     }
 
     /**
@@ -171,7 +217,10 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<boolean>} - Visualize switching setting.
      */
     switcherVisualize(action) {
-        return this._setting(this._createBooleanSetting, `${action}-visualize`);
+        return this._getSetting(
+            this._createBooleanSetting.bind(this),
+            `${action}-visualize`
+        );
     }
 
     /**
@@ -180,26 +229,48 @@ var module = new class PrefsSourceModule {
      * @returns {_Setting<number>} - Switching timeout setting.
      */
     switcherTimeout(action) {
-        return this._setting(this._createNumericSetting, `${action}-timeout`);
+        return this._getSetting(
+            this._createNumericSetting.bind(this),
+            `${action}-timeout`
+        );
+    }
+
+    useDefaults() {
+        for (const action of [this.windowsSwitcher, this.workspacesSwitcher]) {
+            for (const switcherAccessor of this._listSwitcherSettings()) {
+                switcherAccessor.call(this, action).useDefault();
+            }
+        }
+        return () => {};
     }
 
     /**
      * Subscribe callback to any setting change and call callback initially.
-     * <p>
-     * Note: settings not passed to {@param settings} MAY have outdated values
-     * during callback invocation.
-     * </p>
-     * @param {function()} callback - Callback for settings change.
-     * @param {_Setting[]} settings - Settings to update before callback
-     * invocation.
+     * @param {function()|undefined} callback - Callback for settings change.
      * @returns {function()} - Callback for unsubscription.
      */
-    // eslint-disable-next-line no-unused-vars
-    onChange(callback, settings) {
-        // Settings are required just to ensure they are in this._setting() cache.
-        const cId = SettingsSource.connect('changed', () => callback());
-        callback();
-        return () => SettingsSource.disconnect(cId);
+    trackChanges(callback = undefined) {
+        const settings = this._listSwitcherSettings();
+        const disposers = [
+            this.highlightPath.trackChanges(),
+            this.pickingActorPathAction.trackChanges(),
+            ...[this.windowsSwitcher, this.workspacesSwitcher].flatMap(
+                action => settings.map(
+                    setting => setting.call(this, action).trackChanges()
+                )
+            ),
+        ];
+
+        if (callback) {
+            const cId = this._source.connect('changed', () => callback());
+            callback();
+            return () => {
+                this._source.disconnect(cId);
+                disposers.forEach(c => c());
+            };
+        } else {
+            return () => disposers.forEach(c => c());
+        }
     }
 
     /**
@@ -208,9 +279,11 @@ var module = new class PrefsSourceModule {
      */
     _createBooleanSetting(key) {
         return new Setting(
+            this._source,
             key,
-            () => SettingsSource.get_boolean(key),
-            value => SettingsSource.set_boolean(key, value)
+            this._source.get_default_value(key).get_boolean(),
+            () => this._source.get_boolean(key),
+            value => this._source.set_boolean(key, value)
         );
     }
 
@@ -220,9 +293,11 @@ var module = new class PrefsSourceModule {
      */
     _createNumericSetting(key) {
         return new Setting(
+            this._source,
             key,
-            () => SettingsSource.get_double(key),
-            value => SettingsSource.set_double(key, value)
+            this._source.get_default_value(key).get_double(),
+            () => this._source.get_double(key),
+            value => this._source.set_double(key, value)
         );
     }
 
@@ -232,9 +307,11 @@ var module = new class PrefsSourceModule {
      */
     _createStringSetting(key) {
         return new Setting(
+            this._source,
             key,
-            () => SettingsSource.get_string(key),
-            value => SettingsSource.set_string(key, value)
+            this._source.get_default_value(key).get_string(),
+            () => this._source.get_string(key),
+            value => this._source.set_string(key, value)
         );
     }
 
@@ -244,9 +321,11 @@ var module = new class PrefsSourceModule {
      */
     _createStringArraySetting(key) {
         return new Setting(
+            this._source,
             key,
-            () => SettingsSource.get_strv(key),
-            value => SettingsSource.set_strv(key, value)
+            this._source.get_default_value(key).get_strv(),
+            () => this._source.get_strv(key),
+            value => this._source.set_strv(key, value)
         );
     }
 
@@ -256,7 +335,7 @@ var module = new class PrefsSourceModule {
      * @param {string} key - Setting key.
      * @returns {T} - Requested setting object.
      */
-    _setting(settingFactory, key) {
+    _getSetting(settingFactory, key) {
         let setting = this._settings[key];
         if (!setting) {
             setting = settingFactory(key);
@@ -264,4 +343,21 @@ var module = new class PrefsSourceModule {
         }
         return setting;
     }
-}();
+
+    /**
+     * @returns {(function(string): _Setting)[]} - Functions that provide
+     * settings for switcher specified by it's identifier as the only argument.
+     */
+    _listSwitcherSettings() {
+        return [
+            this.switcherActorPath,
+            this.switcherActorWidth,
+            this.switcherActorAlign,
+            this.switcherHorizontalMultiplier,
+            this.switcherVerticalMultiplier,
+            this.switcherCycle,
+            this.switcherTimeout,
+            this.switcherVisualize,
+        ];
+    }
+};

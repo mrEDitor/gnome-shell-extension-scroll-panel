@@ -3,12 +3,14 @@
 Extension allows switching between windows or workspaces by scrolling Gnome
 Shell topbar with mouse or extra buttons (both in overview and workspace mode).
 
-Defaults are:
+![Demo](demo.gif)
+
+Extension is highly configurable; defaults are:
 
 - scroll the topbar over the clock or empty space to switch workspaces;
-- scroll the overview button or application name in topbar to switch windows;
-- hold Super key and scroll anywhere to switch workspaces (Gnome Shell feature);
-- hold Super+Shift keys and scroll a window to take it to another workspaces while switching.
+- scroll the overview button or application name in topbar to switch windows.
+
+![Preferences](ui/prefs.ui.png)
 
 You can install the extension from [extensions.gnome.org](https://extensions.gnome.org/extension/4257/).
 

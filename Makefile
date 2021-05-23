@@ -1,6 +1,9 @@
 export DOMAIN ?= io.github.mreditor.gnome-shell-extensions.scroll-panel
 BUILD_DIR ?= build
 INSTALL_DIR ?= $(HOME)/.local/share/gnome-shell/extensions
+DEBUG ?=
+FORCE ?=
+UI ?=
 
 BUILD_DIR := $(abspath $(BUILD_DIR))
 INSTALL_DIR := $(abspath $(INSTALL_DIR))
@@ -17,6 +20,8 @@ Usage (with `: dependencies` according to make syntax):
 	lint : eslintrc-gjs.yml eslintrc-shell.yml
 		- Run linter on project files. Required config files will be downloaded
 		from https://gitlab.gnome.org/GNOME/gnome-shell-extensions/ if missed.
+	preview : build
+		- Preview ui/*.ui file with name passed via `UI=...` option.
 	install : build uninstall
 		- Install the built extension from `BUILD_DIR` to `INSTALL_DIR`. Since
 		dependency on `build`, set `DEBUG=1` if debug version is required.
@@ -37,12 +42,14 @@ Variables:
 		- Gnome Shell extensions directory to use during `install` and
 		`uninstall`. To install extension globally, you can use
 		`/usr/share/gnome-shell/extensions` on most systems.
+	DEBUG = $(DEBUG)
+		- If set, `build` target will include the debug module.
 	FORCE = $(FORCE)
 		- If set, `uninstall` target will delete non-similar files keeping diff
 		in standard output. Intended to be used for uninstalling or upgrading
 		extension when not having source code of installed version.
-	DEBUG = $(DEBUG)
-		- If set, `build` target will include the debug module.
+	UI = $(UI)
+		- UI filename to work with (for `preview` target).
 endef
 export HELP
 
@@ -52,6 +59,7 @@ help :
 	@echo "$$HELP"
 
 all : clean build lint zip
+	$(MAKE) -C ui pngs BUILD_DIR='$(BUILD_DIR)'
 
 clean :
 	rm -rf '$(BUILD_DIR)'
@@ -68,6 +76,9 @@ build :
 lint : eslintrc-gjs.yml eslintrc-shell.yml
 	eslint --ignore-pattern '$(BUILD_DIR)' .
 	$(MAKE) -C ui lint BUILD_DIR='$(BUILD_DIR)'
+
+preview : build
+	$(MAKE) -C ui preview BUILD_DIR='$(BUILD_DIR)' UI='$(UI)'
 
 install : build uninstall
 	test -n '$(BUILD_DIR)'

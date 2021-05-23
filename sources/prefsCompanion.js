@@ -1,10 +1,7 @@
-/* exported module */
+/* exported PrefsCompanion */
 
 const { Clutter, Cogl, GObject, St } = imports.gi;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
-
-/** @type {PrefsSourceModule} */
-const PrefsSource = Me.imports.prefsSource.module;
 
 function _logWarning(message) {
     log(`[${Me.metadata.uuid}][WRN] ${message}`);
@@ -94,10 +91,13 @@ const ActorPicker = GObject.registerClass(
 /**
  * Prefs widget shell-space companion.
  * Used for interaction of prefs widget with Gnome Shell scene elements.
- * @type {PrefsCompanionModule}
  */
-var module = new class PrefsCompanionModule {
-    constructor() {
+var PrefsCompanion = class _PrefsCompanion {
+    /**
+     * @param {_PrefsSource} prefsSource - Prefs source instance to use.
+     */
+    constructor(prefsSource) {
+        this._prefsSource = prefsSource;
         this._actorPicker = new ActorPicker();
 
         const seat = Clutter.get_default_backend().get_default_seat();
@@ -161,15 +161,16 @@ var module = new class PrefsCompanionModule {
 
     /**
      * Run prefs widget shell-space companion.
+     * @param {_PrefsSource} PrefsSource - Prefs source instance to use..
      * @returns {function()} Companion stop callback.
      */
     run() {
-        PrefsSource.highlightPath.setValue([]);
-        PrefsSource.pickingActorPathAction.setValue('');
-        const cancelHighlight = PrefsSource.highlightPath.onChange(
+        this._prefsSource.highlightPath.value = [];
+        this._prefsSource.pickingActorPathAction.value = '';
+        const cancelHighlight = this._prefsSource.highlightPath.onChange(
             this._onHighlightPathChange.bind(this)
         );
-        const cancelPicker = PrefsSource.pickingActorPathAction.onChange(
+        const cancelPicker = this._prefsSource.pickingActorPathAction.onChange(
             this._onPickingActorPathActionChange.bind(this)
         );
         return () => {
@@ -227,8 +228,8 @@ var module = new class PrefsCompanionModule {
      * @param {Clutter.Actor} actor - Actor to target.
      */
     _targetActor(actor) {
-        // will call {this._onHighlightPath} automatically
-        PrefsSource.highlightPath.setValue(this.getActorPath(actor));
+        // will call `this._onHighlightPath` automatically
+        this._prefsSource.highlightPath.value = this.getActorPath(actor);
     }
 
     /**
@@ -257,14 +258,14 @@ var module = new class PrefsCompanionModule {
     }
 
     _onActorPicked() {
-        PrefsSource
-            .switcherActorPath(PrefsSource.pickingActorPathAction.value)
-            .setValue(this.getActorPath(this._actorPicker.targetActor));
-        PrefsSource.pickingActorPathAction.setValue('');
+        const action = this._prefsSource.pickingActorPathAction.value;
+        this._prefsSource.switcherActorPath(action).value =
+            this.getActorPath(this._actorPicker.targetActor);
+        this._prefsSource.pickingActorPathAction.value = '';
     }
 
     _stopPickingActor() {
         this._pointerDevice.ungrab();
-        PrefsSource.highlightPath.setValue([]);
+        this._prefsSource.highlightPath.value = [];
     }
-}();
+};

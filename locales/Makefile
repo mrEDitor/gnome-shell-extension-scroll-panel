@@ -8,12 +8,12 @@ build : messages.pot $(addprefix $(BUILD_DIR)/, $(LOCALE_FILES))
 install : $(addprefix $(INSTALL_DIR)/, $(LOCALE_FILES))
 endif
 
-messages.pot : $(wildcard ../sources/*.js) $(wildcard ../sources/*.json) $(wildcard ../ui/*.ui)
+messages.pot : $(wildcard ../sources/*.js) $(wildcard ../ui/*.ui)
 	$(eval TEMP_POT := $(shell mktemp "XXXXXXX.diff.pot"))
-	xgettext --language=JavaScript ../sources/*.json --join-existing --output='$(TEMP_POT)'
-	xgettext --language=JavaScript --keyword=gettext  ../sources/*.js --join-existing --output='$(TEMP_POT)'
+	xgettext --language=JavaScript  ../sources/*.js --join-existing --output='$(TEMP_POT)'
 	xgettext --language=Glade ../ui/*.ui --join-existing --output='$(TEMP_POT)'
-	for po in *.po; do echo msgmerge --update --previous $$po messages.pot; done
+	msgmerge --update --previous messages.pot '$(TEMP_POT)'
+	for po in *.po; do msgmerge --update --previous $$po messages.pot; done
 	rm '$(TEMP_POT)'
 
 %.po : messages.pot

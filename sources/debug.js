@@ -1,7 +1,8 @@
 /* exported module */
 // noinspection JSUnfilteredForInLoop
-// This module is for debug purposes only. It is expected to be erased from
-// release build and should be used inside try-catch only and may uses some hacks.
+// This module is for debug purposes only and may use some hacks. It's content
+// is expected to be erased from release build and should be used only inside
+// try-catch blocks or with null coalescing operators.
 
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
@@ -10,7 +11,7 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
  */
 var module = new class DebugModule {
     /**
-     * Log verbose message (in debug build only).
+     * Log verbose message.
      * @param {string} message - Message to log.
      */
     logDebug(message) {
@@ -18,8 +19,7 @@ var module = new class DebugModule {
     }
 
     /**
-     * Add verbose step-in/step-out log messages to each method of module
-     * (in debug build only).
+     * Add verbose step-in/step-out log messages to each method of module.
      * @param {object} modules - Object to add methods tracing to.
      */
     injectModulesTraceLogs(modules) {
@@ -45,40 +45,55 @@ var module = new class DebugModule {
             moduleNames[j] = temp;
         }
         for (const moduleName of moduleNames) {
-            for (const symbolName in modules[moduleName]) {
-                const moduleSymbol = modules[moduleName][symbolName];
-                switch (typeof moduleSymbol) {
-                case 'object':
-                    this.injectObjectTraceLogs(moduleSymbol, moduleName, symbolName);
-                    continue;
-                case 'function':
-                    log(`[${Me.metadata.uuid}][STP] Symbol '${symbolName}' found in module '${moduleName}', patching constructor...`);
-                    modules[moduleName][symbolName] = (...args) => {
-                        try {
-                            const instance = new moduleSymbol(...args);
-                            if (typeof instance === 'object') {
-                                this.injectObjectTraceLogs(
-                                    instance,
-                                    moduleName,
-                                    symbolName
-                                );
-                            }
-                            return instance;
-                        } catch (e) {
-                            // TODO: we may detect error type here to support
-                            //       exceptions being thrown by constructor.
-                            log(`[${Me.metadata.uuid}][STP] Instance of class '${symbolName}' from module '${moduleName}' patching problem:\n${e}`);
-                            return moduleSymbol(...args);
-                        }
-                    };
+            try {
+                const moduleInstance = modules[moduleName];
+                for (const symbolName in moduleInstance) {
+                    switch (typeof moduleInstance[symbolName]) {
+                    case 'function':
+                        this.injectConstructorTraceLogs(modules, moduleName, symbolName);
+                        break;
+                    case 'object':
+                        this.injectObjectTraceLogs(moduleInstance[symbolName], moduleName, symbolName);
+                        break;
+                    }
                 }
+            } catch (e) {
+                log(`[${Me.metadata.uuid}][STP] Loading module '${moduleName}' problem:\n${e}`);
             }
         }
     }
 
     /**
+     * Wrap object constructor (`modules`[`moduleName`][`symbolName`]) way to
+     * add verbose step-in/step-out log messages to each method of object
+     * instance creating.
+     * @param {object} modules - Modules accessor.
+     * @param {string} moduleName - Module name.
+     * @param {string} symbolName - Object name.
+     */
+    injectConstructorTraceLogs(modules, moduleName, symbolName) {
+        const constructor = modules[moduleName][symbolName];
+        if (typeof constructor !== 'function' || constructor.objectTraceLogger) {
+            return;
+        }
+        const debug = this;
+        log(`[${Me.metadata.uuid}][STP] Symbol '${symbolName}' found in module '${moduleName}', patching constructor...`);
+        modules[moduleName][symbolName] = function (...args) {
+            if (new.target) {
+                const instance = new constructor(...args);
+                debug.injectObjectTraceLogs(instance, moduleName, symbolName);
+                return instance;
+            } else {
+                // Plain functions are considered simple helpers.
+                return constructor(...args);
+            }
+        };
+        modules[moduleName][symbolName].objectTraceLogger = this;
+    }
+
+    /**
      * Add verbose step-in/step-out log messages to each method of object
-     * instance (in debug build only).
+     * instance.
      * @param {object} instance - Object to add methods tracing to.
      * @param {string} moduleName - Module name.
      * @param {string} symbolName - Object name.
@@ -88,10 +103,12 @@ var module = new class DebugModule {
         if (instance === this) {
             return;
         }
-        const memberNames = Object.getOwnPropertyNames(instance);
+        const memberNames = Object.getOwnPropertyNames(
+            Object.getPrototypeOf(instance)
+        );
         for (const memberName of memberNames) {
             const member = instance[memberName];
-            if (typeof member !== 'function') {
+            if (typeof member !== 'function' || member.objectTraceLogger) {
                 continue;
             }
             const memberFullName = `${moduleName}.${symbolName}.${memberName}`;
@@ -103,6 +120,7 @@ var module = new class DebugModule {
                 log(`[${Me.metadata.uuid}][STP] <- ${memberCall}: ${this._toShortString(r)}`);
                 return r;
             };
+            instance[memberName].objectTraceLogger = this;
         }
     }
 

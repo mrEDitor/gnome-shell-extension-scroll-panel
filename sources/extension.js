@@ -3,26 +3,21 @@
 const { Clutter, GLib, Meta } = imports.gi;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
+// WARNING: No extension imports allowed here since it will break method calls
+// tracing in development environment.
 
 /** @type {DebugModule|null} */
 const Debug = Me.imports.debug?.module;
 
-/** @type WindowSwitcherPopup */
-const WindowSwitcherPopup = Me.imports.windowSwitcher.WindowSwitcherPopup;
-
-/** @type {PrefsCompanionModule} */
-const PrefsCompanion = Me.imports.prefsCompanion.module;
-
-/** @type {PrefsSourceModule} */
-const PrefsSource = Me.imports.prefsSource.module;
-
 class ActorScrollHandler {
     /**
+     * @param {_PrefsSource} prefsSource - {@link PrefsSource} instance.
      * @param {string} action - Action identifier from {@link PrefsSource}.
      * @param {function(number): boolean} onSwitch - Callback for switch action.
      * The only argument is switching distance (-N for left, +N for right).
      */
-    constructor(action, onSwitch) {
+    constructor(prefsSource, action, onSwitch) {
+        this._prefsSource = prefsSource;
         this._action = action;
         this._onSwitch = distance => {
             return onSwitch(distance)
@@ -85,8 +80,8 @@ class ActorScrollHandler {
             return Clutter.EVENT_PROPAGATE;
         }
 
-        const horizontalMultiplier = PrefsSource.switcherHorizontalMultiplier(this._action);
-        const verticalMultiplier = PrefsSource.switcherVerticalMultiplier(this._action);
+        const horizontalMultiplier = this._prefsSource.switcherHorizontalMultiplier(this._action);
+        const verticalMultiplier = this._prefsSource.switcherVerticalMultiplier(this._action);
         switch (event.get_scroll_direction()) {
         case Clutter.ScrollDirection.LEFT:
             return this._onSwitch(-horizontalMultiplier.value);
@@ -113,23 +108,31 @@ class ActorScrollHandler {
     }
 }
 
-/**
- * Extension main module instance.
- * @type {ExtensionModule}
- */
-var module = new class ExtensionModule {
+class ExtensionModule {
     constructor() {
+        /** @type WindowSwitcherPopup */
+        this.WindowSwitcherPopup = Me.imports.windowSwitcher.WindowSwitcherPopup;
+
+        /** @type {_PrefsSource} */
+        this._prefsSource = new Me.imports.prefsSource.PrefsSource(Me);
+
+        /** @type {_PrefsCompanion} */
+        this.PrefsCompanion = new Me.imports.prefsCompanion.PrefsCompanion(
+            this._prefsSource
+        );
+
         /** @type {function()[]} */
         this._signalDisconnectors = [];
 
-        // prefer `module` over `this` here to enable debug-tracing
         this._workspacesSwitcherHandler = new ActorScrollHandler(
-            PrefsSource.workspacesSwitcher,
-            distance => module._switchWorkspace(distance)
+            this._prefsSource,
+            this._prefsSource.workspacesSwitcher,
+            distance => this._switchWorkspace(distance)
         );
         this._windowsSwitcherHandler = new ActorScrollHandler(
-            PrefsSource.windowsSwitcher,
-            distance => module._switchWindow(distance)
+            this._prefsSource,
+            this._prefsSource.windowsSwitcher,
+            distance => this._switchWindow(distance)
         );
 
         /** @type {WindowSwitcherPopup} */
@@ -144,59 +147,44 @@ var module = new class ExtensionModule {
 
     enable() {
         this._signalDisconnectors.push(
-            PrefsCompanion.run(),
-
-            // prefer `module` over `this` here to enable debug-tracing
-            PrefsSource.onChange(
-                () => module._updateHandler(
-                    this._windowsSwitcherHandler,
-                    PrefsSource.windowsSwitcher
-                ),
-                [
-                    PrefsSource.switcherHorizontalMultiplier(PrefsSource.windowsSwitcher),
-                    PrefsSource.switcherVerticalMultiplier(PrefsSource.windowsSwitcher),
-                    PrefsSource.switcherActorPath(PrefsSource.windowsSwitcher),
-                    PrefsSource.switcherActorWidth(PrefsSource.windowsSwitcher),
-                    PrefsSource.switcherActorAlign(PrefsSource.windowsSwitcher),
-                ]
-            ),
-            PrefsSource.onChange(
-                () => module._updateHandler(
-                    this._workspacesSwitcherHandler,
-                    PrefsSource.workspacesSwitcher
-                ),
-                [
-                    PrefsSource.switcherHorizontalMultiplier(PrefsSource.workspacesSwitcher),
-                    PrefsSource.switcherVerticalMultiplier(PrefsSource.workspacesSwitcher),
-                    PrefsSource.switcherActorPath(PrefsSource.workspacesSwitcher),
-                    PrefsSource.switcherActorWidth(PrefsSource.workspacesSwitcher),
-                    PrefsSource.switcherActorAlign(PrefsSource.workspacesSwitcher),
-                ]
-            )
+            this._prefsSource.trackChanges(() => {
+                if (!this._prefsSource.pickingActorPathAction.value) {
+                    this._updateHandler(
+                        this._windowsSwitcherHandler,
+                        this._prefsSource.windowsSwitcher
+                    );
+                    this._updateHandler(
+                        this._workspacesSwitcherHandler,
+                        this._prefsSource.workspacesSwitcher
+                    );
+                }
+            }),
+            this.PrefsCompanion.run()
         );
     }
 
     disable() {
-        this._windowsSwitcherHandler.handleActor(null);
-        this._workspacesSwitcherHandler.handleActor(null);
         for (const disconnector of this._signalDisconnectors) {
             disconnector();
         }
+        this._signalDisconnectors = [];
+        this._windowsSwitcherHandler.handleActor(null);
+        this._workspacesSwitcherHandler.handleActor(null);
     }
 
     _updateHandler(handler, switcher) {
         // There is no reason to handle switcher actor if all multipliers are 0.
         const anyOfSwitcherMultipliersIsSet =
-            PrefsSource.switcherHorizontalMultiplier(switcher).value ||
-            PrefsSource.switcherVerticalMultiplier(switcher).value;
+            this._prefsSource.switcherHorizontalMultiplier(switcher).value ||
+            this._prefsSource.switcherVerticalMultiplier(switcher).value;
         handler.handleActor(
             anyOfSwitcherMultipliersIsSet
-                ? PrefsCompanion.findActor(
-                    PrefsSource.switcherActorPath(switcher).value
+                ? this.PrefsCompanion.findActor(
+                    this._prefsSource.switcherActorPath(switcher).value
                 )
                 : null,
-            PrefsSource.switcherActorWidth(switcher).value,
-            PrefsSource.switcherActorAlign(switcher).value
+            this._prefsSource.switcherActorWidth(switcher).value,
+            this._prefsSource.switcherActorAlign(switcher).value
         );
     }
 
@@ -212,10 +200,10 @@ var module = new class ExtensionModule {
             return true;
         }
 
-        const switcher = PrefsSource.windowsSwitcher;
-        const cycle = PrefsSource.switcherCycle(switcher).value;
-        const visualize = PrefsSource.switcherVisualize(switcher).value;
-        const timeout = PrefsSource.switcherTimeout(switcher).value;
+        const switcher = this._prefsSource.windowsSwitcher;
+        const cycle = this._prefsSource.switcherCycle(switcher).value;
+        const visualize = this._prefsSource.switcherVisualize(switcher).value;
+        const timeout = this._prefsSource.switcherTimeout(switcher).value;
         this._windowSwitchTimeoutHandle = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
             timeout, // ms
@@ -245,7 +233,7 @@ var module = new class ExtensionModule {
 
         if (visualize) {
             if (!this._windowSwitcherPopup?.tryDisplay(index, 1.5 * timeout)) {
-                this._windowSwitcherPopup = new WindowSwitcherPopup(windows);
+                this._windowSwitcherPopup = new this.WindowSwitcherPopup(windows);
                 this._windowSwitcherPopup.connect('destroy', () => {
                     const selectIndex = this._windowSwitcherPopup.selectedIndex;
                     windows[selectIndex].activate(global.get_current_time());
@@ -272,10 +260,10 @@ var module = new class ExtensionModule {
             return true;
         }
 
-        const switcher = PrefsSource.workspacesSwitcher;
-        const cycle = PrefsSource.switcherCycle(switcher).value;
-        const visualize = PrefsSource.switcherVisualize(switcher).value;
-        const timeout = PrefsSource.switcherTimeout(switcher).value;
+        const switcher = this._prefsSource.workspacesSwitcher;
+        const cycle = this._prefsSource.switcherCycle(switcher).value;
+        const visualize = this._prefsSource.switcherVisualize(switcher).value;
+        const timeout = this._prefsSource.switcherTimeout(switcher).value;
         this._workspaceSwitchTimeoutHandle = GLib.timeout_add(
             GLib.PRIORITY_DEFAULT,
             timeout, // ms
@@ -315,7 +303,7 @@ var module = new class ExtensionModule {
             .activate(global.get_current_time());
         return true;
     }
-}();
+}
 
 /**
  * Construct the extension main module instance.
@@ -324,5 +312,5 @@ var module = new class ExtensionModule {
 function init() {
     Debug?.logDebug('Initializing shell extension...');
     Debug?.injectModulesTraceLogs(Me.imports);
-    return module;
+    return new ExtensionModule();
 }
