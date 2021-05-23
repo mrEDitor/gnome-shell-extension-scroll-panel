@@ -1,10 +1,15 @@
 SOURCE_FILES := $(wildcard *.js)
 BUILD_METADATA ?= git-$(shell git rev-parse --short HEAD)
 
+ESLINT ?= eslint
 JQ ?= jq
+WGET ?= wget
 
-.PHONY: build install
+.PHONY: lint build install
 .PHONY: $(BUILD_DIR)/metadata.json $(BUILD_DIR)/debug.js
+
+lint : eslintrc-gjs.yml eslintrc-shell.yml
+	$(ESLINT) .
 
 build : $(BUILD_DIR)/metadata.json $(addprefix $(BUILD_DIR)/, $(SOURCE_FILES))
 
@@ -32,3 +37,9 @@ $(INSTALL_DIR)/metadata.json : $(BUILD_DIR)/metadata.json
 $(INSTALL_DIR)/%.js : $(BUILD_DIR)/%.js
 	mkdir -p '$(INSTALL_DIR)'
 	cp '$^' '$@'
+
+eslintrc-gjs.yml :
+	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-gjs.yml
+
+eslintrc-shell.yml :
+	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-shell.yml

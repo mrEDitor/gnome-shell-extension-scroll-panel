@@ -4,9 +4,6 @@ INSTALL_DIR ?= $(HOME)/.local/share/gnome-shell/extensions
 BUILD_DIR := $(abspath $(BUILD_DIR))
 INSTALL_DIR := $(abspath $(INSTALL_DIR))
 
-ESLINT ?= eslint
-WGET ?= wget
-
 DEBUG ?=
 FORCE ?=
 UI ?=
@@ -20,7 +17,7 @@ Usage (with `: dependencies` according to make syntax):
 		`install` or `uninstall` targets.
 	build :
 		- Build the extension inside `BUILD_DIR`.
-	lint : eslintrc-gjs.yml eslintrc-shell.yml
+	lint :
 		- Run linter on project files. Required config files will be downloaded
 		from https://gitlab.gnome.org/GNOME/gnome-shell-extensions/ if missed.
 	preview : build
@@ -56,9 +53,6 @@ Flags:
 	UI = $(UI)
 		- UI filename to work with (for `preview` target).
 
-Tools:
-	ESLINT = $(ESLINT)
-	WGET = $(WGET)
 endef
 export HELP
 
@@ -82,8 +76,8 @@ build :
 	$(MAKE) -C schemas build BUILD_DIR='$(BUILD_DIR)/schemas'
 	$(MAKE) -C ui build BUILD_DIR='$(BUILD_DIR)'
 
-lint : eslintrc-gjs.yml eslintrc-shell.yml
-	$(ESLINT) --ignore-pattern '$(BUILD_DIR)' .
+lint :
+	$(MAKE) -C sources lint BUILD_DIR='$(BUILD_DIR)'
 	$(MAKE) -C ui lint
 
 preview : build
@@ -126,12 +120,6 @@ endif
 endif
 
 zip : $(BUILD_DIR)/$(DOMAIN).zip
-
-eslintrc-gjs.yml :
-	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-gjs.yml
-
-eslintrc-shell.yml :
-	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-shell.yml
 
 $(BUILD_DIR)/$(DOMAIN).zip : build
 	test -n '$(DOMAIN)'

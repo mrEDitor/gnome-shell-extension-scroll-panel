@@ -1,5 +1,5 @@
 *~
 /.idea
 /build
-/eslintrc-gjs.yml
-/eslintrc-shell.yml
+/sources/eslintrc-gjs.yml
+/sources/eslintrc-shell.yml

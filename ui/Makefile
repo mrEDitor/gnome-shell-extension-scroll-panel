@@ -1,7 +1,7 @@
 export UI ?=
 PREVIEW ?=
 
-export SEED := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+export SEED := $(shell cat /dev/urandom | tr -dc 'a-zA-Z0-9' | head -c 24)
 UI_FILES := $(wildcard *.ui)
 
 GJS ?= gjs
@@ -35,7 +35,7 @@ pngs : $(addsuffix .png, $(UI_FILES))
 
 $(BUILD_DIR)/%.ui : %.ui
 	mkdir -p '$(BUILD_DIR)'
-	cp '$*.ui' '$@'
+	cp '$^' '$@'
 
 $(INSTALL_DIR)/%.ui : $(BUILD_DIR)/%.ui
 	test -n '$(BUILD_DIR)'

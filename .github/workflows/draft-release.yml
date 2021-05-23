@@ -21,9 +21,10 @@ jobs:
           ]]
       - name: Build project
         run: |
-          sudo apt-get install gettext libgtk-4-bin
+          sudo apt-get install gettext
           npm install eslint
-          ESLINT='npx eslint' make lint zip
+          BUILD_DIR='${{ env.GITHUB_WORKSPACE }}/build' ESLINT='npx eslint' make -C sources lint
+          make zip
       - name: Draft Release
         id: draft_release
         uses: actions/create-release@master
