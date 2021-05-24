@@ -10,7 +10,7 @@ const AltTab = imports.ui.altTab;
  * See original sources at {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/altTab.js}
  */
 var WindowSwitcherPopup = GObject.registerClass(
-    class WindowSwitcherPopup extends SwitcherPopup.SwitcherPopup {
+    class _WindowSwitcherPopup extends SwitcherPopup.SwitcherPopup {
         _init(windows) {
             super._init();
             this.reactive = false;

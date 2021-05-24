@@ -110,19 +110,32 @@ class ActorScrollHandler {
 
 class ExtensionModule {
     constructor() {
-        /** @type WindowSwitcherPopup */
+        /** @type {_WindowSwitcherPopup.constructor} */
         this.WindowSwitcherPopup = Me.imports.windowSwitcher.WindowSwitcherPopup;
-
-        /** @type {_PrefsSource} */
-        this._prefsSource = new Me.imports.prefsSource.PrefsSource(Me);
-
-        /** @type {_PrefsCompanion} */
-        this.PrefsCompanion = new Me.imports.prefsCompanion.PrefsCompanion(
-            this._prefsSource
-        );
 
         /** @type {function()[]} */
         this._signalDisconnectors = [];
+
+        /** @type {WindowSwitcherPopup} */
+        this._windowSwitcherPopup = null;
+
+        /** @type {WorkspaceSwitcherPopup.WorkspaceSwitcherPopup} */
+        this._workspacesSwitcherPopup = null;
+
+        /** @type {object} */
+        this._windowSwitchTimeoutHandle = null;
+
+        /** @type {object} */
+        this._workspaceSwitchTimeoutHandle = null;
+    }
+
+    enable() {
+        /** @type {_PrefsSource} */
+        this._prefsSource = new Me.imports.prefsSource.PrefsSource(Me);
+        /** @type {_PrefsCompanion} */
+        this._prefsCompanion = new Me.imports.prefsCompanion.PrefsCompanion(
+            this._prefsSource
+        );
 
         this._workspacesSwitcherHandler = new ActorScrollHandler(
             this._prefsSource,
@@ -135,17 +148,6 @@ class ExtensionModule {
             distance => this._switchWindow(distance)
         );
 
-        /** @type {WindowSwitcherPopup} */
-        this._windowSwitcherPopup = null;
-
-        /** @type {WorkspaceSwitcherPopup.WorkspaceSwitcherPopup} */
-        this._workspacesSwitcherPopup = null;
-
-        this._windowSwitchTimeoutHandle = null;
-        this._workspaceSwitchTimeoutHandle = null;
-    }
-
-    enable() {
         this._signalDisconnectors.push(
             this._prefsSource.trackChanges(() => {
                 if (!this._prefsSource.pickingActorPathAction.value) {
@@ -159,7 +161,7 @@ class ExtensionModule {
                     );
                 }
             }),
-            this.PrefsCompanion.run()
+            this._prefsCompanion.run()
         );
     }
 
@@ -179,7 +181,7 @@ class ExtensionModule {
             this._prefsSource.switcherVerticalMultiplier(switcher).value;
         handler.handleActor(
             anyOfSwitcherMultipliersIsSet
-                ? this.PrefsCompanion.findActor(
+                ? this._prefsCompanion.findActor(
                     this._prefsSource.switcherActorPath(switcher).value
                 )
                 : null,
