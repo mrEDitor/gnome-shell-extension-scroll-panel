@@ -39,7 +39,7 @@ $(INSTALL_DIR)/%.js : $(BUILD_DIR)/%.js
 	cp '$^' '$@'
 
 eslintrc-gjs.yml :
-	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-gjs.yml
+	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/main/lint/eslintrc-gjs.yml
 
 eslintrc-shell.yml :
-	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/master/lint/eslintrc-shell.yml
+	$(WGET) https://gitlab.gnome.org/GNOME/gnome-shell-extensions/-/raw/main/lint/eslintrc-shell.yml
