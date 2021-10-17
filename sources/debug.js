@@ -12,6 +12,7 @@ const Me = imports.misc.extensionUtils.getCurrentExtension();
 var module = new class DebugModule {
     /**
      * Log verbose message.
+     *
      * @param {string} message - Message to log.
      */
     logDebug(message) {
@@ -20,6 +21,7 @@ var module = new class DebugModule {
 
     /**
      * Add verbose step-in/step-out log messages to each method of module.
+     *
      * @param {object} modules - Object to add methods tracing to.
      */
     injectModulesTraceLogs(modules) {
@@ -32,6 +34,7 @@ var module = new class DebugModule {
          * Also Gnome Shell does not support Object.keys() on module list, but
          * supports foreach.
          * </p>
+         *
          * @type {string[]}
          */
         const moduleNames = [];
@@ -67,6 +70,7 @@ var module = new class DebugModule {
      * Wrap object constructor (`modules`[`moduleName`][`symbolName`]) way to
      * add verbose step-in/step-out log messages to each method of object
      * instance creating.
+     *
      * @param {object} modules - Modules accessor.
      * @param {string} moduleName - Module name.
      * @param {string} symbolName - Object name.
@@ -94,6 +98,7 @@ var module = new class DebugModule {
     /**
      * Add verbose step-in/step-out log messages to each method of object
      * instance.
+     *
      * @param {object} instance - Object to add methods tracing to.
      * @param {string} moduleName - Module name.
      * @param {string} symbolName - Object name.

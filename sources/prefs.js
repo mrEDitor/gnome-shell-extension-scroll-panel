@@ -6,6 +6,7 @@ const Gtk = imports.gi.Gtk;
 
 /**
  * Prefs widget tabs.
+ *
  * @param {string} id - Tab identifier.
  * @param {Gtk.Builder} uiBuilder - UI builder to use.
  * @param {PrefsSource} prefsSource - Preferences source module to use.
@@ -383,6 +384,7 @@ var UiBuilder = class _UiBuilder {
 
     /**
      * Update tab content according to interacted {@param tab}.
+     *
      * @param {PrefsTab|undefined} tab - Interacted tab, if any.
      */
     _updateTab(tab = undefined) {
@@ -445,6 +447,7 @@ var UiBuilder = class _UiBuilder {
 
     /**
      * Setup the widget for demonstration.
+     *
      * @returns {Gtk.Box} - Prefs widget in demo variant.
      */
     bindDemo() {
@@ -457,6 +460,7 @@ var UiBuilder = class _UiBuilder {
 
     /**
      * Setup the widget for extension.
+     *
      * @returns {Gtk.Box} - Prefs widget with extension bindings.
      */
     bindPrefs() {
@@ -498,7 +502,8 @@ var UiBuilder = class _UiBuilder {
 
     /**
      * Create Gettext localization helper with formatting abilities.
-     * @return {function(string, ...string[]): string} - Gettext localization
+     *
+     * @returns {function(string, ...string[]): string} - Gettext localization
      * helper with formatting abilities. The first method argument is message
      * body, the second is message variables to replace %s and %1$s with.
      * %s and %1$s notations should not be mixed.
@@ -545,6 +550,7 @@ function init() {
 
 /**
  * Build extension preferences widget with {@link UiBuilder.bindPrefs()}.
+ *
  * @returns {Gtk.Widget} - The preferences widget.
  */
 function buildPrefsWidget() {

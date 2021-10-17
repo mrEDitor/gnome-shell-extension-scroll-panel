@@ -25,6 +25,7 @@ var WindowSwitcherPopup = GObject.registerClass(
 
         /**
          * Try display switcher.
+         *
          * @param {number} activeIndex - 0-based index of element to highlight.
          * @param {number} timeout - Timeout (in milliseconds) before hiding of
          * the switcher.

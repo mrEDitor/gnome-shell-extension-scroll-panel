@@ -14,7 +14,6 @@ var Setting = GObject.registerClass(
      */
     class _Setting extends GObject.Object {
         /**
-         * @constructor
          * @param {Gio.Settings} source - Setting source.
          * @param {string} key - Setting key.
          * @param {T} defaultValue - Default setting value.
@@ -34,7 +33,8 @@ var Setting = GObject.registerClass(
          * Should be called before accessing value in any way in order to
          * register value fetching before other callbacks will be called.
          * Signal call order is guaranteed:
-         * https://developer.gnome.org/gobject/stable/gobject-Signals.html
+         * {@link https://developer.gnome.org/gobject/stable/gobject-Signals.html}
+         *
          * @returns {function()} - Tracking disposer callback. Should be called
          * to cleanup resources when setting is not needed anymore.
          */
@@ -74,6 +74,7 @@ var Setting = GObject.registerClass(
 
         /**
          * Subscribe a callback for setting value changes and call it initially.
+         *
          * @param {function(string, T)} callback - Value change callback
          * @returns {function()} - Callback for subscription cancellation.
          */
@@ -109,6 +110,7 @@ var PrefsSource = class _PrefsSource {
          * Path along the scene view to the actor to highlight.
          * The setting is used for extension-settings communication only and
          * intended to be empty when to setting widget is open.
+         *
          * @type {_Setting<string[]>}
          */
         this.highlightPath = this._createStringArraySetting('highlight-path');
@@ -118,6 +120,7 @@ var PrefsSource = class _PrefsSource {
          * should be a string array.
          * The setting is used for extension-settings communication only and
          * intended to be empty when no settings widget is open.
+         *
          * @type {_Setting<string>}
          */
         this.pickingActorPathAction = this._createStringSetting('picking-actor-path-action');
@@ -134,6 +137,7 @@ var PrefsSource = class _PrefsSource {
 
         /**
          * Cache for {@link _setting(key)}.
+         *
          * @type {object<string, _Setting>}
          */
         this._settings = {};
@@ -141,6 +145,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Path along the scene view to the actor to make it a scrollable switcher.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<string[]>} - Switcher actor path setting.
      */
@@ -153,6 +158,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Minimum width for scrollable widget actor.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<number>} - Switcher actor width setting.
      */
@@ -165,6 +171,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Content align for scrollable widget actor.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<string>} - Switcher actor align setting.
      */
@@ -177,6 +184,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Horizontal switching distance multiplier.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<number>} - Switcher horizontal multiplier setting.
      */
@@ -189,6 +197,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Vertical switching distance multiplier.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<number>} - Switcher vertical multiplier setting.
      */
@@ -201,6 +210,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Whether cyclic switching enabled.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<boolean>} - Cyclic switching setting.
      */
@@ -213,6 +223,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Whether switching should be visualized.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<boolean>} - Visualize switching setting.
      */
@@ -225,6 +236,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Timeout (in milliseconds) to ignore further scrolling after switching.
+     *
      * @param {string} action - Switcher action identifier.
      * @returns {_Setting<number>} - Switching timeout setting.
      */
@@ -246,6 +258,7 @@ var PrefsSource = class _PrefsSource {
 
     /**
      * Subscribe callback to any setting change and call callback initially.
+     *
      * @param {function()|undefined} callback - Callback for settings change.
      * @returns {function()} - Callback for unsubscription.
      */

@@ -3,6 +3,11 @@
 const { Clutter, Cogl, GObject, St } = imports.gi;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
+/**
+ * Log prefs warning message.
+ *
+ * @param {string} message - Message to log.
+ */
 function _logWarning(message) {
     log(`[${Me.metadata.uuid}][WRN] ${message}`);
 }
@@ -11,6 +16,7 @@ function _logWarning(message) {
  * Red border highlight effect for {@link Clutter} actors.
  * Based on Gnome Shell Looking Glass, you can find it at
  * {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/lookingGlass.js}
+ *
  * @type {ActorPicker.prototype.constructor}
  */
 const ActorPicker = GObject.registerClass(
@@ -117,6 +123,7 @@ var PrefsCompanion = class _PrefsCompanion {
 
     /**
      * Get path for an actor in stage view tree.
+     *
      * @param {Clutter.Actor} actor - Actor to get path for.
      * @returns {string[]} - Actor path.
      */
@@ -136,6 +143,7 @@ var PrefsCompanion = class _PrefsCompanion {
 
     /**
      * Find an actor by path in stage view tree. Returns null for empty path.
+     *
      * @param {string[]} path - Path of actor to find.
      * @returns {Clutter.Actor|null} - Demanded actor, if found.
      */
@@ -161,7 +169,7 @@ var PrefsCompanion = class _PrefsCompanion {
 
     /**
      * Run prefs widget shell-space companion.
-     * @param {_PrefsSource} PrefsSource - Prefs source instance to use..
+     *
      * @returns {function()} Companion stop callback.
      */
     run() {

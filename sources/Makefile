@@ -11,6 +11,9 @@ WGET ?= wget
 lint : eslintrc-gjs.yml eslintrc-shell.yml
 	$(ESLINT) .
 
+clean :
+	rm eslintrc-gjs.yml eslintrc-shell.yml || true
+
 build : $(BUILD_DIR)/metadata.json $(addprefix $(BUILD_DIR)/, $(SOURCE_FILES))
 
 $(BUILD_DIR)/debug.js :

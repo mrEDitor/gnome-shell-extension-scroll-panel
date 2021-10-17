@@ -65,6 +65,7 @@ all : clean build lint zip
 	$(MAKE) -C ui pngs BUILD_DIR='$(BUILD_DIR)'
 
 clean :
+	$(MAKE) -C sources clean BUILD_DIR='$(BUILD_DIR)'
 	rm -rf '$(BUILD_DIR)'
 	mkdir -p '$(BUILD_DIR)'
 

@@ -31,6 +31,7 @@ class ActorScrollHandler {
 
     /**
      * Subscribe for scrolling signals of specified actor.
+     *
      * @param {Clutter.Actor|null} actor - Actor to scroll signals of.
      * @param {number?} width - Fixed width to set for actor.
      * @param {string?} align - Align to set for actor.
@@ -309,6 +310,7 @@ class ExtensionModule {
 
 /**
  * Construct the extension main module instance.
+ *
  * @returns {ExtensionModule} - Extension main module.
  */
 function init() {
