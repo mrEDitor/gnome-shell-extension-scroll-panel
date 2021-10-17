@@ -14,7 +14,7 @@ Extension is highly configurable; defaults are:
 
 You can install the extension from [extensions.gnome.org](https://extensions.gnome.org/extension/4257/).
 
-Target Gnome version is Gnome Shell 40.
+Target Gnome versions are Gnome Shell 40+.
 
 ## Installation from scratch
 
