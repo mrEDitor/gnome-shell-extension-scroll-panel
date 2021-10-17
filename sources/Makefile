@@ -9,6 +9,7 @@ WGET ?= wget
 .PHONY: $(BUILD_DIR)/metadata.json $(BUILD_DIR)/debug.js
 
 lint : eslintrc-gjs.yml eslintrc-shell.yml
+	npm install
 	$(ESLINT) .
 
 clean :
