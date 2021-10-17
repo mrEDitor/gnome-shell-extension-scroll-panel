@@ -1,5 +1,5 @@
 SOURCE_FILES := $(wildcard *.js)
-BUILD_METADATA ?= git-$(shell git rev-parse --short HEAD)
+BUILD_METADATA ?= $(shell if [[ `git status --porcelain --untracked-files=no` ]]; then echo 'custom'; else echo "git-`git rev-parse --short HEAD`"; fi)
 
 ESLINT ?= eslint
 JQ ?= jq

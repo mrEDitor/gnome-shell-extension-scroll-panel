@@ -176,7 +176,7 @@ var UiBuilder = class _UiBuilder {
         const gettext = this._gettext();
         for (const aboutLine of [
             `<span size="larger">${this._metadata.name} ${this._metadata.version || ''}</span>`,
-            `<span size="smaller">${this._metadata.uuid} v${this._metadata['semantic-version']}</span>`,
+            `I<span size="smaller">${this._metadata.uuid} v${this._metadata['semantic-version']}</span>`,
             `<span>${gettext('by <a href="%s">Eduard Minasyan</a>', 'https://mrEDitor.github.io/')}</span>`,
             `<span>${gettext('Homepage: <a href="%1$s">%1$s</a>', this._metadata.url)}</span>`,
             `<span>${gettext(
@@ -192,7 +192,8 @@ var UiBuilder = class _UiBuilder {
                 marginEnd: 15,
                 marginTop: 5,
                 marginBottom: 5,
-                label: aboutLine,
+                label: aboutLine[0] === 'I' ? aboutLine.substring(1) : aboutLine,
+                selectable: aboutLine[0] === 'I',
                 useMarkup: true,
                 wrap: true,
             }));

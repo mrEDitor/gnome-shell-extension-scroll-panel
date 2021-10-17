@@ -154,3 +154,9 @@ msgstr ""
 #: ../ui/prefs.ui:371
 msgid "Should the switcher be shown because of the action."
 msgstr ""
+
+msgid ""
+"This extension allows switching between windows or workspaces by "
+"scrolling Gnome Shell topbar with mouse (both in overview and workspace "
+"modes)."
+msgstr ""
