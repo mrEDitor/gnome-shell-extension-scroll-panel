@@ -77,10 +77,6 @@ class ActorScrollHandler {
     }
 
     _switch(event) {
-        if (event.is_pointer_emulated()) {
-            return Clutter.EVENT_PROPAGATE;
-        }
-
         const horizontalMultiplier = this._prefsSource.switcherHorizontalMultiplier(this._action);
         const verticalMultiplier = this._prefsSource.switcherVerticalMultiplier(this._action);
         switch (event.get_scroll_direction()) {
@@ -92,20 +88,21 @@ class ActorScrollHandler {
             return this._onSwitch(-verticalMultiplier.value);
         case Clutter.ScrollDirection.DOWN:
             return this._onSwitch(verticalMultiplier.value);
-        case Clutter.ScrollDirection.SMOOTH: {
+        case Clutter.ScrollDirection.SMOOTH:
             const [x, y] = event.get_scroll_delta();
-            return this._onSwitch(
-                Math.trunc(
-                    Math.abs(x) > Math.abs(y)
-                        ? x * horizontalMultiplier.value
-                        : y * verticalMultiplier.value
-                )
-            );
+            if (x !== 0 || y !== 0) {
+                return this._onSwitch(
+                    Math.trunc(
+                        Math.abs(x) > Math.abs(y)
+                            ? x * horizontalMultiplier.value
+                            : y * verticalMultiplier.value
+                    )
+                );
+			}
         }
-        default:
-            // Switcher should absorb unknown gestures during timeout.
-            return this._onSwitch(0);
-        }
+
+		// Switcher should absorb unknown gestures during timeout.
+        return this._onSwitch(0);
     }
 }
 
@@ -196,11 +193,11 @@ class ExtensionModule {
      * @returns {boolean} - Whether switching performed.
      */
     _switchWindow(distance) {
-        if (!distance) {
-            return false;
-        }
         if (this._windowSwitchTimeoutHandle) {
             return true;
+        }
+        if (!distance) {
+            return false;
         }
 
         const switcher = this._prefsSource.windowsSwitcher;
@@ -256,11 +253,11 @@ class ExtensionModule {
      * @returns {boolean} - Whether switching performed.
      */
     _switchWorkspace(distance) {
-        if (!distance) {
-            return false;
-        }
         if (this._workspaceSwitchTimeoutHandle) {
             return true;
+        }
+        if (!distance) {
+            return false;
         }
 
         const switcher = this._prefsSource.workspacesSwitcher;
