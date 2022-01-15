@@ -50,14 +50,29 @@
         </child>
         <child>
             <object class="GtkBox" id="about-box">
+				<property name="hexpand">true</property>
+				<property name="vexpand">true</property>
                 <property name="margin-start">10</property>
                 <property name="margin-end">10</property>
                 <property name="margin-top">10</property>
                 <property name="margin-bottom">10</property>
-                <property name="valign">center</property>
-                <property name="hexpand">true</property>
-                <property name="vexpand">true</property>
-                <property name="orientation">vertical</property>
+				<property name="orientation">vertical</property>
+				<child>
+					<object class="GtkBox" id="about-box-content">
+						<property name="hexpand">true</property>
+						<property name="vexpand">true</property>
+						<property name="orientation">vertical</property>
+						<property name="valign">center</property>
+					</object>
+				</child>
+				<child>
+					<object class="GtkButton" id="reset-settings">
+						<property name="css-classes">destructive-action</property>
+						<property name="label" translatable="yes">Reset settings</property>
+						<property name="halign">end</property>
+						<property name="valign">end</property>
+					</object>
+				</child>
             </object>
         </child>
         <child>

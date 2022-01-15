@@ -115,7 +115,9 @@ var UiBuilder = class _UiBuilder {
         this._widget = this._builder.get_object('content');
 
         this._tabChooserHint = this._builder.get_object('tab-chooser-hint');
+        this._resetSettings = this._builder.get_object('reset-settings');
         this._aboutBox = this._builder.get_object('about-box');
+        this._aboutBoxContent = this._builder.get_object('about-box-content');
         this._scrollBox = this._builder.get_object('scroll-box');
         this._settingsBox = this._builder.get_object('settings-box');
         this._aboutTab = this._builder.get_object('about');
@@ -188,7 +190,7 @@ var UiBuilder = class _UiBuilder {
             '',
             `<span>${gettext(this._metadata.description)}</span>`,
         ]) {
-            this._aboutBox.append(new Gtk.Label({
+            this._aboutBoxContent.append(new Gtk.Label({
                 marginStart: 15,
                 marginEnd: 15,
                 marginTop: 5,
@@ -199,6 +201,7 @@ var UiBuilder = class _UiBuilder {
                 wrap: true,
             }));
         }
+        this._resetSettings.connect('clicked', () => this._prefsSource.reset(a => this._resetSettings.set_label(a)));
 
         // bind actor highlight on hover
         const motionController = new Gtk.EventControllerMotion();
@@ -390,7 +393,7 @@ var UiBuilder = class _UiBuilder {
     _updateTab(tab = undefined) {
         this._tabChooserHint.revealed = tab === undefined;
         this._aboutBox.visible = tab === undefined;
-        this._settingsBox.visible =  tab !== undefined;
+        this._scrollBox.visible = tab !== undefined;
 
         this._prefsSource.highlightPath.value = [];
         this._prefsSource.pickingActorPathAction.value = '';

@@ -1,6 +1,7 @@
 LOCALE_NAMES := $(basename $(wildcard *.po))
 LOCALE_FILES := $(addsuffix /LC_MESSAGES/$(DOMAIN).mo, $(LOCALE_NAMES))
 
+JQ ?= jq
 MSGFMT ?= msgfmt
 XGETTEXT ?= xgettext --join-existing
 MSGMERGE ?= msgmerge --update --previous
@@ -14,6 +15,9 @@ endif
 
 messages.pot : $(wildcard ../sources/*.js) $(wildcard ../ui/*.ui)
 	$(eval TEMP_POT := $(shell mktemp "XXXXXXX.diff.pot"))
+	echo -n 'msgid ' >> $(TEMP_POT)
+	$(JQ) '.["description"]' ../sources/metadata.json >> $(TEMP_POT)
+	echo 'msgstr ""' >> $(TEMP_POT)
 	$(XGETTEXT) --language=JavaScript  ../sources/*.js --output='$(TEMP_POT)'
 	$(XGETTEXT) --language=Glade ../ui/*.ui --output='$(TEMP_POT)'
 	$(MSGMERGE) messages.pot '$(TEMP_POT)'

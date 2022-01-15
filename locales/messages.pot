@@ -1,9 +1,8 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-23 03:25+0300\n"
+"POT-Creation-Date: 2022-01-15 16:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,18 +11,23 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../sources/prefs.js:180
+msgid ""
+"This extension allows switching between windows or workspaces by scrolling "
+"Gnome Shell topbar with mouse (both in overview and workspace modes)."
+msgstr ""
+
+#: ../sources/prefs.js:183
 #, javascript-format
 msgid "by <a href=\"%s\">Eduard Minasyan</a>"
 msgstr ""
 
-#: ../sources/prefs.js:181
+#: ../sources/prefs.js:184
 #, javascript-format
 msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
 msgstr ""
 
 # this is expected to be used for translator's credits
-#: ../sources/prefs.js:184
+#: ../sources/prefs.js:187
 #, javascript-format
 msgid ""
 "Seems like you are using unlocalized extension, would you like to <a href="
@@ -46,11 +50,15 @@ msgstr ""
 msgid "Choose a feature to configure above."
 msgstr ""
 
-#: ../ui/prefs.ui:88
+#: ../ui/prefs.ui:71
+msgid "Reset settings"
+msgstr ""
+
+#: ../ui/prefs.ui:103
 msgid "Panel to scroll"
 msgstr ""
 
-#: ../ui/prefs.ui:90
+#: ../ui/prefs.ui:105
 msgid ""
 "Choose a panel to scroll for the selected action. If the extension is "
 "enabled, the current choice is outlined in a colored box while the mouse "
@@ -60,104 +68,98 @@ msgid ""
 "choose hierarchy level, such as the whole bar instead of the clock box only."
 msgstr ""
 
-#: ../ui/prefs.ui:122
+#: ../ui/prefs.ui:137
 msgid "Panel fixed width"
 msgstr ""
 
-#: ../ui/prefs.ui:124
+#: ../ui/prefs.ui:139
 msgid "Set fixed width for the scrollable panel."
 msgstr ""
 
-#: ../ui/prefs.ui:153
+#: ../ui/prefs.ui:168
 msgid "px"
 msgstr ""
 
-#: ../ui/prefs.ui:166
+#: ../ui/prefs.ui:181
 msgid "Panel content align"
 msgstr ""
 
-#: ../ui/prefs.ui:168
+#: ../ui/prefs.ui:183
 msgid "Set content align for the scrollable panel."
 msgstr ""
 
-#: ../ui/prefs.ui:182
+#: ../ui/prefs.ui:197
 msgid "System"
 msgstr ""
 
-#: ../ui/prefs.ui:189
+#: ../ui/prefs.ui:204
 msgid "Start"
 msgstr ""
 
-#: ../ui/prefs.ui:196
+#: ../ui/prefs.ui:211
 msgid "Center"
 msgstr ""
 
-#: ../ui/prefs.ui:203
+#: ../ui/prefs.ui:218
 msgid "End"
 msgstr ""
 
-#: ../ui/prefs.ui:216
+#: ../ui/prefs.ui:231
 msgid "Horizontal scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:218
+#: ../ui/prefs.ui:233
 msgid "Whether horizontal scrolling should cause forward or back step."
 msgstr ""
 
-#: ../ui/prefs.ui:232 ../ui/prefs.ui:275
+#: ../ui/prefs.ui:247 ../ui/prefs.ui:290
 msgid "Off"
 msgstr ""
 
-#: ../ui/prefs.ui:239 ../ui/prefs.ui:282
+#: ../ui/prefs.ui:254 ../ui/prefs.ui:297
 msgid "Direct"
 msgstr ""
 
-#: ../ui/prefs.ui:246 ../ui/prefs.ui:289
+#: ../ui/prefs.ui:261 ../ui/prefs.ui:304
 msgid "Inverted"
 msgstr ""
 
-#: ../ui/prefs.ui:259
+#: ../ui/prefs.ui:274
 msgid "Vertical scrolling"
 msgstr ""
 
-#: ../ui/prefs.ui:261
+#: ../ui/prefs.ui:276
 msgid "Whether vertical scrolling should cause forward or back step."
 msgstr ""
 
-#: ../ui/prefs.ui:302
+#: ../ui/prefs.ui:317
 msgid "Switching timeout"
 msgstr ""
 
-#: ../ui/prefs.ui:304
+#: ../ui/prefs.ui:319
 msgid ""
 "Timeout for switching event: further scrolling events in this timeout will "
 "be ignored."
 msgstr ""
 
-#: ../ui/prefs.ui:331
+#: ../ui/prefs.ui:346
 msgid "ms"
 msgstr ""
 
-#: ../ui/prefs.ui:343
+#: ../ui/prefs.ui:358
 msgid "Cyclic switching"
 msgstr ""
 
-#: ../ui/prefs.ui:345
+#: ../ui/prefs.ui:360
 msgid ""
 "Should the switcher cycle, i.e. switch between first and last elements when "
 "switching out-of-list."
 msgstr ""
 
-#: ../ui/prefs.ui:369
+#: ../ui/prefs.ui:384
 msgid "Visualize"
 msgstr ""
 
-#: ../ui/prefs.ui:371
+#: ../ui/prefs.ui:386
 msgid "Should the switcher be shown because of the action."
-msgstr ""
-
-msgid ""
-"This extension allows switching between windows or workspaces by "
-"scrolling Gnome Shell topbar with mouse (both in overview and workspace "
-"modes)."
 msgstr ""
