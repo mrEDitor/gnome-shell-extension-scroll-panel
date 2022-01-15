@@ -89,19 +89,19 @@ class ActorScrollHandler {
         case Clutter.ScrollDirection.DOWN:
             return this._onSwitch(verticalMultiplier.value);
         case Clutter.ScrollDirection.SMOOTH:
+        {
             const [x, y] = event.get_scroll_delta();
             if (x !== 0 || y !== 0) {
-                return this._onSwitch(
-                    Math.trunc(
-                        Math.abs(x) > Math.abs(y)
-                            ? x * horizontalMultiplier.value
-                            : y * verticalMultiplier.value
-                    )
-                );
-			}
+                return this._onSwitch(Math.trunc(
+                    Math.abs(x) > Math.abs(y)
+                        ? x * horizontalMultiplier.value
+                        : y * verticalMultiplier.value
+                ));
+            }
+        }
         }
 
-		// Switcher should absorb unknown gestures during timeout.
+        // Switcher should absorb unknown gestures during timeout.
         return this._onSwitch(0);
     }
 }

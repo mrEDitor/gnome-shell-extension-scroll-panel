@@ -146,10 +146,10 @@ var PrefsSource = class _PrefsSource {
     /**
      * Reset all settings.
      */
-    reset(log) {
-		for (const key of this._source.list_keys()) {
+    reset() {
+        for (const key of this._source.list_keys()) {
             this._source.reset(key);
-	    }
+        }
     }
 
     /**
