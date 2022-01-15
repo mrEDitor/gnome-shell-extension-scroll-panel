@@ -1,0 +1,175 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-23 03:25+0300\n"
+"PO-Revision-Date: 2021-12-13 22:30+0300\n"
+"Last-Translator: recepchakan\n"
+"Language-Team: \n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../sources/prefs.js:180
+#, javascript-format
+msgid "by <a href=\"%s\">Eduard Minasyan</a>"
+msgstr ""
+
+#: ../sources/prefs.js:181
+#, javascript-format
+msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
+msgstr "Anasayfa: <a href=\"%1$s\">%1$s</a>"
+
+#: ../sources/prefs.js:184
+#, javascript-format
+msgid ""
+"Seems like you are using unlocalized extension, would you like to <a href="
+"\"%s\">localize it</a>?"
+msgstr "Leave your suggestions and localizations on the project page!"
+
+#: ../ui/prefs.ui:11
+msgid "About"
+msgstr "Hakkında"
+
+#: ../ui/prefs.ui:17
+msgid "Switching workspaces"
+msgstr "Çalışma alanları arasında geçiş"
+
+#: ../ui/prefs.ui:23
+msgid "Switching windows"
+msgstr "Pencereler arasında geçiş"
+
+#: ../ui/prefs.ui:45
+msgid "Choose a feature to configure above."
+msgstr "Yukarıdan ayarlamak istediğiniz özellik seçin. "
+
+#: ../ui/prefs.ui:88
+msgid "Panel to scroll"
+msgstr "Panelde kaydırma"
+
+#: ../ui/prefs.ui:90
+msgid ""
+"Choose a panel to scroll for the selected action. If the extension is "
+"enabled, the current choice is outlined in a colored box while the mouse "
+"pointer is over the button. Yellow box means that the highlighted panel "
+"currently does not have any event listeners and may be inaccessible because "
+"of other actors rendered over it. Use scrolling when picking an actor to "
+"choose hierarchy level, such as the whole bar instead of the clock box only."
+msgstr ""
+"Seçilen eylem için kaydırılacak bir panel seçin. Uzantı etkinleştirilirse,"
+"fare işaretçisi düğmenin üzerindeyken geçerli seçim renkli bir kutuda özetlenir."
+"Sarı kutu, vurgulanan panelin şu anda herhangi bir olay dinleyicisine sahip olmadığı"
+"ve üzerinde oluşturulan diğer aktörler nedeniyle erişilemeyebileceği anlamına gelir."
+"Yalnızca saat kutusu yerine tüm çubuk gibi hiyerarşi düzeyini seçmek için bir aktör"
+"seçerken kaydırmayı kullanın." 
+
+#: ../ui/prefs.ui:122
+msgid "Panel fixed width"
+msgstr "Sabit panel genişliği"
+
+#: ../ui/prefs.ui:124
+msgid "Set fixed width for the scrollable panel."
+msgstr "Kaydırma alanının genişliğini sabitlemek için."
+
+#: ../ui/prefs.ui:153
+msgid "px"
+msgstr ""
+
+#: ../ui/prefs.ui:166
+msgid "Panel content align"
+msgstr "Panel içeriğini Hızala"
+
+#: ../ui/prefs.ui:168
+msgid "Set content align for the scrollable panel."
+msgstr "Kaydırılabilir panel içeriğini hizalamak için."
+
+#: ../ui/prefs.ui:182
+msgid "System"
+msgstr "Sistem"
+
+#: ../ui/prefs.ui:189
+msgid "Start"
+msgstr "Başlangıç"
+
+#: ../ui/prefs.ui:196
+msgid "Center"
+msgstr "Merkez"
+
+#: ../ui/prefs.ui:203
+msgid "End"
+msgstr "Son"
+
+#: ../ui/prefs.ui:216
+msgid "Horizontal scrolling"
+msgstr "Dikey kaydırma"
+
+#: ../ui/prefs.ui:218
+msgid "Whether horizontal scrolling should cause forward or back step."
+msgstr "Yatay kaydırma davranışları"
+
+#: ../ui/prefs.ui:232 ../ui/prefs.ui:275
+msgid "Off"
+msgstr "Kapalı"
+
+#: ../ui/prefs.ui:239 ../ui/prefs.ui:282
+msgid "Direct"
+msgstr "Direkt"
+
+#: ../ui/prefs.ui:246 ../ui/prefs.ui:289
+msgid "Inverted"
+msgstr "Ters"
+
+#: ../ui/prefs.ui:259
+msgid "Vertical scrolling"
+msgstr "Yatay kaydırma"
+
+#: ../ui/prefs.ui:261
+msgid "Whether vertical scrolling should cause forward or back step."
+msgstr "Dikey kaydırma davranışları"
+
+#: ../ui/prefs.ui:302
+msgid "Switching timeout"
+msgstr "Geçişler arası zaman aşımı"
+
+#: ../ui/prefs.ui:304
+msgid ""
+"Timeout for switching event: further scrolling events in this timeout will "
+"be ignored."
+msgstr ""
+"Bir aksiyon sonrasıda ki bekleme süresi. Bu süre sonuna kadar ki eylemler"
+"yok sayılacaktır."
+
+#: ../ui/prefs.ui:331
+msgid "ms"
+msgstr ""
+
+#: ../ui/prefs.ui:343
+msgid "Cyclic switching"
+msgstr "Döngüseleştir"
+
+#: ../ui/prefs.ui:345
+msgid ""
+"Should the switcher cycle, i.e. switch between first and last elements when "
+"switching out-of-list."
+msgstr ""
+"Sonsuz döngüyü sağlar. Son kısımdan başa atlar."
+"Veya sondan başa"
+
+#: ../ui/prefs.ui:369
+msgid "Visualize"
+msgstr "Görselleştir"
+
+#: ../ui/prefs.ui:371
+msgid "Should the switcher be shown because of the action."
+msgstr "Önizleme penceresi bu ayar ile görüntülenir."
+
+msgid ""
+"This extension allows switching between windows or workspaces by "
+"scrolling Gnome Shell topbar with mouse (both in overview and workspace "
+"modes)."
+msgstr ""
+"Bu eklenti, fare panel üzerinde iken fare tekerleği ile pencereler ve"
+"çalışma alanları arasında kaydırarak gezinmeyi sağlar."
+"(Genel bakış ve çalışma alanlarının ikisinde de çalışır.)"
