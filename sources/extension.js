@@ -77,6 +77,10 @@ class ActorScrollHandler {
     }
 
     _switch(event) {
+        if (event.is_pointer_emulated()) {
+            return Clutter.EVENT_PROPAGATE;
+        }
+
         const horizontalMultiplier = this._prefsSource.switcherHorizontalMultiplier(this._action);
         const verticalMultiplier = this._prefsSource.switcherVerticalMultiplier(this._action);
         switch (event.get_scroll_direction()) {
@@ -284,18 +288,21 @@ class ExtensionModule {
             });
         }
 
+        const displayWorkspacesSwitcherPopup = imports.misc.config.PACKAGE_VERSION >= '42'
+            ? (direction, index) => this._workspacesSwitcherPopup?.display(index)
+            : (direction, index) => this._workspacesSwitcherPopup?.display(direction, index);
         if (distance < 0) {
             // such that `modBallast > abs(distance) && modBallast % count == 0`
             const modBallast = Math.abs(distance) * count;
             index = cycle
                 ? (index + distance + modBallast) % count
                 : Math.max(0, index + distance);
-            this._workspacesSwitcherPopup?.display(Meta.MotionDirection.LEFT, index);
+            displayWorkspacesSwitcherPopup(Meta.MotionDirection.LEFT, index);
         } else {
             index = cycle
                 ? (index + distance) % count
                 : Math.min(index + distance, count - 1);
-            this._workspacesSwitcherPopup?.display(Meta.MotionDirection.RIGHT, index);
+            displayWorkspacesSwitcherPopup(Meta.MotionDirection.RIGHT, index);
         }
 
         global.workspaceManager

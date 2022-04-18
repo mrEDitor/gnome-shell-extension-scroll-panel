@@ -262,7 +262,6 @@ var PrefsSource = class _PrefsSource {
                 switcherAccessor.call(this, action).useDefault();
             }
         }
-        return () => {};
     }
 
     /**

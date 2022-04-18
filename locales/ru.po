@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-15 16:35+0300\n"
+"POT-Creation-Date: 2022-04-19 01:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,17 +20,17 @@ msgstr ""
 "прокрутки верхней панели Gnome Shell колесиком мыши (как в режиме обзора, "
 "так и при работе)."
 
-#: ../sources/prefs.js:183
+#: ../sources/prefs.js:181
 #, javascript-format
 msgid "by <a href=\"%s\">Eduard Minasyan</a>"
 msgstr "Автор: <a href=\"%s\">Эдуард Минасян</a>"
 
-#: ../sources/prefs.js:184
+#: ../sources/prefs.js:182
 #, javascript-format
 msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
 msgstr "Домашняя страница: <a href=\"%1$s\">%1$s</a>"
 
-#: ../sources/prefs.js:187
+#: ../sources/prefs.js:185
 #, javascript-format
 msgid ""
 "Seems like you are using unlocalized extension, would you like to <a href="
@@ -38,120 +38,113 @@ msgid ""
 msgstr ""
 "Оставляйте свои предложения по доработке и локализации на странице проекта!"
 
-#: ../ui/prefs.ui:11
-msgid "About"
-msgstr "О расширении"
-
-#: ../ui/prefs.ui:17
-msgid "Switching workspaces"
-msgstr "Переключение рабочих мест"
-
-#: ../ui/prefs.ui:23
-msgid "Switching windows"
-msgstr "Переключение окон"
-
-#: ../ui/prefs.ui:45
-msgid "Choose a feature to configure above."
-msgstr "Выберите настраиваемое действие выше"
-
-#: ../ui/prefs.ui:71
+#: ../ui/prefs.ui:33
 msgid "Reset settings"
 msgstr "Сбросить настройки"
 
-#: ../ui/prefs.ui:103
+#: ../ui/prefs.ui:42
+msgid "About"
+msgstr "О расширении"
+
+#: ../ui/prefs.ui:67
 msgid "Panel to scroll"
 msgstr "Панель для прокрутки"
 
-#: ../ui/prefs.ui:105
+#: ../ui/prefs.ui:69
 msgid ""
 "Choose a panel to scroll for the selected action. If the extension is "
 "enabled, the current choice is outlined in a colored box while the mouse "
-"pointer is over the button. Yellow box means that the highlighted panel "
-"currently does not have any event listeners and may be inaccessible because "
-"of other actors rendered over it. Use scrolling when picking an actor to "
-"choose hierarchy level, such as the whole bar instead of the clock box only."
+"pointer is over the button."
 msgstr ""
 "Выберите панель, которая будет выполнять настраиваемое действие при "
 "прокрутке. Если расширение активно, текущая выбранная панель будет обведена "
-"цветной рамкой, пока указатель мыши находится на кнопке выбора. Жёлтая рамка "
-"показывает, что выбранная панель ещё не имеет обработчиков событий и может "
-"быть недоступной для прокрутки, если поверх неё отрисованы другие элементы "
-"интерфейса. Для изменения уровня иерархии во  время выбора панели (например, "
-"выбора между часами и всей панелью) используйте прокрутку."
+"цветной рамкой, пока указатель мыши находится на кнопке выбора."
 
-#: ../ui/prefs.ui:137
+#: ../ui/prefs.ui:94
+msgid ""
+"Use scrolling when picking an actor to choose hierarchy level, such as the "
+"whole bar instead of the clock box only. Yellow box means that the "
+"highlighted panel currently does not have any event listeners and may be "
+"inaccessible because of other actors rendered over it."
+msgstr ""
+"Для изменения уровня иерархии во время выбора панели (например, выбора между "
+"часами и всей панелью) используйте прокрутку. Жёлтая рамка показывает, что "
+"выбранная панель ещё не имеет обработчиков событий и может быть недоступной "
+"для прокрутки, если поверх неё отрисованы другие элементы интерфейса."
+
+#: ../ui/prefs.ui:117
 msgid "Panel fixed width"
 msgstr "Фиксированная ширина панели"
 
-#: ../ui/prefs.ui:139
+#: ../ui/prefs.ui:119
 msgid "Set fixed width for the scrollable panel."
 msgstr "Фиксированная ширина, до которой будет расширена выбранная панель."
 
-#: ../ui/prefs.ui:168
+#: ../ui/prefs.ui:148
 msgid "px"
 msgstr ""
 
-#: ../ui/prefs.ui:181
+#: ../ui/prefs.ui:161
 msgid "Panel content align"
 msgstr "Выравнивание содержимого панели"
 
-#: ../ui/prefs.ui:183
+#: ../ui/prefs.ui:163
 msgid "Set content align for the scrollable panel."
 msgstr "Устанавливает режим выравнивания содержимого внутри выбранной панели."
 
-#: ../ui/prefs.ui:197
+#: ../ui/prefs.ui:177
 msgid "System"
 msgstr "Системное"
 
-#: ../ui/prefs.ui:204
+#: ../ui/prefs.ui:184
 msgid "Start"
 msgstr "С начала"
 
-#: ../ui/prefs.ui:211
+#: ../ui/prefs.ui:191
 msgid "Center"
 msgstr "По центру"
 
-#: ../ui/prefs.ui:218
+#: ../ui/prefs.ui:198
 msgid "End"
 msgstr "С конца"
 
-#: ../ui/prefs.ui:231
+#: ../ui/prefs.ui:211
 msgid "Horizontal scrolling"
 msgstr "Горизонтальная прокрутка"
 
-#: ../ui/prefs.ui:233
+#: ../ui/prefs.ui:213
 msgid "Whether horizontal scrolling should cause forward or back step."
 msgstr ""
 "Должна ли горизонтальная прокрутка восприниматься как переключение вперёд "
 "или назад."
 
-#: ../ui/prefs.ui:247 ../ui/prefs.ui:290
+#: ../ui/prefs.ui:227 ../ui/prefs.ui:270
 msgid "Off"
 msgstr "Отключена"
 
-#: ../ui/prefs.ui:254 ../ui/prefs.ui:297
+#: ../ui/prefs.ui:234 ../ui/prefs.ui:277
 msgid "Direct"
 msgstr "Прямая"
 
-#: ../ui/prefs.ui:261 ../ui/prefs.ui:304
+#: ../ui/prefs.ui:241 ../ui/prefs.ui:284
 msgid "Inverted"
 msgstr "Обратная"
 
-#: ../ui/prefs.ui:274
+#: ../ui/prefs.ui:254
 msgid "Vertical scrolling"
 msgstr "Вертикальная прокрутка"
 
-#: ../ui/prefs.ui:276
+#: ../ui/prefs.ui:256
 msgid "Whether vertical scrolling should cause forward or back step."
 msgstr ""
 "Должна ли вертикальная прокрутка восприниматься как переключение вперёд или "
 "назад."
 
-#: ../ui/prefs.ui:317
+#: ../ui/prefs.ui:297
 msgid "Switching timeout"
 msgstr "Задержка следующего переключения"
 
-#: ../ui/prefs.ui:319
+#: ../ui/prefs.ui:299
 msgid ""
 "Timeout for switching event: further scrolling events in this timeout will "
 "be ignored."
@@ -159,15 +152,15 @@ msgstr ""
 "Задержка следующего переключения: до её истечения последующие события "
 "прокруткибудут проигнорированы."
 
-#: ../ui/prefs.ui:346
+#: ../ui/prefs.ui:326
 msgid "ms"
 msgstr ""
 
-#: ../ui/prefs.ui:358
+#: ../ui/prefs.ui:338
 msgid "Cyclic switching"
 msgstr "Циклическая прокрутка"
 
-#: ../ui/prefs.ui:360
+#: ../ui/prefs.ui:340
 msgid ""
 "Should the switcher cycle, i.e. switch between first and last elements when "
 "switching out-of-list."
@@ -175,10 +168,18 @@ msgstr ""
 "Должна ли прокрутка зацикливаться, т.е. переключаться между первым и "
 "последнимэлементами при выходе за границы списка элементов."
 
-#: ../ui/prefs.ui:384
+#: ../ui/prefs.ui:364
 msgid "Visualize"
 msgstr "Визуализация"
 
-#: ../ui/prefs.ui:386
+#: ../ui/prefs.ui:366
 msgid "Should the switcher be shown because of the action."
 msgstr "Должно ли действие быть визуализировано всплывающим переключателем."
+
+#: ../ui/prefs.ui:389
+msgid "Switching workspaces"
+msgstr "Переключение рабочих мест"
+
+#: ../ui/prefs.ui:400
+msgid "Switching windows"
+msgstr "Переключение окон"

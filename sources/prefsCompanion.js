@@ -1,6 +1,7 @@
 /* exported PrefsCompanion */
 
 const { Clutter, Cogl, GObject, St } = imports.gi;
+const { main: Main } = imports.ui;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 /**
@@ -15,7 +16,7 @@ function _logWarning(message) {
 /**
  * Red border highlight effect for {@link Clutter} actors.
  * Based on Gnome Shell Looking Glass, you can find it at
- * {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/lookingGlass.js}
+ * {@link https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/42.0/js/ui/lookingGlass.js}
  *
  * @type {ActorPicker.prototype.constructor}
  */
@@ -110,6 +111,7 @@ var PrefsCompanion = class _PrefsCompanion {
         this._pointerDevice = seat.get_pointer();
 
         this._eventHandler = new St.BoxLayout({ reactive: true });
+        Main.uiGroup.add_actor(this._eventHandler);
         this._eventHandler.connect('button-press-event', () => {
             this._onActorPicked();
         });
@@ -262,7 +264,12 @@ var PrefsCompanion = class _PrefsCompanion {
     }
 
     _startPickingActor() {
-        this._pointerDevice.grab(this._eventHandler);
+        try {
+            // Since Gnome 42
+            this._grab = global.stage.grab(this._eventHandler);
+        } catch {
+            this._pointerDevice.grab(this._eventHandler);
+        }
     }
 
     _onActorPicked() {
@@ -273,7 +280,13 @@ var PrefsCompanion = class _PrefsCompanion {
     }
 
     _stopPickingActor() {
-        this._pointerDevice.ungrab();
+        if (this._grab) {
+            // since Gnome 42
+            this._grab.dismiss();
+        } else if (this._pointerDevice.ungrab) {
+            this._pointerDevice.ungrab();
+        }
+
         this._prefsSource.highlightPath.value = [];
     }
 };
