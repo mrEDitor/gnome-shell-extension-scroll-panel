@@ -78,7 +78,13 @@ class ActorScrollHandler {
 
     _switch(event) {
         if (event.is_pointer_emulated()) {
-            return Clutter.EVENT_PROPAGATE;
+            /*
+             * WORKAROUND#19: accept any scrolling events, including both:
+             * - first one after targeting;
+             * - volume indicator (and other scrollable actors on the panel).
+             * Must not be used as main solution, see #20.
+             */
+            // return Clutter.EVENT_PROPAGATE;
         }
 
         const horizontalMultiplier = this._prefsSource.switcherHorizontalMultiplier(this._action);
