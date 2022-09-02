@@ -12,7 +12,7 @@ export async function hasChanges() {
 export async function hash(workingDir) {
     try {
         const stdout = await git(
-            ['rev-pars1e', '--short', 'HEAD'],
+            ['rev-parse', '--short', 'HEAD'],
             { workingDir }
         );
         return stdout.trim();
