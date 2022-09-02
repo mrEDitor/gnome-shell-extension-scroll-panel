@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-19 01:06+0300\n"
+"POT-Creation-Date: 2022-08-30 09:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -20,37 +20,37 @@ msgstr ""
 "прокрутки верхней панели Gnome Shell колесиком мыши (как в режиме обзора, "
 "так и при работе)."
 
-#: ../sources/prefs.js:181
+#: sources/prefs.js:181
 #, javascript-format
 msgid "by <a href=\"%s\">Eduard Minasyan</a>"
 msgstr "Автор: <a href=\"%s\">Эдуард Минасян</a>"
 
-#: ../sources/prefs.js:182
+#: sources/prefs.js:182
 #, javascript-format
 msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
 msgstr "Домашняя страница: <a href=\"%1$s\">%1$s</a>"
 
-#: ../sources/prefs.js:185
+#: sources/prefs.js:185
 #, javascript-format
 msgid ""
-"Seems like you are using unlocalized extension, would you like to <a href="
-"\"%s\">localize it</a>?"
+"Seems like you are using unlocalized extension, would you like to <a "
+"href=\"%s\">localize it</a>?"
 msgstr ""
 "Оставляйте свои предложения по доработке и локализации на странице проекта!"
 
-#: ../ui/prefs.ui:33
+#: sources/prefs.ui:33
 msgid "Reset settings"
 msgstr "Сбросить настройки"
 
-#: ../ui/prefs.ui:42
+#: sources/prefs.ui:42
 msgid "About"
 msgstr "О расширении"
 
-#: ../ui/prefs.ui:67
+#: sources/prefs.ui:67
 msgid "Panel to scroll"
 msgstr "Панель для прокрутки"
 
-#: ../ui/prefs.ui:69
+#: sources/prefs.ui:69
 msgid ""
 "Choose a panel to scroll for the selected action. If the extension is "
 "enabled, the current choice is outlined in a colored box while the mouse "
@@ -60,7 +60,7 @@ msgstr ""
 "прокрутке. Если расширение активно, текущая выбранная панель будет обведена "
 "цветной рамкой, пока указатель мыши находится на кнопке выбора."
 
-#: ../ui/prefs.ui:94
+#: sources/prefs.ui:94
 msgid ""
 "Use scrolling when picking an actor to choose hierarchy level, such as the "
 "whole bar instead of the clock box only. Yellow box means that the "
@@ -72,79 +72,79 @@ msgstr ""
 "выбранная панель ещё не имеет обработчиков событий и может быть недоступной "
 "для прокрутки, если поверх неё отрисованы другие элементы интерфейса."
 
-#: ../ui/prefs.ui:117
+#: sources/prefs.ui:117
 msgid "Panel fixed width"
 msgstr "Фиксированная ширина панели"
 
-#: ../ui/prefs.ui:119
+#: sources/prefs.ui:119
 msgid "Set fixed width for the scrollable panel."
 msgstr "Фиксированная ширина, до которой будет расширена выбранная панель."
 
-#: ../ui/prefs.ui:148
+#: sources/prefs.ui:148
 msgid "px"
 msgstr ""
 
-#: ../ui/prefs.ui:161
+#: sources/prefs.ui:161
 msgid "Panel content align"
 msgstr "Выравнивание содержимого панели"
 
-#: ../ui/prefs.ui:163
+#: sources/prefs.ui:163
 msgid "Set content align for the scrollable panel."
 msgstr "Устанавливает режим выравнивания содержимого внутри выбранной панели."
 
-#: ../ui/prefs.ui:177
+#: sources/prefs.ui:177
 msgid "System"
 msgstr "Системное"
 
-#: ../ui/prefs.ui:184
+#: sources/prefs.ui:184
 msgid "Start"
 msgstr "С начала"
 
-#: ../ui/prefs.ui:191
+#: sources/prefs.ui:191
 msgid "Center"
 msgstr "По центру"
 
-#: ../ui/prefs.ui:198
+#: sources/prefs.ui:198
 msgid "End"
 msgstr "С конца"
 
-#: ../ui/prefs.ui:211
+#: sources/prefs.ui:211
 msgid "Horizontal scrolling"
 msgstr "Горизонтальная прокрутка"
 
-#: ../ui/prefs.ui:213
+#: sources/prefs.ui:213
 msgid "Whether horizontal scrolling should cause forward or back step."
 msgstr ""
 "Должна ли горизонтальная прокрутка восприниматься как переключение вперёд "
 "или назад."
 
-#: ../ui/prefs.ui:227 ../ui/prefs.ui:270
+#: sources/prefs.ui:227 sources/prefs.ui:270
 msgid "Off"
 msgstr "Отключена"
 
-#: ../ui/prefs.ui:234 ../ui/prefs.ui:277
+#: sources/prefs.ui:234 sources/prefs.ui:277
 msgid "Direct"
 msgstr "Прямая"
 
-#: ../ui/prefs.ui:241 ../ui/prefs.ui:284
+#: sources/prefs.ui:241 sources/prefs.ui:284
 msgid "Inverted"
 msgstr "Обратная"
 
-#: ../ui/prefs.ui:254
+#: sources/prefs.ui:254
 msgid "Vertical scrolling"
 msgstr "Вертикальная прокрутка"
 
-#: ../ui/prefs.ui:256
+#: sources/prefs.ui:256
 msgid "Whether vertical scrolling should cause forward or back step."
 msgstr ""
 "Должна ли вертикальная прокрутка восприниматься как переключение вперёд или "
 "назад."
 
-#: ../ui/prefs.ui:297
+#: sources/prefs.ui:297
 msgid "Switching timeout"
 msgstr "Задержка следующего переключения"
 
-#: ../ui/prefs.ui:299
+#: sources/prefs.ui:299
 msgid ""
 "Timeout for switching event: further scrolling events in this timeout will "
 "be ignored."
@@ -152,15 +152,15 @@ msgstr ""
 "Задержка следующего переключения: до её истечения последующие события "
 "прокруткибудут проигнорированы."
 
-#: ../ui/prefs.ui:326
+#: sources/prefs.ui:326
 msgid "ms"
 msgstr ""
 
-#: ../ui/prefs.ui:338
+#: sources/prefs.ui:338
 msgid "Cyclic switching"
 msgstr "Циклическая прокрутка"
 
-#: ../ui/prefs.ui:340
+#: sources/prefs.ui:340
 msgid ""
 "Should the switcher cycle, i.e. switch between first and last elements when "
 "switching out-of-list."
@@ -168,18 +168,18 @@ msgstr ""
 "Должна ли прокрутка зацикливаться, т.е. переключаться между первым и "
 "последнимэлементами при выходе за границы списка элементов."
 
-#: ../ui/prefs.ui:364
+#: sources/prefs.ui:364
 msgid "Visualize"
 msgstr "Визуализация"
 
-#: ../ui/prefs.ui:366
+#: sources/prefs.ui:366
 msgid "Should the switcher be shown because of the action."
 msgstr "Должно ли действие быть визуализировано всплывающим переключателем."
 
-#: ../ui/prefs.ui:389
+#: sources/prefs.ui:389
 msgid "Switching workspaces"
 msgstr "Переключение рабочих мест"
 
-#: ../ui/prefs.ui:400
+#: sources/prefs.ui:400
 msgid "Switching windows"
 msgstr "Переключение окон"

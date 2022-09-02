@@ -1,5 +1,5 @@
 {
-	"shell-version": ["40", "41", "42"],
+	"shell-version": ["40", "41", "42.rc", "42"],
 	"uuid": "io.github.mreditor.gnome-shell-extensions.scroll-panel",
 	"name": "Scroll Panel",
 	"gettext-domain": "io.github.mreditor.gnome-shell-extensions.scroll-panel",

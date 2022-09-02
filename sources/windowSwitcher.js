@@ -1,5 +1,5 @@
 /* exported WindowSwitcherPopup */
-const { GLib, GObject } = imports.gi;
+const {GLib, GObject} = imports.gi;
 const SwitcherPopup = imports.ui.switcherPopup;
 const AltTab = imports.ui.altTab;
 

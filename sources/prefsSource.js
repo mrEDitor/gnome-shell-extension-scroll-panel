@@ -1,6 +1,6 @@
 /* exported PrefsSource */
 
-const { Gio, GObject } = imports.gi;
+const {Gio, GObject} = imports.gi;
 // WARNING: No shell or extension imports allowed here or in class constructors
 // since it will break buildPrefsView() call for development environment.
 
@@ -138,7 +138,7 @@ var PrefsSource = class _PrefsSource {
         /**
          * Cache for {@link _setting(key)}.
          *
-         * @type {object<string, _Setting>}
+         * @type {Object<string, _Setting>}
          */
         this._settings = {};
     }

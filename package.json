@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "packageManager": "yarn@3.2.3",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^17.0.25",
+    "archiver": "^5.3.1",
+    "command-line-args": "^5.2.1",
+    "command-line-usage": "^6.1.3",
+    "eslint": "^8.16.0",
+    "eslint-plugin-jsdoc": "^39.2.7",
+    "typescript": "^4.6.3"
+  },
+  "scripts": {
+    "yarn:restore": "node scripts/restore-yarn.js",
+    "yarn:update": "node scripts/restore-yarn.js latest && yarn up '**' -R",
+    "build": "node scripts/build.js",
+    "build:zip": "node scripts/build.js --lint=immutable --zip",
+    "gnome:install": "node scripts/build.js --lint=immutable --install",
+    "podman": "node scripts/podman.js",
+    "podman:try": "node scripts/podman.js --run-vnc=5900 --lint=immutable --install"
+  }
+}
