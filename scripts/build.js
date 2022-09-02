@@ -8,7 +8,7 @@ import * as glib from './nodejs/glib.mjs';
 import * as ui from './nodejs/ui.mjs';
 import * as xgettext from './nodejs/xgettext.mjs';
 import { lint } from './nodejs/linter.mjs';
-import { buildMetadata, readMetadata, validateReleaseTag } from './nodejs/metadata.mjs';
+import { buildMetadata, readMetadata, validateMetadata, validateReleaseTag } from './nodejs/metadata.mjs';
 import { copyFile, unlinkFile } from './nodejs/utils.mjs';
 
 const metadata = await readMetadata('sources/metadata.json');
@@ -75,6 +75,11 @@ const optionDefinitions = [
         description: `Set base directory to place extension directory to for --install option (default: '${process.env.HOME}/.local/share/gnome-shell/extensions/').`,
         typeLabel: '{underline directory}',
     },
+    {
+        name: 'built',
+        description: 'Do not rewrite build files but use existing ones for other operations (e.g. for lint or install).',
+        type: Boolean,
+    },
 ];
 
 const args = cmdArgs(optionDefinitions, { partial: true });
@@ -114,67 +119,72 @@ if (args['clean']) {
     }
 }
 
-await fs.mkdir(`${args['build-dir']}/locales`, { recursive: true });
-await fs.mkdir(`${args['build-dir']}/schemas`, { recursive: true });
-const potPatchFilePath = `${args['build-dir']}/locales.patch.pot`;
-try {
-    const srcFileNamesByExt = {};
-    for (const fileName of await fs.readdir('sources')) {
-        srcFileNamesByExt[path.extname(fileName)] ??= [];
-        srcFileNamesByExt[path.extname(fileName)].push(`sources/${fileName}`);
-    }
-    await xgettext.create(potPatchFilePath, { [metadata['description']]: '' });
-    await xgettext.extract('JavaScript', srcFileNamesByExt['.js'], potPatchFilePath);
-    await xgettext.extract('Glade', srcFileNamesByExt['.ui'], potPatchFilePath);
-
-    const potMessagesFilePath = 'locales/messages.pot';
-    await xgettext.merge(potPatchFilePath, potMessagesFilePath);
-    for (const fileName of await fs.readdir('locales')) {
-        const fileInfo = path.parse(fileName);
-        if (fileInfo.ext === '.po') {
-            const localeDirPath = `${args['build-dir']}/locales/${fileInfo.name}/LC_MESSAGES`;
-            await fs.mkdir(localeDirPath, { recursive: true });
-            await xgettext.merge(potMessagesFilePath, `locales/${fileName}`, `${localeDirPath}/${metadata['uuid']}.po`);
-            await xgettext.compile(`${localeDirPath}/${metadata['uuid']}.po`, `${localeDirPath}/${metadata['uuid']}.mo`);
+if (args['built']) {
+    await validateMetadata(await readMetadata(`${args['build-dir']}/metadata.json`));
+    console.log('⏩ Build files considered up-to-date, skipping build...')
+} else {
+    await fs.mkdir(`${args['build-dir']}/locales`, { recursive: true });
+    await fs.mkdir(`${args['build-dir']}/schemas`, { recursive: true });
+    const potPatchFilePath = `${args['build-dir']}/locales.patch.pot`;
+    try {
+        const srcFileNamesByExt = {};
+        for (const fileName of await fs.readdir('sources')) {
+            srcFileNamesByExt[path.extname(fileName)] ??= [];
+            srcFileNamesByExt[path.extname(fileName)].push(`sources/${fileName}`);
         }
-    }
+        await xgettext.create(potPatchFilePath, { [metadata['description']]: '' });
+        await xgettext.extract('JavaScript', srcFileNamesByExt['.js'], potPatchFilePath);
+        await xgettext.extract('Glade', srcFileNamesByExt['.ui'], potPatchFilePath);
 
-    for (const localeName of await fs.readdir(`${args['build-dir']}/locales`)) {
-        const localeBasePath = `${args['build-dir']}/locales/${localeName}/LC_MESSAGES/${metadata['uuid']}`;
-        switch (args['lint']) {
-            case 'default':
-                if (!existsSync(`locales/${localeName}.po`)) {
-                    console.log(`Missed or deleted locale file restored from build files during linting: 'locales/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
-                }
-                await copyFile(`${localeBasePath}.po`, `locales/${localeName}.po`);
-                break;
-            case 'immutable':
-                try {
-                    const genFileBuffer = await fs.readFile(`${localeBasePath}.po`);
-                    const srcFileBuffer = await fs.readFile(`locales/${localeName}.po`);
-                    if (!genFileBuffer.equals(srcFileBuffer)) {
-                        throw new Error(`There are some outdated locale files. See --linter option to fix or ignore these problems.`);
+        const potMessagesFilePath = 'locales/messages.pot';
+        await xgettext.merge(potPatchFilePath, potMessagesFilePath);
+        for (const fileName of await fs.readdir('locales')) {
+            const fileInfo = path.parse(fileName);
+            if (fileInfo.ext === '.po') {
+                const localeDirPath = `${args['build-dir']}/locales/${fileInfo.name}/LC_MESSAGES`;
+                await fs.mkdir(localeDirPath, { recursive: true });
+                await xgettext.merge(potMessagesFilePath, `locales/${fileName}`, `${localeDirPath}/${metadata['uuid']}.po`);
+                await xgettext.compile(`${localeDirPath}/${metadata['uuid']}.po`, `${localeDirPath}/${metadata['uuid']}.mo`);
+            }
+        }
+
+        for (const localeName of await fs.readdir(`${args['build-dir']}/locales`)) {
+            const localeBasePath = `${args['build-dir']}/locales/${localeName}/LC_MESSAGES/${metadata['uuid']}`;
+            switch (args['lint']) {
+                case 'default':
+                    if (!existsSync(`locales/${localeName}.po`)) {
+                        console.log(`Missed or deleted locale file restored from build files during linting: 'locales/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
                     }
-                } catch (e) {
-                    console.error(`Linting locale file '${localeName}.po' failed, most probably it's missed or unavailable. See --linter option to fix or ignore this problems.`);
-                    console.error();
-                    throw e;
-                }
-                break;
+                    await copyFile(`${localeBasePath}.po`, `locales/${localeName}.po`);
+                    break;
+                case 'immutable':
+                    try {
+                        const genFileBuffer = await fs.readFile(`${localeBasePath}.po`);
+                        const srcFileBuffer = await fs.readFile(`locales/${localeName}.po`);
+                        if (!genFileBuffer.equals(srcFileBuffer)) {
+                            throw new Error(`There are some outdated locale files. See --linter option to fix or ignore these problems.`);
+                        }
+                    } catch (e) {
+                        console.error(`Linting locale file '${localeName}.po' failed, most probably it's missed or unavailable. See --linter option to fix or ignore this problems.`);
+                        console.error();
+                        throw e;
+                    }
+                    break;
+            }
         }
+    } finally {
+        await fs.rm(potPatchFilePath, { force: true });
     }
-} finally {
-    await fs.rm(potPatchFilePath, { force: true });
+
+    copyBuildFiles(args['build-dir'], '.', 'sources');
+    await glib.compileSchemas(`${args['build-dir']}/schemas`, 'schemas');
+
+    await unlinkFile(`${args['build-dir']}/metadata.json`);
+    await fs.writeFile(
+        `${args['build-dir']}/metadata.json`,
+        JSON.stringify(await buildMetadata(metadata), null, 2)
+    );
 }
-
-await unlinkFile(`${args['build-dir']}/metadata.json`);
-await fs.writeFile(
-    `${args['build-dir']}/metadata.json`,
-    JSON.stringify(await buildMetadata(metadata), null, 2)
-);
-
-copyBuildFiles(args['build-dir'], '.', 'sources');
-await glib.compileSchemas(`${args['build-dir']}/schemas`, 'schemas');
 
 switch (args['lint']) {
     case 'default':
@@ -199,7 +209,7 @@ for (const previewFileName of args['preview-ui'] ?? []) {
 
 if (args['zip']) {
     try {
-        validateReleaseTag(metadata);
+        await validateReleaseTag(metadata);
     } catch (e) {
         console.error('An attempt to create zip distributable rejected since version is not properly tagged.');
         console.error();
@@ -238,7 +248,6 @@ if (args['install']) {
             switch (path.extname(fileName)) {
                 case '.js':
                     return args['debug'] || fileName !== 'debug.js';
-                case '.json':
                 case '.ui':
                     return true;
                 case '.yml':

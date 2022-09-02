@@ -40,9 +40,10 @@ const optionDefinitions = [
         typeLabel: '[127.0.0.1:]{underline port}',
     },
     {
-        name: 'install',
-        description: 'Install extension after build.',
-        type: Boolean,
+        name: 'lint',
+        defaultValue: 'default',
+        description: "Source files linting mode: 'default' (lint and fix, if possible), 'immutable' (lint, do not mutate files) or 'none'.",
+        typeLabel: 'default|immutable|none',
     },
     {
         name: 'capture-ui',
@@ -55,6 +56,11 @@ const optionDefinitions = [
         description: 'Run live preview of specified filename.ui after build.',
         multiple: true,
         typeLabel: '{underline filename}[.ui]',
+    },
+    {
+        name: 'install',
+        description: 'Install extension after build.',
+        type: Boolean,
     },
     {
         name: 'build-dir',
@@ -190,8 +196,22 @@ try {
         }
 
         // TODO: single build with shell restart -or- capture/preview without rebuild here?
+        if (args['lint'] !== 'none') {
+            const yarnBuildArgs = ['--wait', '--', 'sudo', 'env', 'DISPLAY=:99', ...yarnCommonArgs];
+            yarnBuildArgs.push('--built');
+            yarnBuildArgs.push(`--lint=${args['lint']}`);
+            
+            await containerSuGnomeExec(
+                'gnome-terminal',
+                yarnBuildArgs,
+                { passStdio: true, workingDir: '/home/gnomeshell/workspace' }
+            );
+        }
+
         if (args['capture-ui']?.length) {
             const yarnBuildArgs = ['--wait', '--', 'sudo', 'env', 'DISPLAY=:99', ...yarnCommonArgs];
+            yarnBuildArgs.push('--built');
+            
             for (const fileName of args['capture-ui']) {
                 yarnBuildArgs.push(`--capture-ui=${fileName}`);
             }
@@ -205,6 +225,8 @@ try {
 
         if (args['preview-ui']?.length) {
             const yarnBuildArgs = ['--', 'sudo', 'env', 'DISPLAY=:99', ...yarnCommonArgs];
+            yarnBuildArgs.push('--built');
+            
             for (const fileName of args['preview-ui']) {
                 yarnBuildArgs.push(`--preview-ui=${fileName}`);
             }
@@ -317,4 +339,5 @@ function onContainerError(code) {
     console.log();
     console.error(`⚡ ${container} 'podman' >`);
     console.error(code);
+    process.exit(1);
 }

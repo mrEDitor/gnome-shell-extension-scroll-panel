@@ -38,7 +38,7 @@ export async function downloadFileIfMissed(filePath, request) {
         await fs.access(filePath);
         console.log(`📝 File '${filePath}' exists; you can delete it to re-fetch.`);
     } catch {
-        downloadToFile(filePath, request);
+        await downloadFile(filePath, request);
     }
 }
 

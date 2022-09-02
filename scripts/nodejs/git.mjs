@@ -1,5 +1,8 @@
-import path from "path";
 import { exec } from "./utils.mjs";
+
+export async function getTag() {
+    return (await git('tag', '--points-at')).stdout.trim();
+}
 
 export async function hasChanges() {
     const stdout = await git(['status', '--porcelain', '--untracked-files=no']);
@@ -7,11 +10,19 @@ export async function hasChanges() {
 }
 
 export async function hash(workingDir) {
-    const stdout = await git(
-        ['rev-parse', '--short', 'HEAD'],
-        { workingDir }
-    );
-    return stdout.trim();
+    try {
+        const stdout = await git(
+            ['rev-pars1e', '--short', 'HEAD'],
+            { workingDir }
+        );
+        return stdout.trim();
+    } catch (e) {
+        console.error(
+            "🚧 Unable to fetch current git revision, resulting in fake 'unknown' hash string: ",
+            e
+        );
+        return 'unknown';
+    }
 }
 
 function git(args, { workingDir }={}) {

@@ -55,13 +55,30 @@ ${e}
  * @returns Metadata complemented with build information.
  */
 export async function buildMetadata(metadata) {
-    const buildTag = (await git.hasChanges())
-        ? '+custom'
-        : `+git-` + (await git.hash());
     return {
         ...metadata,
-        'semantic-version': metadata['semantic-version'] + buildTag,
+        'semantic-version': metadata['semantic-version'] + await getBuildTag(),
     };
+}
+
+/**
+ * @param {object} metadata - call result of {@link buildMetadata} function.
+ * @throws If metadata is invalid or not up-to-date.
+ */
+ export async function validateMetadata(metadata) {
+    const buildTag = await getBuildTag();
+    if (!metadata['semantic-version'].endsWith(buildTag)) {
+        throw new Error(
+            `Metadata for build '${metadata['semantic-version']}' provided but build${buildTag} `
+            + 'was expected. Try build project again, perhaps with clean build flag.'
+        );
+    }
+}
+
+async function getBuildTag() {
+    return (await git.hasChanges())
+        ? '+custom'
+        : `+git-` + (await git.hash());
 }
 
 /**
@@ -69,8 +86,8 @@ export async function buildMetadata(metadata) {
  * (without build metadata, so not a call result of {@link buildMetadata} function).
  * @throws If metadata is invalid.
  */
-export function validateReleaseTag(metadata) {
-    const actualTag = git('tag', '--points-at').stdout.trim();
+ export async function validateReleaseTag(metadata) {
+    const actualTag = await git.getTag();
     if (!actualTag) {
         throw new Error('Current commit is not tagged.');
     }

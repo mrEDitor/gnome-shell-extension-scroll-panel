@@ -84,7 +84,7 @@ export function preview(buildDirPath, fileName, title = undefined, protect = fal
  * @return {Promise}
  */
 export function lint(filePath) {
-    if (!process.env['GNOME_TERMINAL_SCREEN']) {
+    if (!process.env['GNOME_TERMINAL_SCREEN'] && fs.existsSync('/run/.containerenv')) {
         // FIXME: Running validator outside of Xorg or something hangs it.
         console.log('🚧 Running in a container; unable to validate UI file:', filePath);
         return Promise.resolve();
