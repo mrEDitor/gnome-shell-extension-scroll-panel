@@ -1,6 +1,6 @@
 /* exported init */
 
-const {Clutter, GLib, Meta} = imports.gi;
+const {    Clutter, GLib, Meta   }=imports.gi;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 // WARNING: No extension imports allowed here since it will break method calls
