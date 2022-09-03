@@ -155,21 +155,24 @@ if (args['built']) {
                     if (!existsSync(`locales/${localeName}.po`)) {
                         console.log(`Missed or deleted locale file restored from build files during linting: 'locales/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
                     }
+
                     await copyFile(`${localeBasePath}.po`, `locales/${localeName}.po`);
                     break;
                 case 'immutable':
                     try {
                         const genFileBuffer = await fs.readFile(`${localeBasePath}.po`);
                         const srcFileBuffer = await fs.readFile(`locales/${localeName}.po`);
+
                         if (!genFileBuffer.equals(srcFileBuffer)) {
                             throw new Error(`There are some outdated locale files. See --linter option to fix or ignore these problems.`);
                         }
+
+                        break;
                     } catch (e) {
                         console.error(`Linting locale file '${localeName}.po' failed, most probably it's missed or unavailable. See --linter option to fix or ignore this problems.`);
                         console.error();
                         throw e;
                     }
-                    break;
             }
         }
     } finally {

@@ -151,6 +151,9 @@ try {
     try {
         const yarnCommonArgs = ['yarn', 'run', 'build', '--build-dir=../build'];
         const yarnBuildArgs = [...yarnCommonArgs];
+
+        // Lint later since UI linter is buggy (see ui.mjs).
+        yarnBuildArgs.push('--lint=none');
         yarnBuildArgs.push(
             args['install-dir']
                 ? '--install-dir=../install'
