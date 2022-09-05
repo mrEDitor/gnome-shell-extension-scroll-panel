@@ -239,7 +239,7 @@ if (args['install']) {
  * @param {string} sourcesDirName - If provided, used to find source files to build and copy.
  * @return {Promise}
  */
- async function copyBuildFiles(targetDirPath, baseDirPath, sourcesDirName = undefined) {
+async function copyBuildFiles(targetDirPath, baseDirPath, sourcesDirName = undefined) {
     if (!args['debug']) {
         await fs.mkdir(targetDirPath, { recursive: true });
         await fs.writeFile(`${targetDirPath}/debug.js`, '');
@@ -251,6 +251,7 @@ if (args['install']) {
             switch (path.extname(fileName)) {
                 case '.js':
                     return args['debug'] || fileName !== 'debug.js';
+                case '.json':
                 case '.ui':
                     return true;
                 case '.yml':

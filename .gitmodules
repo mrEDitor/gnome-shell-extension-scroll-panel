@@ -1,4 +1,4 @@
 [submodule "podman"]
 	path = podman
 	url = https://github.com/mrEDitor/podman-gnome-shell-extension-environment.git
-	branch = for-scroll-panel
+	branch = main
