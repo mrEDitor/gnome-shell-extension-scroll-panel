@@ -278,7 +278,7 @@ try {
 } finally {
     // Attach to console even after failed build and/or VNC, may be useful for diagnostics.
     if (args['attach']) {
-        console.log("ℹ️ To stop the container and exit, use 'poweroff'.");
+        console.log("🚧 To stop the container and exit, use 'poweroff'.");
         await exec('podman', [ 'attach', container ], { passStdio: true });
     }
 

@@ -1,6 +1,7 @@
 /* exported init */
 
 const {Clutter, GLib, Meta} = imports.gi;
+const Main = imports.ui.main;
 const WorkspaceSwitcherPopup = imports.ui.workspaceSwitcherPopup;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 // WARNING: No extension imports allowed here since it will break method calls
@@ -245,6 +246,7 @@ class ExtensionModule {
             ? (index + modBallast) % windows.length
             : Math.min(Math.max(0, index), windows.length - 1);
 
+        // TODO: do not show popup when Main.overview.visible is true?
         if (visualize) {
             if (!this._windowSwitcherPopup?.tryDisplay(index, 1.5 * timeout)) {
                 this._windowSwitcherPopup = new this.WindowSwitcherPopup(windows);
@@ -289,7 +291,7 @@ class ExtensionModule {
 
         let index = global.workspaceManager.get_active_workspace_index();
         const count = global.workspaceManager.n_workspaces;
-        if (!this._workspacesSwitcherPopup && visualize) {
+        if (!this._workspacesSwitcherPopup && visualize && !Main.overview.visible) {
             this._workspacesSwitcherPopup = new WorkspaceSwitcherPopup.WorkspaceSwitcherPopup({
                 reactive: false,
             });
