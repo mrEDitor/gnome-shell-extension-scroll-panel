@@ -2,7 +2,7 @@
 import archiver from 'archiver';
 import cmdArgs from 'command-line-args';
 import cmdUsage from 'command-line-usage';
-import { existsSync, promises as fs } from 'fs';
+import { createWriteStream, existsSync, promises as fs } from 'fs';
 import * as path from 'path';
 import * as glib from './nodejs/glib.mjs';
 import * as ui from './nodejs/ui.mjs';
@@ -153,7 +153,7 @@ if (args['built']) {
             switch (args['lint']) {
                 case 'default':
                     if (!existsSync(`locales/${localeName}.po`)) {
-                        console.log(`Missed or deleted locale file restored from build files during linting: 'locales/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
+                        console.log(`🚧 Missed or deleted locale file restored from build files during linting: 'locales/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
                     }
 
                     await copyFile(`${localeBasePath}.po`, `locales/${localeName}.po`);
@@ -177,6 +177,13 @@ if (args['built']) {
         }
     } finally {
         await fs.rm(potPatchFilePath, { force: true });
+        if (!args['with-sources']) {
+            for (const localeName of await fs.readdir(`${args['build-dir']}/locales`)) {
+                await fs.rm(`${args['build-dir']}/locales/${localeName}/LC_MESSAGES/${metadata['uuid']}.po`, {
+                    force: true,
+                });
+            }
+        }
     }
 
     copyBuildFiles(args['build-dir'], '.', 'sources');
@@ -220,8 +227,8 @@ if (args['zip']) {
     }
 
     const zip = archiver('zip');
-    zip.pipe(fs.createWriteStream(`${args['build-dir']}/${metadata['uuid']}.zip`));
-    zip.glob(`${args['build-dir']}/**/*`, { ignore: [ '**/!(*.zip)' ] });
+    zip.pipe(createWriteStream(`${args['build-dir']}/${metadata['uuid']}.zip`));
+    zip.glob(`**`, { cwd: args['build-dir'], ignore: `${metadata['uuid']}.zip` });
     zip.finalize();
 }
 

@@ -1,12 +1,12 @@
 import { exec } from "./utils.mjs";
 
 export async function getTag() {
-    return (await git('tag', '--points-at')).stdout.trim();
+    return (await git(['tag', '--points-at'])).trim();
 }
 
 export async function hasChanges() {
     const stdout = await git(['status', '--porcelain', '--untracked-files=no']);
-    return stdout.length !== 0;
+    return stdout.trim().length !== 0;
 }
 
 export async function hash(workingDir) {

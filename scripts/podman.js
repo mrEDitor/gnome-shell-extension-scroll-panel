@@ -92,11 +92,9 @@ if (args['help']) {
             header: 'Fedora known versions list (check for even fresher ones at https://hub.docker.com/_/fedora)',
             content: [
                 { desc: 'Fedora 37', example: 'GNOME Shell 43' },
-                { desc: 'Fedora 36', example: 'GNOME Shell 42.rc' },
-                { desc: 'Fedora 35', example: 'GNOME Shell 41.4' },
-                { desc: 'Fedora 34', example: 'GNOME Shell 40.8' },
-                { desc: 'Fedora 33', example: 'GNOME Shell 3.38.5' },
-                { desc: 'Fedora 32', example: 'GNOME Shell 3.36.9' },
+                { desc: 'Fedora 36', example: 'GNOME Shell 42' },
+                { desc: 'Fedora 35', example: 'GNOME Shell 41' },
+                { desc: 'Fedora 34', example: 'GNOME Shell 40' },
             ],
         },
         {

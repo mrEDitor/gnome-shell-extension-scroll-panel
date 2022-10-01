@@ -174,6 +174,16 @@ class ExtensionModule {
         this._signalDisconnectors = [];
         this._windowsSwitcherHandler.handleActor(null);
         this._workspacesSwitcherHandler.handleActor(null);
+
+        // clean timeouts according to https://gjs.guide/extensions/review-guidelines/review-guidelines.html#remove-main-loop-sources
+        if (this._workspaceSwitchTimeoutHandle !== null) {
+            GLib.Source.remove(this._workspaceSwitchTimeoutHandle);
+            this._workspaceSwitchTimeoutHandle = null;
+        }
+        if (this._windowSwitchTimeoutHandle !== null) {
+            GLib.Source.remove(this._windowSwitchTimeoutHandle);
+            this._windowSwitchTimeoutHandle = null;
+        }
     }
 
     _updateHandler(handler, switcher) {
