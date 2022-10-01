@@ -1,5 +1,21 @@
+# backup files
 *~
-/.idea
+
+# various IDE settings are dotfiles typically
+# yarn engine is also in dotfiles; lockfile is enough
+/.*
+
+# whitelist for useful dotfiles
+!/.github
+
+# default directory for build artifacts
 /build
-/sources/eslintrc-gjs.yml
-/sources/eslintrc-shell.yml
+
+# gnome-shell eslint configs
+/eslintrc-gjs.yml
+/eslintrc-shell.yml
+
+# ignore local npm/yarn-v1 build config and modules
+# since mainstream build script is yarn-v3
+node_modules
+package-lock.json

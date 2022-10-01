@@ -1,6 +1,6 @@
 /* exported init, buildPrefsWidget, UiBuilder */
 
-const { Gtk } = imports.gi;
+const {Gtk} = imports.gi;
 // WARNING: No shell or extension imports allowed here or in class constructors
 // since it will break buildPrefsView() call for development environment.
 
@@ -113,25 +113,25 @@ var UiBuilder = class _UiBuilder {
         /**
          * The root UI widget to build. Does not bind preferences for write
          * unless {@link bindPrefs()} was called.
-         * 
+         *
          * @type {Gtk.Box}
          */
         this._widget = this._builder.get_object('content');
 
-        /** @type {Gtk.ToggleButton} */ 
+        /** @type {Gtk.ToggleButton} */
         this._actorChoose = this._builder.get_object('setting-actor-choose');
 
-        /** @type {Gtk.Popover} */ 
+        /** @type {Gtk.Popover} */
         this._actorChoosePopover = this._builder.get_object('setting-actor-choose-popover');
 
-        /** @type {Gtk.CheckButton} */ 
+        /** @type {Gtk.CheckButton} */
         this._actorWidthEnable = this._builder.get_object('setting-actor-width-enable');
 
         /**
          * Doesn't change setting value while is insensitive.
-         * 
+         *
          * @type {Gtk.SpinButton}
-         */ 
+         */
         this._actorWidth = this._builder.get_object('setting-actor-width');
 
         this._prefTabs = [
@@ -451,13 +451,13 @@ var UiBuilder = class _UiBuilder {
             this._actorChoose.active = false;
         });
 
-        this._widget.connect('realize', () => {
-            this._widget.page = this._prefTabs.findIndex(
+        this._builder.get_object('tabs').connect('realize', tabs => {
+            tabs.page = this._prefTabs.findIndex(
                 tab => tab !== undefined
             );
         });
 
-        const box = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
+        const box = new Gtk.Box({orientation: Gtk.Orientation.VERTICAL});
         box.append(new imports.gi.Adw.HeaderBar());
         box.append(this._widget);
         return box;
@@ -500,9 +500,9 @@ var UiBuilder = class _UiBuilder {
 
         this._widget.connect('realize', () => {
             // TODO: add scrolling for Gnome <42?
-            //if (this._widget.parent instanceof Gtk.Box) {
-            //this._scrollBox.vscrollbar_policy = Gtk.PolicyType.NEVER;
-            //}
+            // if (this._widget.parent instanceof Gtk.Box) {
+            // this._scrollBox.vscrollbar_policy = Gtk.PolicyType.NEVER;
+            // }
         });
 
         return this._widget;

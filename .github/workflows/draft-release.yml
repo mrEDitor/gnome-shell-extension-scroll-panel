@@ -1,4 +1,5 @@
 on:
+  workflow_dispatch:
   push:
     tags:
     - 'v*'
@@ -10,24 +11,21 @@ jobs:
     name: Create Release Asset
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout code
-        uses: actions/checkout@master
-      - name: Check version tag
-        run: |
-          [[ \
-            `git tag --points-at` \
-            == \
-            v`jq -r '.["semantic-version"] + "-gnome" + .["shell-version"][-1]' sources/metadata.json` \
-          ]]
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
       - name: Build project
         run: |
-          sudo apt-get install gettext
-          npm install eslint
-          BUILD_DIR='${{ env.GITHUB_WORKSPACE }}/build' ESLINT='npx eslint' make -C sources lint
-          make zip
+          sudo apt-get install podman
+          yarn run yarn:restore
+          yarn run podman --lint=immutable --zip
+
       - name: Draft Release
         id: draft_release
-        uses: actions/create-release@master
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -35,13 +33,14 @@ jobs:
           release_name: ${{ github.ref }}
           draft: true
           prerelease: false
+
       - name: Upload Package
         id: upload-package
-        uses: actions/upload-release-asset@master
+        uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.draft_release.outputs.upload_url }}
           asset_path: ./build/io.github.mreditor.gnome-shell-extensions.scroll-panel.zip
-          asset_name: io.github.mreditor.gnome-shell-extensions.scroll-panel.zip
+          asset_name: io.github.mreditor.gnome-shell-extensions.scroll-panel_${{ github.ref }}.zip
           asset_content_type: application/zip

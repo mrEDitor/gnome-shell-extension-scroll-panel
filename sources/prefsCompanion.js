@@ -1,7 +1,7 @@
 /* exported PrefsCompanion */
 
-const { Clutter, Cogl, GObject, St } = imports.gi;
-const { main: Main } = imports.ui;
+const {Clutter, Cogl, GObject, St} = imports.gi;
+const {main: Main} = imports.ui;
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 /**
@@ -110,7 +110,7 @@ var PrefsCompanion = class _PrefsCompanion {
         const seat = Clutter.get_default_backend().get_default_seat();
         this._pointerDevice = seat.get_pointer();
 
-        this._eventHandler = new St.BoxLayout({ reactive: true });
+        this._eventHandler = new St.BoxLayout({reactive: true});
         Main.uiGroup.add_actor(this._eventHandler);
         this._eventHandler.connect('button-press-event', () => {
             this._onActorPicked();

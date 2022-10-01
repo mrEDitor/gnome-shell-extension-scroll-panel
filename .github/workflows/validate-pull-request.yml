@@ -1,0 +1,24 @@
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+    - 'master'
+
+name: Validate Pull Request
+
+jobs:
+  build:
+    name: Build and lint
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Build project
+        run: |
+          sudo apt-get install podman
+          yarn run yarn:restore
+          yarn run podman --lint=immutable
