@@ -1,0 +1,184 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 4.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-22 18:43+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid ""
+"This extension allows switching between windows or workspaces by scrolling "
+"Gnome Shell topbar with mouse (both in overview and workspace modes)."
+msgstr ""
+"Розширення дозволяє перемикатися між вікнами або робочими місцями шляхом "
+"прокрутки верхньої панелі Gnome Shell коліщатком миші (як в режимі огляду, "
+"так і при роботі)."
+
+#: sources/prefs.js:181
+#, javascript-format
+msgid "by <a href=\"%s\">Eduard Minasyan</a>"
+msgstr "Автор: <a href=\"%s\">Едуард Мінасян</a>"
+
+#: sources/prefs.js:182
+#, javascript-format
+msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
+msgstr "Домашня сторінка: <a href=\"%1$s\">%1$s</a>"
+
+#: sources/prefs.js:185
+#, javascript-format
+msgid ""
+"Seems like you are using unlocalized extension, would you like to <a "
+"href=\"%s\">localize it</a>?"
+msgstr ""
+"Залишайте свої пропозиції щодо доопрацювання та локалізації на сторінці "
+"проєкту!"
+
+#: sources/prefs.ui:33
+msgid "Reset settings"
+msgstr "Скинути налаштування"
+
+#: sources/prefs.ui:42
+msgid "About"
+msgstr "Про розширення"
+
+#: sources/prefs.ui:67
+msgid "Panel to scroll"
+msgstr "Панель для прокручування"
+
+#: sources/prefs.ui:69
+msgid ""
+"Choose a panel to scroll for the selected action. If the extension is "
+"enabled, the current choice is outlined in a colored box while the mouse "
+"pointer is over the button."
+msgstr ""
+"Виберіть панель, яка буде виконувати спеціальну дію під час прокручування. "
+"Якщо розширення активне, поточна вибрана панель буде обведена кольоровою "
+"рамкою, поки вказівник миші знаходиться на кнопці вибору."
+
+#: sources/prefs.ui:94
+msgid ""
+"Use scrolling when picking an actor to choose hierarchy level, such as the "
+"whole bar instead of the clock box only. Yellow box means that the "
+"highlighted panel currently does not have any event listeners and may be "
+"inaccessible because of other actors rendered over it."
+msgstr ""
+"Для зміни рівня ієрархії під час вибору панелі (наприклад, вибору між "
+"годинником і всією панеллю) використовуйте прокрутку. Жовта рамка показує, "
+"що вибрана панель ще не має обробників подій і може бути недоступною для "
+"прокрутки, якщо поверх неї намальовані інші елементи інтерфейсу."
+
+#: sources/prefs.ui:117
+msgid "Panel fixed width"
+msgstr "Фіксована ширина панелі"
+
+#: sources/prefs.ui:119
+msgid "Set fixed width for the scrollable panel."
+msgstr "Фіксована ширина, до якої буде розширена обрана панель."
+
+#: sources/prefs.ui:148
+msgid "px"
+msgstr ""
+
+#: sources/prefs.ui:161
+msgid "Panel content align"
+msgstr "Вирівнювання вмісту панелі"
+
+#: sources/prefs.ui:163
+msgid "Set content align for the scrollable panel."
+msgstr "Встановлює режим вирівнювання вмісту всередині обраної панелі."
+
+#: sources/prefs.ui:177
+msgid "System"
+msgstr "Системне"
+
+#: sources/prefs.ui:184
+msgid "Start"
+msgstr "З початку"
+
+#: sources/prefs.ui:191
+msgid "Center"
+msgstr "По центру"
+
+#: sources/prefs.ui:198
+msgid "End"
+msgstr "З кінця"
+
+#: sources/prefs.ui:211
+msgid "Horizontal scrolling"
+msgstr "Горизонтальне прокручування"
+
+#: sources/prefs.ui:213
+msgid "Whether horizontal scrolling should cause forward or back step."
+msgstr ""
+"Чи сприймається горизонтальне прокручування як перемикання вперед або назад."
+
+#: sources/prefs.ui:227 sources/prefs.ui:270
+msgid "Off"
+msgstr "Вимкнена"
+
+#: sources/prefs.ui:234 sources/prefs.ui:277
+msgid "Direct"
+msgstr "Пряма"
+
+#: sources/prefs.ui:241 sources/prefs.ui:284
+msgid "Inverted"
+msgstr "Зворотна"
+
+#: sources/prefs.ui:254
+msgid "Vertical scrolling"
+msgstr "Вертикальне прокручування"
+
+#: sources/prefs.ui:256
+msgid "Whether vertical scrolling should cause forward or back step."
+msgstr ""
+"Чи сприймається вертикальне прокручування як перемикання вперед або назад."
+
+#: sources/prefs.ui:297
+msgid "Switching timeout"
+msgstr "Затримка наступного перемикання"
+
+#: sources/prefs.ui:299
+msgid ""
+"Timeout for switching event: further scrolling events in this timeout will "
+"be ignored."
+msgstr ""
+"Затримка наступного перемикання: до її закінчення наступні події "
+"прокручування будуть проігноровані."
+
+#: sources/prefs.ui:326
+msgid "ms"
+msgstr ""
+
+#: sources/prefs.ui:338
+msgid "Cyclic switching"
+msgstr "Циклічне прокручування"
+
+#: sources/prefs.ui:340
+msgid ""
+"Should the switcher cycle, i.e. switch between first and last elements when "
+"switching out-of-list."
+msgstr ""
+"Чи має прокручування зациклюватися, тобто. перемикатися між першим та "
+"останнім елементами при виході за межі списку елементів."
+
+#: sources/prefs.ui:364
+msgid "Visualize"
+msgstr "Візуалізація"
+
+#: sources/prefs.ui:366
+msgid "Should the switcher be shown because of the action."
+msgstr "Показувати перемикач під час дії."
+
+#: sources/prefs.ui:389
+msgid "Switching workspaces"
+msgstr "Перемикання робочих місць"
+
+#: sources/prefs.ui:400
+msgid "Switching windows"
+msgstr "Перемикання вікон"

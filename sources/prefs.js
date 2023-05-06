@@ -538,7 +538,7 @@ var UiBuilder = class _UiBuilder {
      */
     _gettext() {
         const gettext = imports.gettext;
-        const gettextDomain =  gettext.domain(this._metadata['gettext-domain']);
+        const gettextDomain = gettext.domain(this._metadata['gettext-domain']);
         return (message, ...args) => {
             let iter = 0;
             return gettextDomain.gettext(message)

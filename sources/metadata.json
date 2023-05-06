@@ -6,5 +6,5 @@
 	"settings-schema": "io.github.mreditor.gnome-shell-extensions.scroll-panel",
 	"description": "This extension allows switching between windows or workspaces by scrolling Gnome Shell topbar with mouse (both in overview and workspace modes).",
 	"url": "https://github.com/mrEDitor/gnome-shell-extension-scroll-panel",
-	"semantic-version": "4.1.8"
+	"semantic-version": "4.1.9"
 }

@@ -1,15 +1,14 @@
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: 4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-30 09:24+0000\n"
+"POT-Creation-Date: 2023-04-22 18:43+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: en\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid ""
@@ -27,12 +26,13 @@ msgstr ""
 msgid "Homepage: <a href=\"%1$s\">%1$s</a>"
 msgstr ""
 
+# this is expected to be used for translator's credits
 #: sources/prefs.js:185
 #, javascript-format
 msgid ""
 "Seems like you are using unlocalized extension, would you like to <a "
 "href=\"%s\">localize it</a>?"
-msgstr "Leave your suggestions and localizations on the project page!"
+msgstr ""
 
 #: sources/prefs.ui:33
 msgid "Reset settings"

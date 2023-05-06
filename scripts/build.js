@@ -123,9 +123,9 @@ if (args['built']) {
     await validateMetadata(await readMetadata(`${args['build-dir']}/metadata.json`));
     console.log('⏩ Build files considered up-to-date, skipping build...')
 } else {
-    await fs.mkdir(`${args['build-dir']}/locales`, { recursive: true });
+    await fs.mkdir(`${args['build-dir']}/locale`, { recursive: true });
     await fs.mkdir(`${args['build-dir']}/schemas`, { recursive: true });
-    const potPatchFilePath = `${args['build-dir']}/locales.patch.pot`;
+    const potPatchFilePath = `${args['build-dir']}/locale.patch.pot`;
     try {
         const srcFileNamesByExt = {};
         for (const fileName of await fs.readdir('sources')) {
@@ -136,32 +136,32 @@ if (args['built']) {
         await xgettext.extract('JavaScript', srcFileNamesByExt['.js'], potPatchFilePath);
         await xgettext.extract('Glade', srcFileNamesByExt['.ui'], potPatchFilePath);
 
-        const potMessagesFilePath = 'locales/messages.pot';
+        const potMessagesFilePath = 'locale/messages.pot';
         await xgettext.merge(potPatchFilePath, potMessagesFilePath);
-        for (const fileName of await fs.readdir('locales')) {
+        for (const fileName of await fs.readdir('locale')) {
             const fileInfo = path.parse(fileName);
             if (fileInfo.ext === '.po') {
-                const localeDirPath = `${args['build-dir']}/locales/${fileInfo.name}/LC_MESSAGES`;
+                const localeDirPath = `${args['build-dir']}/locale/${fileInfo.name}/LC_MESSAGES`;
                 await fs.mkdir(localeDirPath, { recursive: true });
-                await xgettext.merge(potMessagesFilePath, `locales/${fileName}`, `${localeDirPath}/${metadata['uuid']}.po`);
-                await xgettext.compile(`${localeDirPath}/${metadata['uuid']}.po`, `${localeDirPath}/${metadata['uuid']}.mo`);
+                await xgettext.merge(potMessagesFilePath, `locale/${fileName}`, `${localeDirPath}/${metadata['gettext-domain']}.po`);
+                await xgettext.compile(`${localeDirPath}/${metadata['gettext-domain']}.po`, `${localeDirPath}/${metadata['gettext-domain']}.mo`);
             }
         }
 
-        for (const localeName of await fs.readdir(`${args['build-dir']}/locales`)) {
-            const localeBasePath = `${args['build-dir']}/locales/${localeName}/LC_MESSAGES/${metadata['uuid']}`;
+        for (const localeName of await fs.readdir(`${args['build-dir']}/locale`)) {
+            const localeBasePath = `${args['build-dir']}/locale/${localeName}/LC_MESSAGES/${metadata['gettext-domain']}`;
             switch (args['lint']) {
                 case 'default':
-                    if (!existsSync(`locales/${localeName}.po`)) {
-                        console.log(`🚧 Missed or deleted locale file restored from build files during linting: 'locales/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
+                    if (!existsSync(`locale/${localeName}.po`)) {
+                        console.log(`🚧 Missed or deleted locale file restored from build files during linting: 'locale/${localeName}.po'. To prevent this, see build option --lint or --clean.`);
                     }
 
-                    await copyFile(`${localeBasePath}.po`, `locales/${localeName}.po`);
+                    await copyFile(`${localeBasePath}.po`, `locale/${localeName}.po`);
                     break;
                 case 'immutable':
                     try {
                         const genFileBuffer = await fs.readFile(`${localeBasePath}.po`);
-                        const srcFileBuffer = await fs.readFile(`locales/${localeName}.po`);
+                        const srcFileBuffer = await fs.readFile(`locale/${localeName}.po`);
 
                         if (!genFileBuffer.equals(srcFileBuffer)) {
                             throw new Error(`There are some outdated locale files. See --linter option to fix or ignore these problems.`);
@@ -178,8 +178,8 @@ if (args['built']) {
     } finally {
         await fs.rm(potPatchFilePath, { force: true });
         if (!args['with-sources']) {
-            for (const localeName of await fs.readdir(`${args['build-dir']}/locales`)) {
-                await fs.rm(`${args['build-dir']}/locales/${localeName}/LC_MESSAGES/${metadata['uuid']}.po`, {
+            for (const localeName of await fs.readdir(`${args['build-dir']}/locale`)) {
+                await fs.rm(`${args['build-dir']}/locale/${localeName}/LC_MESSAGES/${metadata['gettext-domain']}.po`, {
                     force: true,
                 });
             }
@@ -269,11 +269,11 @@ async function copyBuildFiles(targetDirPath, baseDirPath, sourcesDirName = undef
         }
     );
 
-    for (const dirName of await fs.readdir(`${baseDirPath}/locales`)) {
+    for (const dirName of await fs.readdir(`${baseDirPath}/locale`)) {
         if (!path.extname(dirName)) {
             await copyFiles(
-                `${baseDirPath}/locales/${dirName}/LC_MESSAGES`,
-                `${targetDirPath}/locales/${dirName}/LC_MESSAGES`,
+                `${baseDirPath}/locale/${dirName}/LC_MESSAGES`,
+                `${targetDirPath}/locale/${dirName}/LC_MESSAGES`,
                 fileName => args['with-sources'] || path.extname(fileName) === '.mo'
             );
         }
@@ -282,7 +282,7 @@ async function copyBuildFiles(targetDirPath, baseDirPath, sourcesDirName = undef
     await copyFiles(
         `${baseDirPath}/schemas`,
         `${targetDirPath}/schemas`,
-        fileName => args['with-sources'] || fileName === 'gschemas.compiled'
+        fileName => fileName.endsWith('.gschema.xml') || fileName === 'gschemas.compiled'
     );
 }
 
