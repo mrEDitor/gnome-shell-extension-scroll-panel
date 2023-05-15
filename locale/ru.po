@@ -82,7 +82,7 @@ msgstr "Фиксированная ширина, до которой будет 
 
 #: sources/prefs.ui:148
 msgid "px"
-msgstr ""
+msgstr "пкс"
 
 #: sources/prefs.ui:161
 msgid "Panel content align"
@@ -154,7 +154,7 @@ msgstr ""
 
 #: sources/prefs.ui:326
 msgid "ms"
-msgstr ""
+msgstr "мс"
 
 #: sources/prefs.ui:338
 msgid "Cyclic switching"

@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-22 18:43+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: \n"
+"Last-Translator: Oleh Popov\n"
 "Language-Team: \n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgid ""
 "Gnome Shell topbar with mouse (both in overview and workspace modes)."
 msgstr ""
 "Розширення дозволяє перемикатися між вікнами або робочими місцями шляхом "
-"прокрутки верхньої панелі Gnome Shell коліщатком миші (як в режимі огляду, "
+"прокручування верхньої панелі Gnome Shell коліщатком миші (як в режимі огляду, "
 "так і при роботі)."
 
 #: sources/prefs.js:181
@@ -36,8 +36,8 @@ msgid ""
 "Seems like you are using unlocalized extension, would you like to <a "
 "href=\"%s\">localize it</a>?"
 msgstr ""
-"Залишайте свої пропозиції щодо доопрацювання та локалізації на сторінці "
-"проєкту!"
+"Залишайте свої пропозиції щодо доопрацювання та локалізації на "
+"<a href=\"%s\">сторінці проєкту</a>!"
 
 #: sources/prefs.ui:33
 msgid "Reset settings"
@@ -69,9 +69,9 @@ msgid ""
 "inaccessible because of other actors rendered over it."
 msgstr ""
 "Для зміни рівня ієрархії під час вибору панелі (наприклад, вибору між "
-"годинником і всією панеллю) використовуйте прокрутку. Жовта рамка показує, "
+"годинником і усієї панелі) використовуйте прокручування. Жовта рамка показує, "
 "що вибрана панель ще не має обробників подій і може бути недоступною для "
-"прокрутки, якщо поверх неї намальовані інші елементи інтерфейсу."
+"прокручування, якщо поверх неї відмальовані інші елементи інтерфейсу."
 
 #: sources/prefs.ui:117
 msgid "Panel fixed width"
@@ -79,11 +79,11 @@ msgstr "Фіксована ширина панелі"
 
 #: sources/prefs.ui:119
 msgid "Set fixed width for the scrollable panel."
-msgstr "Фіксована ширина, до якої буде розширена обрана панель."
+msgstr "Фіксована ширина обраної панелі."
 
 #: sources/prefs.ui:148
 msgid "px"
-msgstr ""
+msgstr "пкс"
 
 #: sources/prefs.ui:161
 msgid "Panel content align"
@@ -115,20 +115,19 @@ msgstr "Горизонтальне прокручування"
 
 #: sources/prefs.ui:213
 msgid "Whether horizontal scrolling should cause forward or back step."
-msgstr ""
-"Чи сприймається горизонтальне прокручування як перемикання вперед або назад."
+msgstr "Чи має горизонтальне прокручування перемикати вперед або назад."
 
 #: sources/prefs.ui:227 sources/prefs.ui:270
 msgid "Off"
-msgstr "Вимкнена"
+msgstr "Вимкнуто"
 
 #: sources/prefs.ui:234 sources/prefs.ui:277
 msgid "Direct"
-msgstr "Пряма"
+msgstr "Пряме"
 
 #: sources/prefs.ui:241 sources/prefs.ui:284
 msgid "Inverted"
-msgstr "Зворотна"
+msgstr "Зворотне"
 
 #: sources/prefs.ui:254
 msgid "Vertical scrolling"
@@ -136,24 +135,22 @@ msgstr "Вертикальне прокручування"
 
 #: sources/prefs.ui:256
 msgid "Whether vertical scrolling should cause forward or back step."
-msgstr ""
-"Чи сприймається вертикальне прокручування як перемикання вперед або назад."
+msgstr "Чи має вертикальне прокручування перемикати вперед або назад."
 
 #: sources/prefs.ui:297
 msgid "Switching timeout"
-msgstr "Затримка наступного перемикання"
+msgstr "Затримка перемикання"
 
 #: sources/prefs.ui:299
 msgid ""
 "Timeout for switching event: further scrolling events in this timeout will "
 "be ignored."
 msgstr ""
-"Затримка наступного перемикання: до її закінчення наступні події "
-"прокручування будуть проігноровані."
+"Затримка перемикання: до її закінчення прокручування буде проігнороване."
 
 #: sources/prefs.ui:326
 msgid "ms"
-msgstr ""
+msgstr "мс"
 
 #: sources/prefs.ui:338
 msgid "Cyclic switching"
@@ -164,8 +161,8 @@ msgid ""
 "Should the switcher cycle, i.e. switch between first and last elements when "
 "switching out-of-list."
 msgstr ""
-"Чи має прокручування зациклюватися, тобто. перемикатися між першим та "
-"останнім елементами при виході за межі списку елементів."
+"Чи має прокручування зациклюватися, тобто перемикатися між першим та "
+"останнім елементом при виході за межі списку елементів."
 
 #: sources/prefs.ui:364
 msgid "Visualize"
@@ -173,7 +170,7 @@ msgstr "Візуалізація"
 
 #: sources/prefs.ui:366
 msgid "Should the switcher be shown because of the action."
-msgstr "Показувати перемикач під час дії."
+msgstr "Чи повинна дія бути візуалізована спливаючим перемикачем."
 
 #: sources/prefs.ui:389
 msgid "Switching workspaces"

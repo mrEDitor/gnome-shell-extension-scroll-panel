@@ -1,6 +1,6 @@
 <schemalist gettext-domain="io.github.mreditor.gnome-shell-extensions.scroll-panel">
-    <schema id="io.github.mreditor.gnome-shell-extensions.scroll-panel"
-            path="/io/github/mreditor/gnome-shell-extensions/scroll-panel/">
+    <schema id="org.gnome.shell.extensions.mreditor.scroll-panel"
+            path="/org/gnome/shell/extensions/mreditor/scroll-panel/">
 
         <key type="as" name="highlight-path">
             <default>[]</default>
